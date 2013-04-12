@@ -1,0 +1,5 @@
+intranet_core:
+    resource: "@IntranetCoreBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
