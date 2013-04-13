@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>{% block title %}Intranet{% endblock %}</title>
+		{% block stylesheets %}
+			<link rel="stylesheet" href="{{ asset('css/intranet.css') }}" type="text/css" />
+		{% endblock %}
+	</head>
+	<body>
+		<div class="container">
+			{% block header %}
+				{% include 
+				'IntranetCoreBundle:Core:header.html.twig' 
+				%}
+			{% endblock %}
+			<div class="row">
+				{% block horizontal_menu %}
+					{% include 
+					'IntranetCoreBundle:Core:hmenu.html.twig'
+					%}
+				{% endblock %}
+			</div>
+			<div class="row">
+				<div id="content" class="span12">
+					{% block content %}
+					{% endblock %}
+				</div>
+			</div>
+			{% block footer %}
+				{% include 
+				'IntranetCoreBundle:Core:footer.html.twig' 
+				%}
+			{% endblock %}
+		</div>
+		
+		{% block javascripts %}
+			{# Javascript files used by bootstrap Twitter #}
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+			<script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
+		{% endblock %}
+	</body>
+</html>

@@ -1,0 +1,7 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block title %}{{ parent() }} - Accueil{% endblock %}
+
+{% block specific_menu %}
+	{% include 'IntranetCoreBundle:Home:menu.html.twig' %}{{ parent() }}
+{% endblock %}
