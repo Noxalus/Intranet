@@ -1,5 +1,14 @@
-intranet_core:
+home:
     resource: "@IntranetCoreBundle/Controller/"
     type:     annotation
     prefix:   /
 
+login:
+    pattern:   /login
+    defaults:  { _controller: IntranetUserBundle:Security:login }
+ 
+login_check:
+    pattern:   /login_check
+    
+logout:
+    pattern:   /logout
