@@ -28,11 +28,11 @@ security:
             anonymous: false
             provider:  main
             form_login:
-                login_path: login
-                check_path: login_check
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
             logout:
-                path:   logout
-                target: /deco
+                path:   fos_user_security_logout
+                target: /login
             remember_me:
                 key: %secret%
 

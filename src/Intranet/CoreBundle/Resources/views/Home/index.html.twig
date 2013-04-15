@@ -1,7 +1,16 @@
 {% extends 'IntranetCoreBundle:Home:layout.html.twig' %}
 
 {% block content %}
-Bonjour {{ app.user.username }} !
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    Connecté en tant que {{ app.user.username }} - <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+{% else %}
+    <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+{% endif %}
+    <br />
+<p>Bonjour {{ app.user.username }} !</p>
+
+<p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. Nulla nec diam ut urna vestibulum faucibus. Vestibulum sed diam justo, congue malesuada libero. Nulla id lorem erat, sed tristique ligula. Nam eget velit neque. Duis vel ipsum ipsum. Nunc at ligula et arcu ultricies varius iaculis sed diam. Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. Aliquam dignissim eros sit amet lorem interdum vestibulum. Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
 
 In feugiat egestas sem, sed faucibus leo condimentum a. Mauris non elit eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam hendrerit pulvinar felis vel hendrerit. Proin sed purus at ante ornare auctor. Nunc hendrerit lorem vitae diam ultrices vulputate. Nulla ultrices mattis nunc, eu fringilla ipsum euismod tincidunt. Nullam at sem et tortor tempus aliquam. Proin quis risus erat, condimentum ultrices purus. Aliquam a quam eu sem ultricies posuere sed vitae eros. Mauris tristique, diam ut cursus semper, risus elit hendrerit nulla, in tristique mi dui non urna. Donec vel ligula mauris, in dapibus lorem. Aliquam malesuada pulvinar tortor, ut vestibulum odio vehicula eget. In hac habitasse platea dictumst. Fusce ligula urna, placerat ac suscipit ac, sodales a felis.
@@ -31,4 +40,5 @@ Ut sed cursus nulla. Nam ornare consequat est. Curabitur et erat orci, et tempus
 Mauris ac nisl turpis, nec ultricies arcu. Donec odio justo, blandit commodo gravida nec, lacinia quis nunc. Nullam ac nibh tortor, eu pharetra orci. Quisque dignissim diam et lorem suscipit lobortis. Duis lobortis auctor laoreet. Praesent id tellus ut elit convallis hendrerit. Proin at vehicula nibh. Donec aliquam, dolor sed lacinia gravida, purus nunc adipiscing tellus, sed ullamcorper sem sem ut neque. Fusce blandit sagittis tortor at sodales. Nulla facilisi. Sed eu leo ante. Quisque sit amet lacus massa, non lacinia ligula. Sed magna metus, aliquet et rutrum in, lacinia vel arcu.
 
 Donec aliquet turpis vitae dolor bibendum quis ultrices tortor semper. Nullam libero enim, convallis ut consectetur quis, tempor sit amet magna. Nunc ac malesuada est. Phasellus consequat aliquet luctus. Fusce mollis dictum imperdiet. In adipiscing elit cursus sapien hendrerit commodo. Donec auctor lectus in libero imperdiet at volutpat nibh tristique. Fusce facilisis, eros non eleifend aliquam, diam mauris facilisis arcu, vitae porttitor risus lorem at enim.
+</p>
 {% endblock %}

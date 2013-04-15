@@ -1,0 +1,37 @@
+{# src/Intranet/UserBundle/Resources/views/layout.html.twig #}
+
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+<div>
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    
+    <div>    
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        {% if error %}
+            <div class="text-error">{{ error|trans }}</div>
+        {% endif %}
+
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+            <label for="username">{{ 'security.login.username'|trans }}</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+
+            <label for="password">{{ 'security.login.password'|trans }}</label>
+            <input type="password" id="password" name="_password" required="required" />
+
+            <input type="hidden" id="remember_me" name="_remember_me" value="on" />
+            <br />
+            <input type="submit" class="btn btn-success"  id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+        </form>
+    </div>
+</div>
+{% endblock %}
