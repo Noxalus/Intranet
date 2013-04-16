@@ -1,3 +1,7 @@
+root:
+    pattern:   /
+    defaults:  { _controller: IntranetCoreBundle:Home:index }
+
 home:
     resource: "@IntranetCoreBundle/Controller/"
     type:     annotation
