@@ -19,7 +19,18 @@
         "sensio/generator-bundle": "2.2.*",
         "jms/security-extra-bundle": "1.4.*",
         "jms/di-extra-bundle": "1.3.*",
-        "friendsofsymfony/user-bundle": "dev-master"
+        "friendsofsymfony/user-bundle": "dev-master",
+        "knplabs/knp-menu": "dev-master",
+        "knplabs/knp-menu-bundle": "dev-master",
+        "sonata-project/user-bundle": "dev-master",
+        "sonata-project/block-bundle": "dev-master",
+        "sonata-project/admin-bundle": "dev-master",
+        "sonata-project/formatter-bundle": "dev-master",
+        "sonata-project/notification-bundle": "dev-master",
+        "sonata-project/media-bundle": "dev-master",
+        "sonata-project/news-bundle": "dev-master",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
+        "sonata-project/easy-extends-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

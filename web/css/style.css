@@ -2,7 +2,10 @@ body
 {
     margin-top: 10px;
     margin-bottom: 10px;
-    background-color:#dfdeb2;
+    background-image: url('../img/background.jpg');
+    background-repeat: repeat-y;
+    background-attachment:fixed;
+    background-position: center top;
 }
 
 #header
