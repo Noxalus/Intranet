@@ -182,3 +182,25 @@ a#trans:hover
 	float: right;
         margin-right: 20px;
 }
+
+#login-box
+{
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.75);
+    margin-top: 50px;
+    border-radius: 20px;
+}
+
+#login-box img
+{
+    position: relative;
+    top: -20px;
+}
+
+#login-box-content
+{
+    margin-top: -10px;
+}
