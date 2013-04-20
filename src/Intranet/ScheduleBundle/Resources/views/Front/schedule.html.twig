@@ -1,0 +1,18 @@
+{% extends 'IntranetCoreBundle:Home:layout.html.twig' %}
+
+{% set dayName = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"] %}
+
+{% block content %}
+    <h1>Planning des cours</h1>
+    <br />
+    {% if is_granted('ROLE_USER') %}
+        <ul>
+            <li><a href="#">Ajouter un cours</a></li>
+        </ul>
+        <br />
+    {% else %}
+        COUCOU
+    {% endif %}
+    
+    {% include 'IntranetScheduleBundle:Front:table.html.twig' %}
+{% endblock %}

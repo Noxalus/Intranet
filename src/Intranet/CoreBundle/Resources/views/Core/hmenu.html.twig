@@ -2,9 +2,9 @@
     <ul id="trans-nav">
         <li><a class="mainmenu" href="{{ path('intranet_core_home_index') }}">Accueil</a></li>
 
-        <li><a class="mainmenu" href="#">Cours</a>
+        <li><a class="mainmenu" href="{{ path('planning') }}">Cours</a>
                 <ul>
-                        <li><a href="#">*Gérer les cours*</a></li>
+                        <li><a href="{{ path('planning') }}">*Gérer les cours*</a></li>
                 </ul>
         </li>
 
@@ -30,12 +30,14 @@
                 </ul>
         </li>
 
-        <li><a class="mainmenu" href="#">Mon Compte</a>
-                <ul>
-                        <li><a href="#">Gestion du compte</a></li>
-                        <li><a href="#">Mes notes</a></li>
-                        <li><a href="#">*Lister les profils*</a></li>
-                </ul>
+        <li>
+            <a class="mainmenu" href="#">Mon Compte {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}({{ app.user.username }}) {% endif %}</a>
+            
+            <ul>
+                    <li><a href="#">Gestion du compte</a></li>
+                    <li><a href="#">Mes notes</a></li>
+                    <li><a href="#">*Lister les profils*</a></li>
+            </ul>
         </li>
         <li class="mainmenu" id="dernier"><a href="#">Nous contacter</a></li>
     </ul>

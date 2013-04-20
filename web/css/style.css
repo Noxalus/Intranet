@@ -204,3 +204,39 @@ a#trans:hover
 {
     margin-top: -10px;
 }
+
+.planning
+{
+    margin: auto;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.planning th
+{
+    width: 200px;
+}
+
+.planning tr td
+{
+    height: 30px;
+}
+
+.planning tr:first-child
+{
+    border-bottom: 1px solid black;
+}
+
+.planning tr td:not(:first-child) {
+    background-color: red;
+}
+
+.planning tr td
+{
+    border-right: 1px solid black;
+}
+
+.center
+{
+    text-align: center;
+}

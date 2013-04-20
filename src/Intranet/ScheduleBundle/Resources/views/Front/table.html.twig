@@ -1,0 +1,68 @@
+{% set dayName = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"] %}
+
+<table class="planning">
+    <tr>
+        <th></th>
+        {% for date in dateOfWeek %}
+           <th>{{ dayName[loop.index - 1] }}<br /><em><small>{{ date }}</small></em>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>8h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>9h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>10h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>11h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>12h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>13h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>14h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>15h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>16h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>17h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>18h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>19h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>20h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>21h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>22h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>23h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>24h00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+</table>
+<br />
+<p class="center">
+    {% set previousWeek = previousWeek|split('-') %}
+    {% set nextWeek = nextWeek|split('-') %}
+    <a href="{{ path('planning_date', {'day': previousWeek[0], 'month': previousWeek[1], 'year': previousWeek[2]}) }}" /><-- Semaine précédente</a> | 
+    <a href="{{ path('planning_date', {'day': nextWeek[0], 'month': nextWeek[1], 'year': nextWeek[2]}) }}" />Semaine suivantee --></a>
+</p>

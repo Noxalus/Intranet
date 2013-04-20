@@ -1,3 +1,13 @@
+intranet_project:
+    resource: "@IntranetProjectBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+intranet_schedule:
+    resource: "@IntranetScheduleBundle/Controller/"
+    type:     annotation
+    prefix:   /planning
+
 root:
     pattern:   /
     defaults:  { _controller: IntranetCoreBundle:Home:index }
