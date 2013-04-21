@@ -1,0 +1,82 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="span7">
+    <h1>News</h1>
+    
+    <h3>
+        Lorem ipsum dolor sit amet<br />
+        <small>le jeudi 27 septembre - par Vincent Coquart</small>
+    </h3>
+    
+    <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
+    Nulla nec diam ut urna vestibulum faucibus. 
+    Vestibulum sed diam justo, congue malesuada libero. 
+    Nulla id lorem erat, sed tristique ligula. 
+    Nam eget velit neque. Duis vel ipsum ipsum. 
+    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
+    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
+    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
+    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
+    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
+    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
+    </p>
+    
+    <h3>
+        Lorem ipsum dolor sit amet<br />
+        <small>le jeudi 27 septembre - par Vincent Coquart</small>
+    </h3>
+    
+    <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
+    Nulla nec diam ut urna vestibulum faucibus. 
+    Vestibulum sed diam justo, congue malesuada libero. 
+    Nulla id lorem erat, sed tristique ligula. 
+    Nam eget velit neque. Duis vel ipsum ipsum. 
+    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
+    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
+    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
+    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
+    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
+    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
+    </p>
+    
+    <h3>
+        Lorem ipsum dolor sit amet<br />
+        <small>le jeudi 27 septembre - par Vincent Coquart</small>
+    </h3>
+    
+    <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
+    Nulla nec diam ut urna vestibulum faucibus. 
+    Vestibulum sed diam justo, congue malesuada libero. 
+    Nulla id lorem erat, sed tristique ligula. 
+    Nam eget velit neque. Duis vel ipsum ipsum. 
+    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
+    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
+    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
+    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
+    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
+    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
+    </p>
+    <br />
+    <p>
+        <a href="#">Ajouter une news</a>
+    </p>
+</div>
+
+<div class="span4" id="right-column">
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <div class="center">
+    Bonjour <b>{{ app.user.username }}</b> (<a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>)
+    <br /><br />
+    <img src="{{ asset('img/avatar.png') }}" alt="Avatar" />
+</div>
+{% endif %}
+</div>
+</div>
+
+{% endblock %}

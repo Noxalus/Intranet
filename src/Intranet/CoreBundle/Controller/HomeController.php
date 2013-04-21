@@ -14,7 +14,8 @@ class HomeController extends Controller {
      */
     public function indexAction() 
     {
-        return $this->render('IntranetCoreBundle:Home:index.html.twig');
+        //return $this->render('IntranetCoreBundle:Home:index.html.twig');
+        return $this->redirect($this->generateUrl('home'));
     }
     
     /**

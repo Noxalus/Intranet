@@ -150,15 +150,15 @@ a#trans:hover
 	color: #fff; 
 }
 
-#menu
-{
-	/*border:2px solid yellow;*/
-}
-
 #content
 {
     background-color: #FFF;
     padding: 20px 20px 20px 20px;
+}
+
+#right-column
+{
+    margin-left: 50px;
 }
 
 #footer
