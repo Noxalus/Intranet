@@ -1,3 +1,8 @@
+intranet_users:
+    resource: "@IntranetUserBundle/Controller/"
+    type:     annotation
+    prefix:   /utilisateurs
+
 intranet_news:
     resource: "@IntranetNewsBundle/Controller/"
     type:     annotation
@@ -21,7 +26,7 @@ home:
     resource: "@IntranetCoreBundle/Controller/"
     type:     annotation
     prefix:   /
-    
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
  

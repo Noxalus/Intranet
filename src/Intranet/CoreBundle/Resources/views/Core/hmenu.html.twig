@@ -2,11 +2,7 @@
     <ul id="trans-nav">
         <li><a class="mainmenu" href="{{ path('intranet_core_home_index') }}">Accueil</a></li>
 
-        <li><a class="mainmenu" href="{{ path('planning') }}">Cours</a>
-                <ul>
-                        <li><a href="{{ path('planning') }}">*Gérer les cours*</a></li>
-                </ul>
-        </li>
+        <li><a class="mainmenu" href="{{ path('planning') }}">Cours</a></li>
 
         <li><a class="mainmenu" href="{{ path('projects') }}">Projets</a></li>
 
@@ -31,7 +27,7 @@
             <ul>
                     <li><a href="#">Gestion du compte</a></li>
                     <li><a href="#">Mes notes</a></li>
-                    <li><a href="#">*Lister les profils*</a></li>
+                    <li><a href="{{ path('user_list') }}">Lister les profils</a></li>
             </ul>
         </li>
         <li class="mainmenu" id="dernier"><a href="#">Nous contacter</a></li>

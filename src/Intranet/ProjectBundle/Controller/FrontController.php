@@ -41,7 +41,7 @@ class FrontController extends Controller
                 ->getRepository('IntranetProjectBundle:ProjectGroup');
 
         $projectGroup = $repository->findProjectGroup($id, $user->getId());
-
+        
         return array(
             'projectGroup' => $projectGroup
         );

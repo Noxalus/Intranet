@@ -1,5 +1,20 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
-COUCOU
+{% if projectGroup is not null %}
+    <h1>{{ projectGroup.project.name }}</h1>
+
+    <p>{{ projectGroup.project.description }}</p>
+
+    <h3>Liste des membres</h3>
+
+    <ul>
+    {% for user in projectGroup.users %}
+        <li>{{ user.username }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p class="text-error">Vous n'êtes pas inscrit dans un groupe pour ce projet !</p>
+{% endif %}
+
 {% endblock %}

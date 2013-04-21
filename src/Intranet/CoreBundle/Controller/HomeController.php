@@ -43,5 +43,4 @@ class HomeController extends Controller {
     {
         return $this->render('IntranetCoreBundle:Home:student.html.twig');
     }
-
 }

@@ -1,0 +1,34 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Liste des utilisateurs</h1>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Login</th>
+        <th>Mail</th>
+        <th>Rôle</th>
+        <th>Dernière visite</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% for role in user.roles %} 
+                    {{ role }} 
+                {% endfor %}
+            </td>
+            <td>
+                {% if user.lastLogin is null %}
+                    <span class="text-error">Jamais</span>
+                {% else %}
+                    Le {{ user.lastLogin|date('d/m/Y à H:i:s') }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

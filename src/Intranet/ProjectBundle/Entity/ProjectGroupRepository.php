@@ -12,23 +12,35 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProjectGroupRepository extends EntityRepository
 {
+
     public function findProjectGroup($project_id, $user_id)
-    {        
-        $queryBuilder = $this->createQueryBuilder('pg');
+    {
+        $queryBuilder = $this->createQueryBuilder('pgr');
+
+        //$this->_em->createQuery("SELECT pg, p FROM ProjectGroup a JOIN pg.utilisateur u WHERE u.age = 25");
 
         $queryBuilder = $this->_em->createQueryBuilder()
-                                  ->select('pg')
-                                  ->from($this->_entityName, 'pg')
-                                  ->leftJoin('pg.users', 'u')
-                                  ->leftJoin('pg.project', 'p')
-                                  ->where('p.id = :project_id')
-                                  ->setParameter('project_id', $project_id);
-                                  //->setParameter('user_id', $user_id);
+                ->select('pg')
+                ->from($this->_entityName, 'pg')
+                ->leftJoin('pg.users', 'u')
+                ->leftJoin('pg.project', 'p')
+                ->where('p.id = :project_id')
+                ->setParameter('project_id', $project_id)
+                ->andWhere('u.id = :user_id')
+                ->setParameter('user_id', $user_id);
 
         $query = $queryBuilder->getQuery();
 
-        $results = $query->getResult();
+        try
+        {
+            $result = $query->getSingleResult();
+        }
+        catch (\Doctrine\Orm\NoResultException $e)
+        {
+            $result = null;
+        }
 
-        return $results;
+        return $result;
     }
+
 }
