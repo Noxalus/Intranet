@@ -1,0 +1,32 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+    <h1>Projets</h1>
+    
+    <div>
+        <ul>
+            <li><a href="{{ path('projects_add') }}" />Ajouter un projet</a></li>
+            <li><a href="{{ path('projects_group_add') }}" />Créer un groupe de projet</a></li>
+        </ul>
+    </div>
+    
+    {% if projects|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+            </tr>
+        {% for project in projects %}
+            <tr>
+                <td><a href="{{ path('projects_display', {'id': project.id}) }}">{{ project.name }}</a></td>
+                <td>{{ project.description }}</td>
+            </tr>
+        {% endfor %}
+        </ul>
+        </table>
+    {% else %}
+        <p class="text-error">Aucun projet !</p>
+    {% endif %}
+{% endblock %}
+
