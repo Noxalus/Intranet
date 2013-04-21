@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  
 /**
  * @ORM\Entity
- * @ORM\Table(name="intranet_user")
+ * @ORM\Table(name="user")
  */
 class User extends BaseUser
 {
@@ -22,13 +22,13 @@ class User extends BaseUser
   
   /**
     * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\Group")
-    * @ORM\JoinTable(name="intranet_user_group")
+    * @ORM\JoinTable(name="user_group")
     */
-   protected $groups;
+   //protected $groups;
    
     public function __construct()
     {
-        $this->groups = new ArrayCollection();
+        //$this->groups = new ArrayCollection();
      
         parent::__construct();
     }

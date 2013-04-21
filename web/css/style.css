@@ -217,9 +217,9 @@ a#trans:hover
     width: 200px;
 }
 
-.planning tr td
+.planning tr td:first-child
 {
-    height: 30px;
+    font-size: x-small;
 }
 
 .planning tr:first-child
