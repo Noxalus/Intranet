@@ -36,7 +36,7 @@ class CourseType
     private $description;
 
     /**
-     * @ORM\OneToOne(targetEntity="Intranet\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Intranet\UserBundle\Entity\User")
      */
     private $teacher;
 

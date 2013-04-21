@@ -43,7 +43,7 @@ class Schedule
     private $comment;
 
     /**
-     * @ORM\OneToOne(targetEntity="CourseType")
+     * @ORM\ManyToOne(targetEntity="CourseType")
      */
     private $type;
 

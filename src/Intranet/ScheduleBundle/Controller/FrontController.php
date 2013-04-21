@@ -41,33 +41,49 @@ class FrontController extends Controller
         $nextWeek->modify('Monday next week');
         $previousWeek->modify('Monday last week');
 
-        $dateOfWeek = array($currentDate->format("d/m/Y"));
+        $datesOfWeek = array();
 
         $interval = new \DateInterval('P1D');
-        for ($i = 1; $i < 7; $i++)
+        $schedule = array();
+        $dayNames = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
+
+        $rowspans = array();
+        for ($i = 1; $i <= 7; $i++)
         {
+            $courses = $this->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IntranetScheduleBundle:Schedule')
+                    ->findCoursesFromDate($monday);
+
+            foreach ($courses as $course)
+            {
+                $date_from = clone $course->getDate();
+                $date_to = (clone $date_from);
+                $date_to->add(new \DateInterval('PT' . $course->getDuration() . 'M'));
+
+                $schedule[$dayNames[$i - 1]][$date_from->format('H\hi')][] = array(
+                    'name' => $course->getType()->getName(),
+                    'duration' => $course->getDuration() / 30,
+                    'end' => $date_to->format('H\hi')
+                );
+
+                while ($date_from != $date_to)
+                {
+                    $rowspans[$dayNames[$i - 1]][$date_from->format('H\hi')] = true;
+                    $date_from->add(new \DateInterval('PT30M'));
+                }
+            }
+            
+            $datesOfWeek[] = $monday->format("d/m/Y");
             $monday->add($interval);
-            $dateOfWeek[] = $monday->format("d/m/Y");
         }
-
-        $schedule = array(
-            'Lundi' => array(
-                '10h00' => array(
-                    'Cours de Math'
-                )
-            ),
-            'Jeudi' => array(
-                '14h00' => array(
-                    'Cours d\'Algebre'
-                )
-            )
-        );
-
+         
         return array(
             'schedule' => $schedule,
-            'dateOfWeek' => $dateOfWeek,
+            'datesOfWeek' => $datesOfWeek,
             'nextWeek' => $nextWeek->format("d-m-Y"),
             'previousWeek' => $previousWeek->format("d-m-Y"),
+            'rowspans' => $rowspans
         );
     }
 

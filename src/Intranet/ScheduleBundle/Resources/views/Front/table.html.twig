@@ -1,12 +1,10 @@
 {% set dayNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"] %}
-{% set times = ["8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30", "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00", "18h30", "19h00", "19h30", "20h00", "20h30", "21h00", "21h30", "22h00", "22h30", "23h00", "23h30", "24h00"] %}
-
-{{dump(schedule) }}
+{% set times = ["08h00", "08h30", "09h00", "09h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30", "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00", "18h30", "19h00", "19h30", "20h00", "20h30", "21h00", "21h30", "22h00", "22h30", "23h00", "23h30", "24h00"] %}
 
 <table class="planning">
     <tr>
         <th></th>
-        {% for date in dateOfWeek %}
+        {% for date in datesOfWeek %}
            <th>{{ dayNames[loop.index - 1] }}<br /><em><small>{{ date }}</small></em>
         {% endfor %}
     </tr>
@@ -15,9 +13,14 @@
             <td>{{ time }}</td>
             {% for dayName in dayNames %}
                 {% if schedule[dayName][time] is defined %}
-                    <td style="background-color: blue; color: white;">{{ schedule[dayName][time][0] }}</td>
+                    <td style="background-color: blue; color: white;" rowspan="{{ schedule[dayName][time][0]['duration'] }}">
+                        {{ schedule[dayName][time][0]['name'] }}<br />
+                        <em>{{ time }} -> {{ schedule[dayName][time][0]['end'] }}  </em>
+                    </td>
                 {% else %}
-                    <td></td>
+                    {% if not rowspans[dayName][time] is defined %}
+                        <td></td>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         </tr>

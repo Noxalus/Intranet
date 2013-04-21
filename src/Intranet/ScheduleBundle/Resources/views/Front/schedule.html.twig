@@ -7,8 +7,8 @@
     <br />
     {% if is_granted('ROLE_USER') %}
         <ul>
-            <li><a href="{{ path('planning_ajouter_type_cours') }}">Ajouter un type de cours</a></li>
             <li><a href="{{ path('planning_ajouter_cours') }}">Ajouter un cours</a></li>
+            <li><a href="{{ path('planning_ajouter_type_cours') }}">Ajouter un type de cours</a></li>
         </ul>
         <br />
     {% endif %}
