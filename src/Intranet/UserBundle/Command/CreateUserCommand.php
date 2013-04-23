@@ -30,6 +30,7 @@ class CreateUserCommand extends ContainerAwareCommand
                 new InputArgument('password', InputArgument::REQUIRED, 'The password'),
                 new InputArgument('firstName', InputArgument::REQUIRED, 'The first name'),
                 new InputArgument('lastName', InputArgument::REQUIRED, 'The last name'),
+                new InputArgument('promo', InputArgument::REQUIRED, 'The promotion'),
                 new InputOption('super-admin', null, InputOption::VALUE_NONE, 'Set the user as super admin'),
                 new InputOption('inactive', null, InputOption::VALUE_NONE, 'Set the user as inactive'),
             ))
@@ -66,11 +67,12 @@ EOT
         $password   = $input->getArgument('password');
         $firstName   = $input->getArgument('firstName');
         $lastName   = $input->getArgument('lastName');
+        $promo   = $input->getArgument('promo');
         $inactive   = $input->getOption('inactive');
         $superadmin = $input->getOption('super-admin');
 
         $manipulator = $this->getContainer()->get('intranet.util.user_manipulator');
-        $manipulator->create($username, $firstName, $lastName, $password, $email, !$inactive, $superadmin);
+        $manipulator->create($username, $firstName, $lastName, $password, $email, $promo, !$inactive, $superadmin);
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
     }
@@ -153,6 +155,21 @@ EOT
                 }
             );
             $input->setArgument('password', $password);
+        }
+        
+        if (!$input->getArgument('promo')) {
+            $promo = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please choose a promotion:',
+                function($promo) {
+                    if (empty($promo)) {
+                        throw new \Exception('Promotion can not be empty');
+                    }
+
+                    return $promo;
+                }
+            );
+            $input->setArgument('promo', $promo);
         }
     }
 }

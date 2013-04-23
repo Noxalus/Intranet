@@ -1,0 +1,53 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Trombinoscope promotion {{ promo }}</h1>
+
+<div class="well center">
+<form action="{{ path('user_trombi_promo', { 'promo': promo }) }}" method="POST">
+    <div>
+        <label>Promotion:</label>
+        <select name="promo">
+            {% for i in (promo - 3)..(promo + 3) %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+        <br />
+        <input type="submit" value="Valider" />
+    </div>
+</form>
+</div>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Login</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Mail</th>
+        <th>Rôle</th>
+        <th>Dernière visite</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% for role in user.roles %} 
+                    {{ role }} 
+                {% endfor %}
+            </td>
+            <td>
+                {% if user.lastLogin is null %}
+                    <span class="text-error">Jamais</span>
+                {% else %}
+                    Le {{ user.lastLogin|date('d/m/Y à H:i:s') }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

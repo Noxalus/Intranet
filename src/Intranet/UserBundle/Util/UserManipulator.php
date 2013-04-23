@@ -26,12 +26,13 @@ class UserManipulator
      * @param string  $email
      * @param string  $firstName
      * @param string  $lastName
+     * @param string  $promo
      * @param Boolean $active
      * @param Boolean $superadmin
      *
      * @return \FOS\UserBundle\Model\UserInterface
      */
-    public function create($username, $firstName, $lastName, $password, $email, $active, $superadmin)
+    public function create($username, $firstName, $lastName, $password, $email, $promo, $active, $superadmin)
     {
         $user = $this->userManager->createUser();
         $user->setUsername($username);
@@ -39,6 +40,7 @@ class UserManipulator
         $user->setLastName($lastName);
         $user->setEmail($email);
         $user->setPlainPassword($password);
+        $user->setPromo($promo);
         $user->setEnabled((Boolean) $active);
         $user->setSuperAdmin((Boolean) $superadmin);
         $this->userManager->updateUser($user);

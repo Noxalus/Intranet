@@ -125,6 +125,7 @@ class FrontController extends Controller
                 return $this->redirect($this->generateUrl('planning'));
             }
         }
+        
         return array(
             'form' => $form->createView(),
         );
