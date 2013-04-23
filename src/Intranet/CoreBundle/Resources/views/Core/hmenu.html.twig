@@ -22,10 +22,10 @@
         </li>
 
         <li>
-            <a class="mainmenu" href="#">Mon Compte {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}({{ app.user.username }}) {% endif %}</a>
+            <a class="mainmenu" href="{{ path('fos_user_profile_show') }}">Mon Compte {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}({{ app.user.username }}) {% endif %}</a>
             
             <ul>
-                    <li><a href="#">Gestion du compte</a></li>
+                    <li><a href="{{ path('fos_user_profile_show') }}">Gestion du compte</a></li>
                     <li><a href="#">Mes notes</a></li>
                     <li><a href="{{ path('user_list') }}">Lister les profils</a></li>
             </ul>

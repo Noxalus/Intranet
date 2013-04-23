@@ -1,0 +1,12 @@
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="fos_user_user_show">
+    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+</div>
+
+<p><a href="{{ path('fos_user_profile_edit') }}" class="btn btn-info">Editer</a></p>
+{% endblock content %}
