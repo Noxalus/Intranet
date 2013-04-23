@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CourseType
  *
- * @ORM\Table(name="course_type")
+ * @ORM\Table(name="intranet_course_type")
  * @ORM\Entity(repositoryClass="Intranet\ScheduleBundle\Entity\CourseTypeRepository")
  */
 class CourseType
@@ -42,7 +42,7 @@ class CourseType
 
     /**
     * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\User")
-    * @ORM\JoinTable(name="course_student_relationship")
+    * @ORM\JoinTable(name="intranet_course_student_relationship")
     */
     private $students;
 

@@ -9,7 +9,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
 /**
  * ProjectGroup
  *
- * @ORM\Table(name="project_group")
+ * @ORM\Table(name="intranet_project_group")
  * @ORM\Entity(repositoryClass="Intranet\ProjectBundle\Entity\ProjectGroupRepository")
  */
 class ProjectGroup
@@ -32,7 +32,7 @@ class ProjectGroup
 
     /**
     * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\User")
-    * @ORM\JoinTable(name="project_group_relationship")
+    * @ORM\JoinTable(name="intranet_project_group_relationship")
     */
     private $users;
 

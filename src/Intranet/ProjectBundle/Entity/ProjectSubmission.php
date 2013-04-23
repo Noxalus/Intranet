@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ProjectSubmission
  *
- * @ORM\Table(name="project_submission")
+ * @ORM\Table(name="intranet_project_submission")
  * @ORM\Entity(repositoryClass="Intranet\ProjectBundle\Entity\ProjectSubmissionRepository")
  */
 class ProjectSubmission
