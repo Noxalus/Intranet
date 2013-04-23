@@ -7,6 +7,8 @@
     <tr>
         <th>ID</th>
         <th>Login</th>
+        <th>Prénom</th>
+        <th>Nom</th>
         <th>Mail</th>
         <th>Rôle</th>
         <th>Dernière visite</th>
@@ -15,6 +17,8 @@
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
             <td>{{ user.email }}</td>
             <td>
                 {% for role in user.roles %} 
