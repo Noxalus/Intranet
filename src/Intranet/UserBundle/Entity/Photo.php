@@ -29,15 +29,31 @@ class Photo
     private $name;
 
     /**
-     * @var datetime $updatedAt
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $updatedAt;
+    public $path;
 
-    public function __construct()
+    public function getAbsolutePath()
     {
-        $this->updatedAt = new \DateTime();
+        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'uploads/documents';
     }
 
     /**

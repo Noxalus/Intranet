@@ -1,0 +1,33 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Ajout d'une promotion</h1>
+
+{% if users|length == 0 %}
+<form method="POST" action="{{ path('user_add_promo') }}" enctype="multipart/form-data">
+    <fieldset>
+    <legend>Fichier (.csv)</legend>
+    <input type="file" name="file" />
+    <br /><br />
+    <button type="submit" class="btn btn-success"><i class="icon-book"></i>Uploader</button>
+    </fieldset>
+</form>
+{% else %}
+<table class="table">
+    <tr>
+        <th>Login</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Adresse</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}
