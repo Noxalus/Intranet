@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Intranet\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class FrontController extends Controller
 {
@@ -121,15 +122,19 @@ class FrontController extends Controller
 
         $request = $this->get('request');
 
+        $session = $request->getSession();
+        $session->set('users', null);
+
         if ($request->getMethod() == 'POST')
         {
+            $promo = $request->request->get('promo');
             $file = $_FILES['file']['tmp_name'];
             $extensions = array('.csv');
             $extension = strrchr($_FILES['file']['name'], '.');
 
             if (!in_array($extension, $extensions))
             {
-                $error = 'Vous devez uploader un fichier de type png, gif, jpg, jpeg, txt ou doc...';
+                $error = 'Vous devez uploader un fichier de type .csv';
             }
 
             if (!isset($error))
@@ -138,45 +143,106 @@ class FrontController extends Controller
                 if (($handle = fopen($file, 'r')) !== FALSE)
                 {
                     $userManager = $this->container->get('fos_user.user_manager');
-                    
+
                     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
                     {
                         $num = count($data);
                         if ($row > 1)
                         {
-                            $info = array();
+                            $infos = array();
                             $user = $userManager->createUser();
                             for ($c = 0; $c < $num; $c++)
                             {
-                                $info[] = $data[$c];
+                                $infos[] = $data[$c];
                             }
-                            
+
                             // Hydratation
-                            $user->setUsername($info[0]);
-                            $user->setFirstName($info[1]);
-                            $user->setLastName($info[2]);
-                            $user->setEmail($info[3]);
-                            $user->setPlainPassword('coucou');
-                            $user->setPromo(2014);
-                            
-                            $userManager->updateUser($user);
-                            
+                            $user->setUsername($infos[0]);
+                            $user->setFirstName($infos[1]);
+                            $user->setLastName($infos[2]);
+                            $user->setEmail($infos[3]);
+                            $user->setPromo($promo);
+
+                            $user->setEnabled(true);
+
                             $users[] = $user;
                         }
                         $row++;
                     }
                     fclose($handle);
+
+                    $session->set('users', $users);
                 }
             }
             else
             {
-                echo $error;
+                $session->getFlashBag()->add('error', $error);
             }
         }
 
         return array(
             'users' => $users
         );
+    }
+
+    /**
+     * @Route("/ajouter/promo/selection", name="user_add_promo_selection")
+     * @Template()
+     */
+    public function addPromoSelectionAction()
+    {
+        $request = $this->get('request');
+        $session = $request->getSession();
+
+        $users = $session->get('users');
+        $usersSelected = array();
+
+        if ($request->getMethod() == 'POST')
+        {
+            $parameters = $request->request;
+            $userManager = $this->container->get('fos_user.user_manager');
+
+            foreach ($parameters as $key => $value)
+            {
+                if ($value === 'on')
+                {
+                    $currentUser = $users[$key - 1];
+
+                    // We check that this user doesn't exist
+                    if (!$userManager->findUserByUsername($currentUser->getUsername()))
+                    {
+                        $password = '';
+                        for ($i = 0; $i < 8; $i++)
+                            $password .= chr(rand(32, 126));
+                        $currentUser->setPlainPassword($password);
+
+                        // We save this new user into the database
+                        $userManager->updateUser($currentUser);
+
+                        $message = \Swift_Message::newInstance()
+                                ->setSubject('Bienvenue sur l\'Intranet MTI !')
+                                ->setFrom('intranet.mti@epita.fr')
+                                ->setTo($currentUser->getEmail())
+                                ->setBody($this->get('templating')->render('IntranetUserBundle:Mail:mail.html.twig', array(
+                                    'user' => $currentUser,
+                                    'password' => $password)), 'text/html')
+                        ;
+                        $message->setCharset('utf-8');
+
+                        $this->get('mailer')->send($message);
+
+                        $usersSelected[] = $currentUser;
+                    }
+                    else
+                    {
+                        $error = $currentUser->getUsername() . ' existe déjà dans la base de données !';
+                        $session->getFlashBag()->add('error', $error);
+                    }
+                }
+            }
+        }
+
+        return array('users' => $usersSelected);
     }
 
 }

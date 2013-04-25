@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: @BCCCronManagerBundle/Resources/config/assetic.yml }
 #    - { resource: sonata_news.yml }
 #    - { resource: sonata_media.yml }
 #    - { resource: sonata_formater.yml }

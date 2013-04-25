@@ -1,0 +1,33 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Inscription de nouveau membre de promotion</h1>
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="flash-notice">
+        <p class="text-error">{{ flashMessage }}</p>
+    </div>
+{% endfor %}
+
+{% if users|length > 0 %}
+    <p class="text-success">Les personnes présentent dans la liste ci-dessous ont bien été inscrites !</p>
+    <table class="table">
+        <tr>
+            <th>Login</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p class="text-error">Aucun nouvel utilisateur n'a été créé !</p>
+{% endif %}
+{% endblock %}

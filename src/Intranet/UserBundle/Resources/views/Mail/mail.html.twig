@@ -1,0 +1,17 @@
+{% set mail = true %}
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+<h1>Inscription à  l'intranet MTI</h1>
+
+<p>Bonjour {{ user.lastName }},<br />
+Ton compte sur l'intranet MTI vient d'être créé, et il est d'ores et déjà utilisable.<br />
+Pour cela, il suffit de se rendre à <a href="{{ url('home') }}">cette adresse</a> et d'y rentrer ton login EPITA avec ce mot de passe:
+</p>
+
+<p class="center"><strong>{{ password }}</strong></p>
+
+<p>Ce mot de passe n'étant pas vraiment sécurisé, nous te conseillons vivement de le changer via <a href="{{ url('user_profile_edit') }}">ton profil</a> !</p>
+
+<p>A bientôt sur l'Intranet MTI ;)</p>
+{% endblock content %}

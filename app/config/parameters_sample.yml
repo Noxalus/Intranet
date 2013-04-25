@@ -5,10 +5,13 @@ parameters:
     database_name: intranet
     database_user: root
     database_password: null
+    
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
     mailer_password: null
+    delivery_address: moi@exemple.fr
+    
     locale: fr
     secret: 0fbb127467b17b84101097f919de958c3
     database_path: null
