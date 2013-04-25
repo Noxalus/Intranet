@@ -1,0 +1,18 @@
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+
+<h1>Profil de {{ user.firstName }} {{ user.lastName }}</h1>
+
+<div>
+<p><strong>Adresse email</strong>: {{ user.email }}</p>    
+</div>
+
+<ul>
+<li><a href="#">Voir les notes</a></li>
+<li><a href="#">Voir les projets</a></li>
+</ul>
+
+<p><a href="{{ path('user_profile_edit', {'user_id': user.id }) }}" class="btn btn-info">Editer</a></p>
+
+{% endblock content %}

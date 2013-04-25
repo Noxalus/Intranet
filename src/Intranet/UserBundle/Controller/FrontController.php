@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Intranet\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontController extends Controller
 {
-
     /**
      * @Route("/liste", name="user_list")
      * @Template()
@@ -70,45 +70,65 @@ class FrontController extends Controller
     }
 
     /**
-     * @Route("/profil/editer", name="user_profile_edit")
-     * @Template()
+     * @Route("/profil", name="user_my_profile")
      */
-    public function profileditAction(Request $request)
+    public function myProfileAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
 
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        return $this->redirect($this->generateUrl('user_profile', [
+                            'username' => $user->getUsername()
+        ]));
+    }
+
+    /**
+     * @Route("/profil/{username}", name="user_profile")
+     * @Template("IntranetUserBundle:Profile:profile.html.twig")
+     */
+    public function profileAction($username)
+    {
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->findUserByUsername($username);
+
+        if (!$user)
+        {
+            return new Response('Ceci est une page d\'erreur 404', 404);
+        }
+        
+        if (!($this->get('security.context')->isGranted('ROLE_TEACHER') || $user == $currentUser))
+        {
+            return new Response('Ceci est une page d\'erreur 403', 403);
+        }
+
+        return array('user' => $user);
+    }
+
+    /**
+     * @Route("/profil/editer/{user_id}", name="user_profile_edit")
+     * @Template("IntranetUserBundle:Profile:edit.html.twig")
+     */
+    public function profileEditAction($user_id)
+    {
+        $repository = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetUserBundle:User');
+        
+        $user = $repository->find($user_id);
+
+        /*
         $formFactory = $this->container->get('fos_user.profile.form.factory');
 
         $form = $formFactory->createForm();
         $form->setData($user);
-
-        if ('POST' === $request->getMethod())
-        {
-            $form->bind($request);
-
-            if ($form->isValid())
-            {
-                /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-                $userManager = $this->container->get('fos_user.user_manager');
-
-                $event = new FormEvent($form, $request);
-                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
-
-                $userManager->updateUser($user);
-
-                if (null === $response = $event->getResponse())
-                {
-                    $url = $this->container->get('router')->generate('fos_user_profile_show');
-                    $response = new RedirectResponse($url);
-                }
-
-                return $response;
-            }
-        }
-
-        return $this->container->get('templating')->renderResponse(
-                        'FOSUserBundle:Profile:edit.html.' . $this->container->getParameter('fos_user.template.engine'), array('form' => $form->createView())
+        */
+        
+        $form = null;
+        
+        return array(
+            'form' => $form,
+            'user' => $user
         );
     }
 

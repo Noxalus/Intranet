@@ -3,6 +3,7 @@
 namespace Intranet\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Yoopies\CoreBundle\Entity\Photo
@@ -13,86 +14,48 @@ use Doctrine\ORM\Mapping as ORM;
 class Photo
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    public $id;
 
     /**
-     * @var string $url
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
-    private $name;
+    public $name;
 
     /**
-     * @var datetime $updatedAt
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $updatedAt;
+    public $path;
 
-    public function __construct()
+    public function getAbsolutePath()
     {
-        $this->updatedAt = new \DateTime();
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
+    public function getWebPath()
     {
-        return $this->id;
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Photo
-     */
-    public function setName($name)
+    protected function getUploadRootDir()
     {
-        $this->name = $name;
-    
-        return $this;
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
+    protected function getUploadDir()
     {
-        return $this->name;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Photo
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/documents';
     }
 }

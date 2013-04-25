@@ -12,11 +12,6 @@ $(this).attr("checked",status);
 <h1>Ajout d'une promotion</h1>
 
 {% if users|length == 0 %}
-{% for flashMessage in app.session.flashbag.get('error') %}
-    <div class="flash-notice">
-        <p class="text-error">{{ flashMessage }}</p>
-    </div>
-{% endfor %}
 <form method="POST" action="{{ path('user_add_promo') }}" enctype="multipart/form-data">
     <fieldset>
     <label for="promo">Promotion:</label>

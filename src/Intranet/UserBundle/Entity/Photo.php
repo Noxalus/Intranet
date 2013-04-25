@@ -3,6 +3,7 @@
 namespace Intranet\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Yoopies\CoreBundle\Entity\Photo
@@ -13,20 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
 class Photo
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    public $id;
 
     /**
-     * @var string $url
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
-    private $name;
+    public $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -35,24 +33,29 @@ class Photo
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
     }
 
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
     }
 
     protected function getUploadRootDir()
     {
-        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        // the absolute directory path where uploaded
+        // documents should be saved
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
     {
-        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
-        // le document/image dans la vue.
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
         return 'uploads/documents';
     }
 
@@ -90,25 +93,25 @@ class Photo
     }
 
     /**
-     * Set updatedAt
+     * Set path
      *
-     * @param \DateTime $updatedAt
+     * @param string $path
      * @return Photo
      */
-    public function setUpdatedAt($updatedAt)
+    public function setPath($path)
     {
-        $this->updatedAt = $updatedAt;
+        $this->path = $path;
     
         return $this;
     }
 
     /**
-     * Get updatedAt
+     * Get path
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getUpdatedAt()
+    public function getPath()
     {
-        return $this->updatedAt;
+        return $this->path;
     }
 }

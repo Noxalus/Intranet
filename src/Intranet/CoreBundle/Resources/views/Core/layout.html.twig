@@ -21,6 +21,34 @@
         </div>
         <div class="row">
             <div id="content">
+                <div id="topAlert">
+                    {% block alert_box %}
+                        {% for flashMessage in app.session.flashbag.get('alert') %}
+                            <div class="alert">
+                                {{ flashMessage | trans | raw }}
+                                <button class="close" data-dismiss="alert">×</button>
+                            </div>
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('info') %}
+                            <div class="alert alert-info">
+                                {{ flashMessage | trans }}
+                                <button class="close" data-dismiss="alert">×</button>
+                            </div>
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('success') %}
+                            <div class="alert alert-success">
+                                {{ flashMessage | trans }}
+                                <button class="close" data-dismiss="alert">×</button>
+                            </div>
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('error') %}
+                            <div class="alert alert-error">
+                                {{ flashMessage | trans }}
+                                <button class="close" data-dismiss="alert">×</button>
+                            </div>
+                        {% endfor %}
+                    {% endblock %}
+                </div>
                 {% block content %}
                 {% endblock %}
             </div>

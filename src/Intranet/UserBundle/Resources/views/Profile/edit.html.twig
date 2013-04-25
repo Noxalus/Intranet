@@ -1,12 +1,8 @@
 {% extends "IntranetCoreBundle:Core:layout.html.twig" %}
 
 {% block content %}
-{% trans_default_domain 'FOSUserBundle' %}
-
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-    </div>
+<h1>Edition du profil de {{ user.firstName }} {{ user.lastName }}</h1>
+<form action="{{ path('user_profile_edit', {'user_id': user.id }) }}" method="POST">
+    
 </form>
 {% endblock content %}
