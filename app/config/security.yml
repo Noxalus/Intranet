@@ -37,4 +37,4 @@ security:
                 key: %secret%
 
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/img/*, roles: IS_FULLY_AUTHENTICATED }

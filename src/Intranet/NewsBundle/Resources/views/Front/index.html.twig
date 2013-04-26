@@ -71,10 +71,14 @@
 <div class="span4" id="right-column">
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     <div class="center">
-    Bonjour <b>{{ app.user.username }}</b> (<a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>)
+    Bonjour <b>{{ app.user.firstName }} {{ app.user.lastName }}</b>
+    <br />
+    (<a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>)
     <br /><br />
     <img src="{{ asset('img/avatar.png') }}" alt="Avatar" />
 </div>
+    
+{% render(controller('IntranetScheduleBundle:Render:nextCourses', {'max': 5})) %}
 {% endif %}
 </div>
 </div>

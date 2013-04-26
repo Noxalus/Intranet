@@ -36,9 +36,9 @@ class User extends BaseUser
     protected $lastName;
     
     /**
-     * @var Yoopies\CoreBundle\Entity\Photo
+     * @var Intranet\UserBundle\Entity\Photo
      *
-     * @ORM\ManyToMany(targetEntity="Photo", cascade={"persist","remove"})
+     * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\Photo", cascade={"persist","remove"})
      * @ORM\JoinTable(name="intranet_users_photos_relationship",
      *    joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *    inverseJoinColumns={@ORM\JoinColumn(name="photo_id", referencedColumnName="id", unique=true)}
@@ -123,7 +123,7 @@ class User extends BaseUser
      * @param \Yoopies\CoreBundle\Entity\Photo $photos
      * @return User
      */
-    public function addPhoto(\Yoopies\CoreBundle\Entity\Photo $photos)
+    public function addPhoto(\Intranet\UserBundle\Entity\Photo $photos)
     {
         $this->photos[] = $photos;
     
@@ -135,7 +135,7 @@ class User extends BaseUser
      *
      * @param \Yoopies\CoreBundle\Entity\Photo $photos
      */
-    public function removePhoto(\Yoopies\CoreBundle\Entity\Photo $photos)
+    public function removePhoto(\Intranet\UserBundle\Entity\Photo $photos)
     {
         $this->photos->removeElement($photos);
     }
