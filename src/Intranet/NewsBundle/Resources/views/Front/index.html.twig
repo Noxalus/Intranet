@@ -75,7 +75,7 @@
     <br />
     (<a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>)
     <br /><br />
-    {{ user_photo(app.user, null) }}
+    {{ user_photo(app.user, 'user_photo') }}
 </div>
     
 {% render(controller('IntranetScheduleBundle:Render:nextCourses', {'max': 5})) %}

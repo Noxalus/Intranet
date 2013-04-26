@@ -53,7 +53,7 @@ class IntranetTwigExtension extends \Twig_Extension
         }
         else
         {
-            $src = $this->container->get('templating.helper.assets')->getAssetUrl($url);
+            $src = $this->container->get('templating.helper.assets')->getUrl($url);
         }
 
         echo '<img src="' . $src . '" alt="' . $alt . '" />';
