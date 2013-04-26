@@ -21,7 +21,8 @@
         "jms/di-extra-bundle": "1.3.*",
         "friendsofsymfony/user-bundle": "dev-master",
         "bcc/cron-manager-bundle": "dev-master",
-        "liip/imagine-bundle": "dev-master"
+        "liip/imagine-bundle": "dev-master",
+        "knplabs/doctrine-behaviors": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

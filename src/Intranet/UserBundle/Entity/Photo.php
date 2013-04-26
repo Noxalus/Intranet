@@ -5,6 +5,7 @@ namespace Intranet\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * Yoopies\CoreBundle\Entity\Photo
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Photo
 {
+    use ORMBehaviors\Timestampable\Timestampable;
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
