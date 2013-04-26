@@ -22,7 +22,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new BCC\CronManagerBundle\BCCCronManagerBundle(),
-            //new Liip\ImagineBundle\LiipImagineBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
             new Intranet\CoreBundle\IntranetCoreBundle(),
             new Intranet\UserBundle\IntranetUserBundle(),
             new Intranet\ScheduleBundle\IntranetScheduleBundle(),

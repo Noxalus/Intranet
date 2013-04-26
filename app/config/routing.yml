@@ -50,3 +50,7 @@ fos_user_change_password:
 BCCCronManagerBundle:
     resource: "@BCCCronManagerBundle/Resources/config/routing.xml"
     prefix:   /cron-manager
+    
+_imagine:
+    resource: .
+    type:     imagine

@@ -38,7 +38,7 @@ class Schedule
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="text")
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
@@ -50,6 +50,7 @@ class Schedule
     public function __construct()
     {
         $this->date = new \Datetime;
+        $this->comment = null;
     }
 
     /**

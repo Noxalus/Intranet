@@ -36,15 +36,11 @@ class User extends BaseUser
     protected $lastName;
     
     /**
-     * @var Yoopies\CoreBundle\Entity\Photo
+     * @var Intranet\UserBundle\Entity\Photo
      *
-     * @ORM\ManyToMany(targetEntity="Photo", cascade={"persist","remove"})
-     * @ORM\JoinTable(name="intranet_users_photos_relationship",
-     *    joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *    inverseJoinColumns={@ORM\JoinColumn(name="photo_id", referencedColumnName="id", unique=true)}
-     *    )
+     * @ORM\OneToOne(targetEntity="Photo", cascade={"persist"})
      */
-    protected $photos;
+    protected $photo;
     
     /**
      * @var integer
@@ -55,8 +51,6 @@ class User extends BaseUser
 
     public function __construct()
     {
-        $this->photos = new ArrayCollection();
-        
         parent::__construct();
     }
 
@@ -116,37 +110,84 @@ class User extends BaseUser
     {
         return $this->lastName;
     }
-
+    
     /**
-     * Add photos
+     * Set promo
      *
-     * @param \Yoopies\CoreBundle\Entity\Photo $photos
+     * @param integer $promo
      * @return User
      */
-    public function addPhoto(\Yoopies\CoreBundle\Entity\Photo $photos)
+    public function setPromo($promo)
     {
-        $this->photos[] = $photos;
+        $this->promo = $promo;
     
         return $this;
     }
 
     /**
-     * Remove photos
+     * Get promo
      *
-     * @param \Yoopies\CoreBundle\Entity\Photo $photos
+     * @return integer 
      */
-    public function removePhoto(\Yoopies\CoreBundle\Entity\Photo $photos)
+    public function getPromo()
     {
-        $this->photos->removeElement($photos);
+        return $this->promo;
+    }
+    
+    /**
+     * Serializes the user.
+     *
+     * The serialized data have to contain the fields used by the equals method and the username.
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->firstName,
+            $this->lastName,
+            $this->promo,
+            $this->email,
+            $this->plainPassword,
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->expired,
+            $this->locked,
+            $this->credentialsExpired,
+            $this->enabled,
+            $this->id,
+        ));
     }
 
     /**
-     * Get photos
+     * Unserializes the user.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param string $serialized
      */
-    public function getPhotos()
+    public function unserialize($serialized)
     {
-        return $this->photos;
+        $data = unserialize($serialized);
+        // add a few extra elements in the array to ensure that we have enough keys when unserializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 2, null));
+
+        list(
+            $this->firstName,
+            $this->lastName,
+            $this->promo,
+            $this->email,
+            $this->plainPassword,
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->expired,
+            $this->locked,
+            $this->credentialsExpired,
+            $this->enabled,
+            $this->id
+        ) = $data;
     }
 }

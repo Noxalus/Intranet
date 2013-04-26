@@ -73,3 +73,10 @@ fos_user:
     db_driver:     orm
     firewall_name: main
     user_class:    Intranet\UserBundle\Entity\User
+    
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            quality: 75
+            filters:
+                thumbnail: { size: [120, 90], mode: outbound }

@@ -11,9 +11,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Intranet\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Response;
+use Intranet\UserBundle\Form\UserType;
 
 class FrontController extends Controller
 {
+
     /**
      * @Route("/liste", name="user_list")
      * @Template()
@@ -88,7 +90,7 @@ class FrontController extends Controller
     public function profileAction($username)
     {
         $currentUser = $this->get('security.context')->getToken()->getUser();
-        
+
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($username);
 
@@ -96,7 +98,7 @@ class FrontController extends Controller
         {
             return new Response('Ceci est une page d\'erreur 404', 404);
         }
-        
+
         if (!($this->get('security.context')->isGranted('ROLE_TEACHER') || $user == $currentUser))
         {
             return new Response('Ceci est une page d\'erreur 403', 403);
@@ -112,22 +114,35 @@ class FrontController extends Controller
     public function profileEditAction($user_id)
     {
         $repository = $this->getDoctrine()
-                   ->getManager()
-                   ->getRepository('IntranetUserBundle:User');
-        
+                ->getManager()
+                ->getRepository('IntranetUserBundle:User');
+
         $user = $repository->find($user_id);
 
-        /*
-        $formFactory = $this->container->get('fos_user.profile.form.factory');
+        $form = $this->createForm(new UserType, $user);
 
-        $form = $formFactory->createForm();
         $form->setData($user);
-        */
-        
-        $form = null;
-        
+
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                
+                $user->getPhoto()->setPath('Test');
+                
+                $em->persist($user);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('user_profile', array('username' => $user->getUsername())));
+            }
+        }
+
         return array(
-            'form' => $form,
+            'form' => $form->createView(),
             'user' => $user
         );
     }

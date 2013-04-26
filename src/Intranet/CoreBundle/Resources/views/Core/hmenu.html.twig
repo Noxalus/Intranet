@@ -22,14 +22,14 @@
         </li>
 
         <li>
-            <a class="mainmenu" href="{{ path('fos_user_profile_show') }}">Mon Compte 
+            <a class="mainmenu" href="{{ path('user_my_profile') }}">Mon Compte 
                 {% if (mail is defined and not mail) or (not mail is defined and is_granted("IS_AUTHENTICATED_REMEMBERED")) %}
                         ({{ app.user.username }}) 
                 {% endif %}
             </a>
             
             <ul>
-                    <li><a href="{{ path('fos_user_profile_show') }}">Gestion du compte</a></li>
+                    <li><a href="{{ path('user_my_profile') }}">Gestion du compte</a></li>
                     <li><a href="#">Mes notes</a></li>
                     <li><a href="{{ path('user_list') }}">Lister les profils</a></li>
             </ul>

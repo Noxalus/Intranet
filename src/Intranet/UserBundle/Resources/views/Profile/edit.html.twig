@@ -2,7 +2,11 @@
 
 {% block content %}
 <h1>Edition du profil de {{ user.firstName }} {{ user.lastName }}</h1>
-<form action="{{ path('user_profile_edit', {'user_id': user.id }) }}" method="POST">
-    
+
+<img src="{{ asset('uploads/documents/' ~ user.photo.path) }}" alt="Avatar" />
+
+<form action="{{ path('user_profile_edit', {'user_id': user.id }) }}" method="POST"  {{ form_enctype(form) }}>
+    {{ form_widget(form) }}    
+    <input type="submit" value="Editer" class="btn btn-success" />
 </form>
 {% endblock content %}

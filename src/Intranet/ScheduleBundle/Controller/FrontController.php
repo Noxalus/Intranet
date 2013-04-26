@@ -101,7 +101,7 @@ class FrontController extends Controller
         $formBuilder
                 ->add('date', 'datetime')
                 ->add('duration', 'integer')
-                ->add('comment', 'textarea')
+                ->add('comment', 'textarea', array('required' => false))
                 ->add('type', 'entity', array(
                     'class' => 'IntranetScheduleBundle:CourseType',
                         )

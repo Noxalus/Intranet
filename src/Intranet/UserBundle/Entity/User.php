@@ -38,13 +38,9 @@ class User extends BaseUser
     /**
      * @var Intranet\UserBundle\Entity\Photo
      *
-     * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\Photo", cascade={"persist","remove"})
-     * @ORM\JoinTable(name="intranet_users_photos_relationship",
-     *    joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *    inverseJoinColumns={@ORM\JoinColumn(name="photo_id", referencedColumnName="id", unique=true)}
-     *    )
+     * @ORM\OneToOne(targetEntity="Photo", cascade={"persist"})
      */
-    protected $photos;
+    protected $photo;
     
     /**
      * @var integer
@@ -55,8 +51,6 @@ class User extends BaseUser
 
     public function __construct()
     {
-        $this->photos = new ArrayCollection();
-        
         parent::__construct();
     }
 
@@ -116,40 +110,7 @@ class User extends BaseUser
     {
         return $this->lastName;
     }
-
-    /**
-     * Add photos
-     *
-     * @param \Yoopies\CoreBundle\Entity\Photo $photos
-     * @return User
-     */
-    public function addPhoto(\Intranet\UserBundle\Entity\Photo $photos)
-    {
-        $this->photos[] = $photos;
     
-        return $this;
-    }
-
-    /**
-     * Remove photos
-     *
-     * @param \Yoopies\CoreBundle\Entity\Photo $photos
-     */
-    public function removePhoto(\Intranet\UserBundle\Entity\Photo $photos)
-    {
-        $this->photos->removeElement($photos);
-    }
-
-    /**
-     * Get photos
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhotos()
-    {
-        return $this->photos;
-    }
-
     /**
      * Set promo
      *
@@ -228,5 +189,28 @@ class User extends BaseUser
             $this->enabled,
             $this->id
         ) = $data;
+    }
+
+    /**
+     * Set photo
+     *
+     * @param \Intranet\UserBundle\Entity\Photo $photo
+     * @return User
+     */
+    public function setPhoto(\Intranet\UserBundle\Entity\Photo $photo = null)
+    {
+        $this->photo = $photo;
+    
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return \Intranet\UserBundle\Entity\Photo 
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
     }
 }
