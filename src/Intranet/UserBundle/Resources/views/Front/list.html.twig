@@ -6,6 +6,7 @@
 <table class="table">
     <tr>
         <th>ID</th>
+        <th>Photo</th>
         <th>Login</th>
         <th>Prénom</th>
         <th>Nom</th>
@@ -16,6 +17,7 @@
     {% for user in users %}
         <tr>
             <td>{{ user.id }}</td>
+            <td>{{ user_photo(user, 'thumbnail') }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.firstName }}</td>
             <td>{{ user.lastName }}</td>

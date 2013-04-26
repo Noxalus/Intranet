@@ -2,3 +2,10 @@ services:
     intranet.util.user_manipulator:
         class:      Intranet\UserBundle\Util\UserManipulator
         arguments:  [@fos_user.user_manager]
+        
+    intranet.twig.extension:
+        class: Intranet\UserBundle\Twig\Extension\IntranetTwigExtension
+        tags:
+            - { name: twig.extension }
+        calls:
+            - [ setContainer, [ @service_container ] ]

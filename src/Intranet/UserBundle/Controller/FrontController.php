@@ -132,7 +132,10 @@ class FrontController extends Controller
             {
                 $em = $this->getDoctrine()->getManager();
                 
-                $user->getPhoto()->setPath('Test');
+                // If we don't do anything on the Photo entity, the image won't be moved
+                if (!$user->getPhoto()->getCreatedAt())
+                    $user->getPhoto()->setCreatedAt(new \DateTime());
+                $user->getPhoto()->setUpdatedAt(new \DateTime());
                 
                 $em->persist($user);
                 $em->flush();

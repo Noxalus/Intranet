@@ -76,7 +76,11 @@ fos_user:
     
 liip_imagine:
     filter_sets:
-        my_thumb:
+        user_photo:
             quality: 75
             filters:
-                thumbnail: { size: [120, 90], mode: outbound }
+                thumbnail: { size: [150, 150], mode: outbound }
+        thumbnail:
+            quality: 50
+            filters:
+                thumbnail: { size: [50, 50], mode: outbound }

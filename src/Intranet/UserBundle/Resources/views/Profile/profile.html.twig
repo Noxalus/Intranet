@@ -4,7 +4,10 @@
 
 <h1>Profil de {{ user.firstName }} {{ user.lastName }}</h1>
 
+
 <div>
+{{ user_photo(user, 'user_photo') }}
+
 <p><strong>Adresse email</strong>: {{ user.email }}</p>    
 </div>
 
