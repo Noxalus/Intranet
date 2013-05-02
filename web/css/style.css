@@ -233,7 +233,7 @@ a#trans:hover
 }
 
 .planning tr td:not(:first-child) {
-    background-color: red;
+    background-color: rgb(192, 181, 181);
 }
 
 .planning tr td
@@ -244,4 +244,27 @@ a#trans:hover
 .center
 {
     text-align: center;
+}
+
+.next_courses_block h2
+{
+    background-image:url('../img/titre-h2.png');
+    padding-top: 18px;
+    padding-left: 100px;
+    font-size: 20px;
+    color: white;
+}
+
+.next_courses_block ul {
+    list-style-type:none;
+    margin-left: 19px;
+    margin-top: -12px;
+    padding-left: 42px;
+    padding-top: 15px;
+    border-left: 1px solid black;
+    padding-bottom: 5px;
+}
+
+.next_courses_block li {
+	margin-bottom:20px;
 }

@@ -6,6 +6,12 @@
 <div class="span7">
     <h1>News</h1>
     
+    {% if is_granted('ROLE_TEACHER') %}
+    <p>
+        <a href="#">Ajouter une news</a>
+    </p>
+    {% endif %}
+    
     <h3>
         Lorem ipsum dolor sit amet<br />
         <small>le jeudi 27 septembre - par Vincent Coquart</small>
@@ -63,9 +69,6 @@
     In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
     </p>
     <br />
-    <p>
-        <a href="#">Ajouter une news</a>
-    </p>
 </div>
 
 <div class="span4" id="right-column">

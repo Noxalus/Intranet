@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Planning des cours</h1>
     <br />
-    {% if is_granted('ROLE_USER') %}
+    {% if is_granted('ROLE_TEACHER') %}
         <ul>
             <li><a href="{{ path('planning_ajouter_cours') }}">Ajouter un cours</a></li>
             <li><a href="{{ path('planning_ajouter_type_cours') }}">Ajouter un type de cours</a></li>

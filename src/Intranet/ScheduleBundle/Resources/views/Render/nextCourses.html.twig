@@ -1,10 +1,10 @@
 <div class="next_courses_block">
-    <h3>Cours à venir</h3>
+    <h2>Cours à venir</h2>
     {% if schedules|length > 0 %}
     <ul>
         {% for schedule in schedules %}
             <li>
-                Le {{ schedule.date|date('d/m') }} à {{ schedule.date|date('H') }}h{{ schedule.date|date('i') }}:<br />
+                <b>Le {{ schedule.date|date('d/m') }} à {{ schedule.date|date('H') }}h{{ schedule.date|date('i') }}</b>:<br />
                 {{ schedule.type.name }} (pendant {{ schedule.duration / 60 }}h)
             </li>
         {% endfor %}

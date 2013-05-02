@@ -15,7 +15,6 @@ use Intranet\UserBundle\Form\UserType;
 
 class FrontController extends Controller
 {
-
     /**
      * @Route("/liste", name="user_list")
      * @Template()
@@ -131,12 +130,12 @@ class FrontController extends Controller
             if ($form->isValid())
             {
                 $em = $this->getDoctrine()->getManager();
-                
+
                 // If we don't do anything on the Photo entity, the image won't be moved
                 if (!$user->getPhoto()->getCreatedAt())
                     $user->getPhoto()->setCreatedAt(new \DateTime());
                 $user->getPhoto()->setUpdatedAt(new \DateTime());
-                
+
                 $em->persist($user);
                 $em->flush();
 
@@ -254,6 +253,10 @@ class FrontController extends Controller
                             $password .= chr(rand(32, 126));
                         $currentUser->setPlainPassword($password);
 
+                        $currentUser->setPlainPassword('coucou');
+
+                        $currentUser->setRoles(array('ROLE_STUDENT'));
+
                         // We save this new user into the database
                         $userManager->updateUser($currentUser);
 
@@ -267,7 +270,7 @@ class FrontController extends Controller
                         ;
                         $message->setCharset('utf-8');
 
-                        $this->get('mailer')->send($message);
+                        //$this->get('mailer')->send($message);
 
                         $usersSelected[] = $currentUser;
                     }

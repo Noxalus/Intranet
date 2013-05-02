@@ -11,7 +11,7 @@ Pour cela, il suffit de se rendre à <a href="{{ url('home') }}">cette adresse</
 
 <p class="center"><strong>{{ password }}</strong></p>
 
-<p>Ce mot de passe n'étant pas vraiment sécurisé, nous te conseillons vivement de le changer via <a href="{{ url('user_profile_edit') }}">ton profil</a> !</p>
+<p>Ce mot de passe n'étant pas vraiment sécurisé, nous te conseillons vivement de le changer via <a href="{{ url('user_profile_edit', {'user_id': user.id }) }}">ton profil</a> !</p>
 
 <p>A bientôt sur l'Intranet MTI ;)</p>
 {% endblock content %}

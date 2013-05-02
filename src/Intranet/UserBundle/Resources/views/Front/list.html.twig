@@ -3,9 +3,15 @@
 {% block content %}
 <h1>Liste des utilisateurs</h1>
 
+{% if is_granted('ROLE_TEACHER') %}
+    <p>
+        <a href="{{ path('user_add_promo') }}">Ajouter une promotion</a>
+    </p>
+    <br />
+{% endif %}
+
 <table class="table">
     <tr>
-        <th>ID</th>
         <th>Photo</th>
         <th>Login</th>
         <th>Prénom</th>
@@ -16,7 +22,6 @@
     </tr>
     {% for user in users %}
         <tr>
-            <td>{{ user.id }}</td>
             <td>{{ user_photo(user, 'thumbnail') }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.firstName }}</td>
@@ -24,7 +29,7 @@
             <td>{{ user.email }}</td>
             <td>
                 {% for role in user.roles %} 
-                    {{ role }} 
+                    {{ role }} <br />
                 {% endfor %}
             </td>
             <td>

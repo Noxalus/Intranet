@@ -4,12 +4,14 @@
 
     <h1>Projets</h1>
     
+    {% if is_granted('ROLE_TEACHER') %}
     <div>
         <ul>
             <li><a href="{{ path('projects_add') }}" />Ajouter un projet</a></li>
             <li><a href="{{ path('projects_group_add') }}" />Créer un groupe de projet</a></li>
         </ul>
     </div>
+    {% endif %}
     
     {% if projects|length > 0 %}
         <table class="table">
