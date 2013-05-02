@@ -52,7 +52,7 @@ class FrontController extends Controller
                 ->getManager()
                 ->getRepository('IntranetUserBundle:User');
 
-        $users = $repository->findByPromo($promo);
+        $users = $repository->findBy(array('promo' => $promo), array('lastName' => 'ASC'));
 
         $request = $this->get('request');
 
@@ -195,8 +195,8 @@ class FrontController extends Controller
 
                             // Hydratation
                             $user->setUsername($infos[0]);
-                            $user->setFirstName($infos[1]);
-                            $user->setLastName($infos[2]);
+                            $user->setLastName($infos[1]);
+                            $user->setFirstName($infos[2]);
                             $user->setEmail($infos[3]);
                             $user->setPromo($promo);
 

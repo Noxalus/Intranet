@@ -23,18 +23,17 @@
 </div>
 
 <table>
+    <tr>
     {% for user in users %}
-        {% if loop.index is divisibleby(6) %}
-            <tr>
+        {% if (loop.index - 1) is divisibleby(5) %}
+            </tr><tr>
         {% endif %}
                     
         <td class="center">
             {{ user_photo(user, 'user_photo') }}<br />
             {{ user.firstName }} {{ user.lastName }}
         </td>
-        {% if loop.index is divisibleby(6) %}
-            </tr>
-        {% endif %}
     {% endfor %}
+    </tr>
 </table>
 {% endblock %}
