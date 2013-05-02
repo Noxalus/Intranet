@@ -8,7 +8,7 @@
     <div>
         <label>Promotion:</label>
         <select name="promo">
-            {% for i in (promo - 3)..(promo + 3) %}
+            {% for i in (promo - 5)..(promo + 5) %}
                 {% if i == promo %}
                     <option value="{{ i }}" selected="selected">{{ i }}</option>
                 {% else %}
