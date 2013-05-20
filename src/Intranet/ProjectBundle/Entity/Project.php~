@@ -3,7 +3,6 @@
 namespace Intranet\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Project
@@ -37,7 +36,7 @@ class Project
     private $description;
 
     /**
-    * @ORM\OneToMany(targetEntity="ProjectDeadline", orphanRemoval=true, mappedBy="project",cascade={"persist","remove"})
+    * @ORM\OneToMany(targetEntity="ProjecDeadline", orphanRemoval=true, mappedBy="project",cascade={"persist","remove"})
     */
     private $deadlines;    
     
@@ -46,7 +45,7 @@ class Project
      */
     public function __construct()
     {
-        $this->deadlines = new ArrayCollection();
+        $this->deadlines = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -108,38 +107,5 @@ class Project
     public function __toString()
     {
         return $this->name;
-    }
-
-    /**
-     * Add deadlines
-     *
-     * @param \Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines
-     * @return Project
-     */
-    public function addDeadline(\Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines)
-    {
-        $this->deadlines[] = $deadlines;
-    
-        return $this;
-    }
-
-    /**
-     * Remove deadlines
-     *
-     * @param \Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines
-     */
-    public function removeDeadline(\Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines)
-    {
-        $this->deadlines->removeElement($deadlines);
-    }
-
-    /**
-     * Get deadlines
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDeadlines()
-    {
-        return $this->deadlines;
     }
 }

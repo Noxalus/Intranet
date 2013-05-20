@@ -1,7 +1,6 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
-
     <h1>Projets</h1>
     
     {% if is_granted('ROLE_TEACHER') %}
@@ -18,11 +17,14 @@
             <tr>
                 <th>Nom</th>
                 <th>Description</th>
+                <th>Prochaine deadline</th>
             </tr>
         {% for project in projects %}
             <tr>
                 <td><a href="{{ path('projects_display', {'id': project.id}) }}">{{ project.name }}</a></td>
                 <td>{{ project.description }}</td>
+                <td>
+                </td>
             </tr>
         {% endfor %}
         </ul>

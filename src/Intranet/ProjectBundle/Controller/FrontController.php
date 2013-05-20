@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Intranet\ProjectBundle\Entity\Project;
 use Intranet\ProjectBundle\Entity\ProjectGroup;
+use Intranet\ProjectBundle\Form\Type\ProjectType;
 
 class FrontController extends Controller
 {
@@ -22,7 +23,7 @@ class FrontController extends Controller
                 ->getRepository('IntranetProjectBundle:Project');
 
         $projects = $repository->findAll();
-
+        
         return array(
             'projects' => $projects
         );
@@ -54,7 +55,11 @@ class FrontController extends Controller
     public function addAction()
     {
         $project = new Project();
-
+        
+        $deadline = new \Intranet\ProjectBundle\Entity\ProjectDeadline();
+        $deadline->setDate(new \DateTime());
+        $project->addDeadline($deadline);
+        /*
         $formBuilder = $this->createFormBuilder($project);
 
         $formBuilder
@@ -62,7 +67,9 @@ class FrontController extends Controller
                 ->add('description', 'textarea');
 
         $form = $formBuilder->getForm();
-
+        */
+        $form = $this->createForm(new ProjectType(), $project);
+        
         $request = $this->get('request');
 
         if ($request->getMethod() == 'POST')
@@ -77,6 +84,10 @@ class FrontController extends Controller
                 $em->flush();
 
                 return $this->redirect($this->generateUrl('projects'));
+            }
+            else
+            {
+                
             }
         }
         return array(
