@@ -19,13 +19,14 @@
     </form>
 </div>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
 // Get the ul that holds the collection of deadlines
 var collectionHolder = $('ul.deadlines');
 
-// setup an "add a tag" link
-var $addTagLink = $('<a href="#" class="add_tag_link">Ajouter une deadline</a>');
-var $newLinkLi = $('<li></li>').append($addTagLink);
+// setup an "Ajouter une deadline" link
+var $addDeadlineLink = $('<a href="#" class="add_deadline_link">Ajouter une deadline</a>');
+var $newLinkLi = $('<li></li>').append($addDeadlineLink);
 
 jQuery(document).ready(function() {
     // add the "Ajouter une deadline" anchor and li to the tags ul
@@ -35,12 +36,12 @@ jQuery(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     collectionHolder.data('index', collectionHolder.find(':input').length);
 
-    $addTagLink.on('click', function(e) {
+    $addDeadlineLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
 
         // add a new tag form (see next code block)
-        addTagForm(collectionHolder, $newLinkLi);
+        addDeadlineForm(collectionHolder, $newLinkLi);
     });
 });
 
