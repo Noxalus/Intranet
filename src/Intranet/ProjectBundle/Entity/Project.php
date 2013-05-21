@@ -113,12 +113,13 @@ class Project
     /**
      * Add deadlines
      *
-     * @param \Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines
+     * @param \Intranet\ProjectBundle\Entity\ProjectDeadline $deadline
      * @return Project
      */
-    public function addDeadline(\Intranet\ProjectBundle\Entity\ProjectDeadline $deadlines)
+    public function addDeadline(\Intranet\ProjectBundle\Entity\ProjectDeadline $deadline)
     {
-        $this->deadlines[] = $deadlines;
+        $this->deadlines[] = $deadline;
+        $deadline->setProject($this);
     
         return $this;
     }

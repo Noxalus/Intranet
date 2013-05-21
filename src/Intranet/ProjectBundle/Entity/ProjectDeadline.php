@@ -30,8 +30,7 @@ class ProjectDeadline
 
     /**
      * @var \stdClass
-     *
-     * @ORM\Column(name="project", type="object")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="deadlines")
      */
     private $project;
 

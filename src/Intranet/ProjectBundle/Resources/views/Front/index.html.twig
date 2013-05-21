@@ -24,6 +24,11 @@
                 <td><a href="{{ path('projects_display', {'id': project.id}) }}">{{ project.name }}</a></td>
                 <td>{{ project.description }}</td>
                 <td>
+                    {% if project.getDeadlines()|length > 0 %}
+                            {{ project.getDeadlines()[0].date|date('Y/m/d h:i:s') }}
+                    {% else %}
+                        Aucune
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
