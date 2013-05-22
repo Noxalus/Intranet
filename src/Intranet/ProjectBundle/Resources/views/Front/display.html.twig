@@ -13,6 +13,38 @@
         <li>{{ user.username }}</li>
     {% endfor %}
     </ul>
+    
+    <h3>Deadlines</h3>
+    
+    {% if projectGroup.project.getDeadlines()|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Date butoir</th>
+                <th>Rendu</th>
+            </tr>
+            {% for deadline in projectGroup.project.getDeadlines() %}
+                <tr>
+                    <td>
+                        {{ deadline.date|date('Y/m/d h:i:s') }}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ path('add_submission', {'project_id': projectGroup.project.id, 'deadline_id': deadline.id }) }}" enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <span class="fileupload-new"><span class="btn btn-file">Fichier<input type="file" /></span></span>
+                                    <span class="fileupload-exists"><button type="submit" class="btn btn-success"><i class="icon-white icon-ok"></i> Envoyer</button></span>
+                                    <span class="fileupload-preview"></span>
+                                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucune deadline de prévue pour ce projet !</p>
+    {% endif %}
 {% else %}
     <p class="text-error">Vous n'êtes pas inscrit dans un groupe pour ce projet !</p>
 {% endif %}

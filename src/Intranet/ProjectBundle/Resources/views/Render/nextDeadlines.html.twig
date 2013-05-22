@@ -1,0 +1,14 @@
+<div class="next_courses_block">
+    <h2>Deadlines à venir</h2>
+    {% if deadlines|length > 0 %}
+    <ul>
+        {% for deadline in deadlines %}
+            <li>
+                {{ deadline.date|date('Y/m/d h:i:s') }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p class="text-error">Aucune deadline !</p>
+    {% endif %}
+</div>

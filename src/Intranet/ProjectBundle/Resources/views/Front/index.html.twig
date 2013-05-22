@@ -18,6 +18,9 @@
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Prochaine deadline</th>
+                {% if is_granted('ROLE_TEACHER') %}
+                    <th>Action</th>
+                {% endif %}
             </tr>
         {% for project in projects %}
             <tr>
@@ -25,10 +28,14 @@
                 <td>{{ project.description }}</td>
                 <td>
                     {% if project.getDeadlines()|length > 0 %}
-                            {{ project.getDeadlines()[0].date|date('Y/m/d h:i:s') }}
+                        {{ project.getDeadlines()[0].date|date('Y/m/d h:i:s') }}<br />
                     {% else %}
                         Aucune
                     {% endif %}
+                </td>
+                <td>
+                    <a href="#" class="btn btn-warning btn-mini"><i class="icon-white icon-edit"></i> Editer</a>
+                    <a href="#" class="btn btn-danger btn-mini"><i class="icon-white icon-remove"></i> Supprimer</a>
                 </td>
             </tr>
         {% endfor %}

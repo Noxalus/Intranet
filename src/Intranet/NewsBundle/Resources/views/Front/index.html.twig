@@ -8,67 +8,18 @@
     
     {% if is_granted('ROLE_TEACHER') %}
     <p>
-        <a href="#">Ajouter une news</a>
+        <a href="{{ path('add_news') }}">Ajouter une news</a>
     </p>
     {% endif %}
     
-    <h3>
-        Lorem ipsum dolor sit amet<br />
-        <small>le jeudi 27 septembre - par Vincent Coquart</small>
-    </h3>
-    
-    <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
-    Nulla nec diam ut urna vestibulum faucibus. 
-    Vestibulum sed diam justo, congue malesuada libero. 
-    Nulla id lorem erat, sed tristique ligula. 
-    Nam eget velit neque. Duis vel ipsum ipsum. 
-    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
-    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
-    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
-    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
-    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
-    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
-    </p>
-    
-    <h3>
-        Lorem ipsum dolor sit amet<br />
-        <small>le jeudi 27 septembre - par Vincent Coquart</small>
-    </h3>
-    
-    <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
-    Nulla nec diam ut urna vestibulum faucibus. 
-    Vestibulum sed diam justo, congue malesuada libero. 
-    Nulla id lorem erat, sed tristique ligula. 
-    Nam eget velit neque. Duis vel ipsum ipsum. 
-    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
-    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
-    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
-    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
-    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
-    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
-    </p>
-    
-    <h3>
-        Lorem ipsum dolor sit amet<br />
-        <small>le jeudi 27 septembre - par Vincent Coquart</small>
-    </h3>
-    
-    <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id arcu massa. 
-    Nulla nec diam ut urna vestibulum faucibus. 
-    Vestibulum sed diam justo, congue malesuada libero. 
-    Nulla id lorem erat, sed tristique ligula. 
-    Nam eget velit neque. Duis vel ipsum ipsum. 
-    Nunc at ligula et arcu ultricies varius iaculis sed diam. 
-    Morbi non felis quis ligula adipiscing rhoncus ac eget lectus. 
-    Nulla facilisi. Vivamus laoreet urna nec metus auctor sodales. 
-    Aliquam dignissim eros sit amet lorem interdum vestibulum. 
-    Nulla venenatis ipsum vitae est euismod vitae mollis nibh dapibus. 
-    In lacinia diam ut mauris bibendum at consequat tellus pulvinar.
-    </p>
-    <br />
+    {% for article in news %}
+        <h3>
+            {{ article.title }}<br />
+            <small>{{ article.date|date('Y/m/d à H:i:s') }} - par {{ article.author.firstname }} {{ article.author.lastname }}</small>
+        </h3>
+        <p>{{ article.content }}</p>
+        <br />
+    {% endfor %}
 </div>
 
 <div class="span4" id="right-column">
@@ -82,6 +33,7 @@
 </div>
     
 {% render(controller('IntranetScheduleBundle:Render:nextCourses', {'max': 5})) %}
+{# render(controller('IntranetProjectBundle:Render:nextDeadlines', {'max': 5})) #}
 {% endif %}
 </div>
 </div>

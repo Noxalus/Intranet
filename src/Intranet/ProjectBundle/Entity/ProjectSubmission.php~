@@ -125,27 +125,4 @@ class ProjectSubmission
     {
         return $this->deadline;
     }
-
-    /**
-     * Set group
-     *
-     * @param \Intranet\ProjectBundle\Entity\ProjectGroup $group
-     * @return ProjectSubmission
-     */
-    public function setGroup(\Intranet\ProjectBundle\Entity\ProjectGroup $group = null)
-    {
-        $this->group = $group;
-    
-        return $this;
-    }
-
-    /**
-     * Get group
-     *
-     * @return \Intranet\ProjectBundle\Entity\ProjectGroup 
-     */
-    public function getGroup()
-    {
-        return $this->group;
-    }
 }
