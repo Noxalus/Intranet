@@ -23,7 +23,7 @@ class FrontController extends Controller
         //$news = $repository->find(array(), array('date' => 'ASC'));
         //$news = $repository->findAll();
         
-        $news = $repository->findAll();
+        $news = $repository->findBy(array(), array('date' => 'DESC'), 5, 0);
         
         return array(
             'news' => $news
