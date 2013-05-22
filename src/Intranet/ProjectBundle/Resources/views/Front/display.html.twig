@@ -28,16 +28,7 @@
                         {{ deadline.date|date('Y/m/d h:i:s') }}
                     </td>
                     <td>
-                        <form method="POST" action="{{ path('add_submission', {'project_id': projectGroup.project.id, 'deadline_id': deadline.id }) }}" enctype="multipart/form-data">
-                            <fieldset>
-                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                    <span class="fileupload-new"><span class="btn btn-file">Fichier<input type="file" /></span></span>
-                                    <span class="fileupload-exists"><button type="submit" class="btn btn-success"><i class="icon-white icon-ok"></i> Envoyer</button></span>
-                                    <span class="fileupload-preview"></span>
-                                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
-                                </div>
-                            </fieldset>
-                        </form>
+                        {% render(controller('IntranetProjectBundle:Render:addSubmission', {'deadline_id': deadline.id })) %}
                     </td>
                 </tr>
             {% endfor %}

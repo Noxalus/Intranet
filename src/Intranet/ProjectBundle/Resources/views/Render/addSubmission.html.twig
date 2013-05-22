@@ -1,0 +1,11 @@
+<form method="POST" action="#" {{ form_enctype(form) }}>
+    <fieldset>
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <span class="fileupload-new"><span class="btn btn-file">Fichier{{ form_widget(form.file) }}</span></span>
+            <span class="fileupload-exists"><button type="submit" class="btn btn-success"><i class="icon-white icon-ok"></i> Envoyer</button></span>
+            <span class="fileupload-preview"></span>
+            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+        </div>
+        {{ form_rest(form) }}
+    </fieldset>
+</form>

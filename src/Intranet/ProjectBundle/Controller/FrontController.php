@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Intranet\ProjectBundle\Entity\Project;
 use Intranet\ProjectBundle\Entity\ProjectGroup;
 use Intranet\ProjectBundle\Form\Type\ProjectType;
+use Intranet\ProjectBundle\Entity\ProjectSubmission;
 
 class FrontController extends Controller
 {
@@ -131,27 +132,9 @@ class FrontController extends Controller
                 return $this->redirect($this->generateUrl('projects'));
             }
         }
-        return array(
-            'form' => $form->createView(),
-        );
-    }
-    
-    /**
-     * @Route("/projet/{project_id}/rendu/{deadline_id}", name="add_submission")
-     * @Template()
-     */
-    public function addSubmissionAction($project_id, $deadline_id)
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $repository = $this->getDoctrine()
-                ->getManager()
-                ->getRepository('IntranetProjectBundle:ProjectGroup');
-
-        $projectGroup = $repository->findProjectGroup($project_id, $user->getId());
         
         return array(
-            'projectGroup' => $projectGroup
+            'form' => $form->createView(),
         );
     }
 }
