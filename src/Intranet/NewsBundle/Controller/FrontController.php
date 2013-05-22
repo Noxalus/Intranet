@@ -5,6 +5,7 @@ namespace Intranet\NewsBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\NewsBundle\Entity\Article;
 
 class FrontController extends Controller
@@ -18,6 +19,9 @@ class FrontController extends Controller
         $repository = $this->getDoctrine()
                    ->getManager()
                    ->getRepository('IntranetNewsBundle:Article');
+        
+        //$news = $repository->find(array(), array('date' => 'ASC'));
+        //$news = $repository->findAll();
         
         $news = $repository->findAll();
         
@@ -61,6 +65,11 @@ class FrontController extends Controller
                 $em->persist($article);
                 $em->flush();
 
+                $request = $this->get('request');
+                $session = $request->getSession();
+                $error = 'Article ajouté avec succès.';
+                $session->getFlashBag()->add('success', $error);
+                
                 return $this->redirect($this->generateUrl('home'));
             }
         }
@@ -101,6 +110,11 @@ class FrontController extends Controller
                 $em->persist($article);
                 $em->flush();
 
+                $request = $this->get('request');
+                $session = $request->getSession();
+                $error = 'Article édité avec succès.';
+                $session->getFlashBag()->add('success', $error);
+                
                 return $this->redirect($this->generateUrl('home'));
             }
         }
@@ -122,10 +136,28 @@ class FrontController extends Controller
                 ->getRepository('IntranetNewsBundle:Article')
                 ->find($id_article);
         
+        if ($article)
+        {
+        
         $em = $this->getDoctrine()->getManager();
-                $em->remove($article);
-                $em->flush();
+               $em->remove($article);
+               $em->flush();
+               
+             
+            $request = $this->get('request');
+            $session = $request->getSession();
+            $error = 'Article supprimé avec succès.';
+            $session->getFlashBag()->add('success', $error);
+        }
+        else
+        {
+            $request = $this->get('request');
+            $session = $request->getSession();
+            $error = 'Il semblerait que cet article n\'existe pas dans la base de données. Il n\'a donc pas pu être supprimé.';
+            $session->getFlashBag()->add('error', $error);
+        }
         return $this->redirect($this->generateUrl('home'));
+        
     }
 
 }
