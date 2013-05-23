@@ -33,9 +33,9 @@ class ProjectSubmission
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=32)
      */
-    private $name;
+    private $md5;
 
     /**
      *
@@ -122,5 +122,107 @@ class ProjectSubmission
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return ProjectSubmission
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return ProjectSubmission
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set deadline
+     *
+     * @param \Intranet\ProjectBundle\Entity\ProjectDeadline $deadline
+     * @return ProjectSubmission
+     */
+    public function setDeadline(\Intranet\ProjectBundle\Entity\ProjectDeadline $deadline = null)
+    {
+        $this->deadline = $deadline;
+    
+        return $this;
+    }
+
+    /**
+     * Get deadline
+     *
+     * @return \Intranet\ProjectBundle\Entity\ProjectDeadline 
+     */
+    public function getDeadline()
+    {
+        return $this->deadline;
+    }
+
+    /**
+     * Set group
+     *
+     * @param \Intranet\ProjectBundle\Entity\ProjectGroup $group
+     * @return ProjectSubmission
+     */
+    public function setGroup(\Intranet\ProjectBundle\Entity\ProjectGroup $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Intranet\ProjectBundle\Entity\ProjectGroup 
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }

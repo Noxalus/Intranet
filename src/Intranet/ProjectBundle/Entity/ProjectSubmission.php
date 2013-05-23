@@ -33,9 +33,9 @@ class ProjectSubmission
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=32)
      */
-    private $name;
+    private $md5;
 
     /**
      *
@@ -158,29 +158,6 @@ class ProjectSubmission
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     * @return ProjectSubmission
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set path
      *
      * @param string $path
@@ -247,5 +224,28 @@ class ProjectSubmission
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * Set md5
+     *
+     * @param string $md5
+     * @return ProjectSubmission
+     */
+    public function setMd5($md5)
+    {
+        $this->md5 = $md5;
+    
+        return $this;
+    }
+
+    /**
+     * Get md5
+     *
+     * @return string 
+     */
+    public function getMd5()
+    {
+        return $this->md5;
     }
 }

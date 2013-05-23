@@ -37,14 +37,23 @@ class RenderController extends Controller
         
         $formBuilder = $this->createFormBuilder($submission);
 
-        $formBuilder->add('file', 'file');
+        $formBuilder->add('file', 'file')
+                    ->add('md5', 'text');
 
         $form = $formBuilder->getForm();
 
         $request = $this->get('request');
-
+        
+        /*
+        echo '<pre>';
+        print_r($request);
+        echo '</pre>';
+        */  
+        
         if ($request->getMethod() == 'POST')
         {
+            echo 'COUCOU';
+            exit;
             $form->bind($request);
 
             if ($form->isValid())
