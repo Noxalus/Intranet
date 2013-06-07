@@ -1,15 +1,19 @@
 body
-{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-image: url('../img/background.jpg');
-    background-repeat: repeat-y;
-    background-attachment:fixed;
-    background-position: center top;
+{	
+    height:100%;
+	width:100%;
+	/* background extensible */
+	background:#000000 url(../img/background.jpg) no-repeat center fixed;
+	-webkit-background-size: cover; /* pour Chrome et Safari */
+	-moz-background-size: cover; /* pour Firefox */
+	-o-background-size: cover; /* pour Opera */
+	background-size: cover; /* version standardisée */
 }
 
 #maincontainer {
 	box-shadow: 1px 1px 6px black;
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
 #header
@@ -283,4 +287,23 @@ a#trans:hover
 
 .next_courses_block li {
 	margin-bottom:20px;
+}
+
+#intranet_userbundle_usertype {
+	padding-top:20px;
+	padding-bottom:10px;
+}
+
+#intranet_userbundle_usertype div label {
+	display:inline-block;
+	width:100px;
+}
+
+#intranet_userbundle_usertype div input {
+	display:inline-block;
+	width:200px;
+}
+
+.btn-success {
+	
 }
