@@ -11,19 +11,29 @@ use Intranet\NewsBundle\Entity\Article;
 class FrontController extends Controller
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/{num_page}", name="home")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction($num_page = 0)
     {
         $repository = $this->getDoctrine()
                    ->getManager()
                    ->getRepository('IntranetNewsBundle:Article');
              
-        $news = $repository->findBy(array(), array('date' => 'DESC'), 5, 0);
+        $news = $repository->findBy(array(), array('date' => 'DESC'), $num_page * 5 + 5, $num_page * 5);
+        $more = false;
+        
+        if (count($news) == 5)
+        {
+            $nextnews = $repository->findBy(array(), array('date' => 'DESC'), $num_page * 5 + 6, $num_page * 5 + 5);
+            if (count($nextnews) != 0)
+                $more = true;
+        }
         
         return array(
-            'news' => $news
+            'news' => $news,
+            'num_page' => $num_page,
+            'ismore' => $more
         );
     }
     

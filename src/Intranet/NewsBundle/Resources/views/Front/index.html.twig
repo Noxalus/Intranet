@@ -24,6 +24,16 @@
         <p>{{ article.content }}</p>
         <br />
     {% endfor %}
+    <br/>
+    {% if num_page != 0 %}
+        <a href="{{ path('home', { 'num_page' : num_page - 1 }) }}"><--- Page précédente </a>
+        {% if ismore %}
+        -
+        {% endif %}
+    {% endif %}
+    {% if ismore %}
+        <a href="{{ path('home', { 'num_page' : num_page + 1 }) }}"> Page suivante ---></a>
+    {% endif %}
 </div>
 
 <div class="span4" id="right-column">
