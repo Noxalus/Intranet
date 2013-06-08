@@ -23,17 +23,17 @@ class Photo
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    private $id;
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    private $path;
 
     /**
      * @Assert\File(maxSize="6000000")
      */
-    public $file;
+    private $file;
 
     public function getAbsolutePath()
     {
@@ -92,6 +92,18 @@ class Photo
         return $this->path;
     }
 
+         public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()

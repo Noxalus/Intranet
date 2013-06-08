@@ -1,0 +1,15 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h2>Vous êtes sur le point de supprimer un article.</h2>
+ 
+  <p>
+    Cette action est irréversible. Êtes-vous sur de vouloir supprimer l'article "{{ article.title }}" ?
+  </p>
+ 
+  {# On met l'id de l'article dans la route de l'action du formulaire #}
+  <form method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" value="Supprimer" class="btn btn-danger" />
+  </form>
+{% endblock %}
