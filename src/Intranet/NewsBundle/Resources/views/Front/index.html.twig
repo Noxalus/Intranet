@@ -21,7 +21,7 @@
             {% endif %}
             <small>{{ article.date|date('Y/m/d à H:i:s') }} - par {{ article.author.firstname }} {{ article.author.lastname }}</small>
         </h3>
-        <p>{{ article.content }}</p>
+    {{ article.content|raw }}
         <br />
     {% endfor %}
     <br/>

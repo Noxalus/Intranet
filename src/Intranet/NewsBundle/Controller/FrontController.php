@@ -50,7 +50,7 @@ class FrontController extends Controller
 
         $formBuilder
                 ->add('title', 'text')
-                ->add('content', 'textarea');
+                ->add('content', 'ckeditor');
 
         $form = $formBuilder->getForm();
 
