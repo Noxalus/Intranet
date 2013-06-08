@@ -92,6 +92,18 @@ class Photo
         return $this->path;
     }
 
+         public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
