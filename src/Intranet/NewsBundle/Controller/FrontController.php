@@ -111,6 +111,12 @@ class FrontController extends Controller
             $formBuilder = $this->createFormBuilder($article);
             $formBuilder
                     ->add('title', 'text')
+                    ->add('picto', 'entity', array(
+                    'class' => 'IntranetNewsBundle:PictoNews',
+                    'property' => 'description',
+                    'empty_value' => 'Choisissez le pictogramme',
+                    'expanded' => false,
+                    'multiple' => false,))
                     ->add('content', 'ckeditor');
             $form = $formBuilder->getForm();
             $request = $this->get('request');
