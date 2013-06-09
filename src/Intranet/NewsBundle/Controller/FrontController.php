@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\NewsBundle\Entity\Article;
+use Intranet\NewsBundle\Entity\PictoNews;
+use Intranet\NewsBundle\Form\Type\PictoNewsType;
 
 class FrontController extends Controller
 {
@@ -72,7 +74,6 @@ class FrontController extends Controller
                 $em->persist($article);
                 $em->flush();
 
-                $request = $this->get('request');
                 $session = $request->getSession();
                 $error = 'Article ajouté avec succès.';
                 $session->getFlashBag()->add('success', $error);
@@ -104,7 +105,7 @@ class FrontController extends Controller
             $formBuilder = $this->createFormBuilder($article);
             $formBuilder
                     ->add('title', 'text')
-                    ->add('content', 'textarea');
+                    ->add('content', 'ckeditor');
             $form = $formBuilder->getForm();
             $request = $this->get('request');
 
@@ -138,7 +139,6 @@ class FrontController extends Controller
         
     }
 
-    
      /**
      * @Route("/news/{id_article}/supprimer", name="delete_news")
      * @Template()
@@ -186,7 +186,78 @@ class FrontController extends Controller
             $session->getFlashBag()->add('error', $error);
         }
         return $this->redirect($this->generateUrl('home'));
+    }
+  
+    
+    /**
+     * @Route("/news/picto/", name="list_picto")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function listPictoAction()
+    {
+        $repository = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetNewsBundle:PictoNews');
+             
+        $pictos = $repository->findBy(array());
         
+        return array(
+            'pictos' => $pictos
+        );
     }
 
+     /**
+     * @Route("/news/picto/ajouter", name="add_picto")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function addPictoAction()
+    {
+        $picto = new PictoNews();
+        $form = $this->createForm(new PictoNewsType, $picto);
+        
+        $request = $this->get('request');
+
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                
+                
+                $em->persist($picto);
+                $em->flush();
+
+                $session = $request->getSession();
+                $error = 'Pictogramme ajouté avec succès.';
+                $session->getFlashBag()->add('success', $error);
+                
+                return $this->redirect($this->generateUrl('list_picto'));
+            }
+        }
+        return array(
+            'form' => $form->createView()
+        );
+    }
+    
+     /**
+     * @Route("/news/picto/{id_picto}/supprimer", name="delete_picto")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function deletePictoAction($id_picto)
+    {
+    }
+    
+     /**
+     * @Route("/news/picto/{id_picto}/edit", name="edit_picto")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function editPictoAction($id_picto)
+    {
+    }
 }

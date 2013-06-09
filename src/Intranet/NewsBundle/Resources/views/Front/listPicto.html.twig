@@ -1,0 +1,31 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Pictogrammes</h1>
+
+<p><a href="{{ path('add_picto') }}">Ajouter un pictogramme</a></p><br/><br/>
+
+{% if pictos|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Description</th>
+                <th>Image</th>
+                {#<th>Actions</th>#}
+            </tr>
+        {% for picto in pictos %}
+            <tr>
+                <td>{{ picto.description }}</td>
+                <td><img src="./../../../{{ picto.getWebPath() }}" height="20" width="20"></td>
+                {#<td>
+                    <a href="{{ path('edit_picto', { 'id_picto' : picto.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-edit"></i> Editer</a>
+                    <a href="{{ path('delete_picto', { 'id_picto' : picto.id }) }}" class="btn btn-danger btn-mini"><i class="icon-white icon-remove"></i> Supprimer</a>
+                </td>#}
+            </tr>
+        {% endfor %}
+        </ul>
+        </table>
+    {% else %}
+        <p class="text-error">Aucun pictogramme n'est défini pour le moment.</p>
+    {% endif %}
+
+{% endblock %}

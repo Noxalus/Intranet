@@ -8,7 +8,8 @@
     
     {% if is_granted('ROLE_TEACHER') %}
     <p>
-        <a href="{{ path('add_news') }}">Ajouter une news</a>
+        <a href="{{ path('add_news') }}">Ajouter une news</a><br/>
+        <a href="{{ path('list_picto')}}">Gérer les pictogrammes</a>
     </p>
     {% endif %}
     
