@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Edition du pictogramme {{ picto.description }}</h1>
-
+<p>Attention : la taille de l'image de pictogramme doit être de 50px par 50px.</p>
 <form method="POST"  {{ form_enctype(form) }}>
     {{ form_widget(form) }}    
     <input type="submit" value="Editer" class="btn btn-success" />

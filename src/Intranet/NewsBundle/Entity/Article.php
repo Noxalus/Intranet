@@ -50,6 +50,12 @@ class Article
     private $author;
 
     /**
+     * @var \stdClass
+     * @ORM\ManyToOne(targetEntity="PictoNews")
+     */
+    private $picto;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -149,5 +155,28 @@ class Article
     public function getAuthor()
     {
         return $this->author;
+    }
+    
+    /**
+     * Set picto
+     *
+     * @param \stdClass $picto
+     * @return Article
+     */
+    public function setPicto($picto)
+    {
+        $this->picto = $picto;
+    
+        return $this;
+    }
+
+    /**
+     * Get picto
+     *
+     * @return \stdClass 
+     */
+    public function getPicto()
+    {
+        return $this->picto;
     }
 }

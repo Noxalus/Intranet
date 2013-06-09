@@ -52,6 +52,12 @@ class FrontController extends Controller
 
         $formBuilder
                 ->add('title', 'text')
+                ->add('picto', 'entity', array(
+                    'class' => 'IntranetNewsBundle:PictoNews',
+                    'property' => 'description',
+                    'empty_value' => 'Choisissez le pictogramme',
+                    'expanded' => false,
+                    'multiple' => false,))
                 ->add('content', 'ckeditor');
 
         $form = $formBuilder->getForm();
@@ -200,7 +206,7 @@ class FrontController extends Controller
                    ->getManager()
                    ->getRepository('IntranetNewsBundle:PictoNews');
              
-        $pictos = $repository->findBy(array());
+        $pictos = $repository->findBy(array(),array('description' => 'ASC'));
         
         return array(
             'pictos' => $pictos
