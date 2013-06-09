@@ -242,16 +242,7 @@ class FrontController extends Controller
             'form' => $form->createView()
         );
     }
-    
-     /**
-     * @Route("/news/picto/{id_picto}/supprimer", name="delete_picto")
-     * @Template()
-     * @Secure(roles="ROLE_TEACHER")
-     */
-    public function deletePictoAction($id_picto)
-    {
-    }
-    
+      
      /**
      * @Route("/news/picto/{id_picto}/edit", name="edit_picto")
      * @Template()
@@ -259,5 +250,39 @@ class FrontController extends Controller
      */
     public function editPictoAction($id_picto)
     {
+        $repository = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('IntranetNewsBundle:PictoNews');
+
+        $picto = $repository->find($id_picto);
+
+        $form = $this->createForm(new PictoNewsType, $picto);
+
+        $form->setData($picto);
+
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+
+                $em->persist($picto);
+                $em->flush();
+
+                $session = $request->getSession();
+                $error = 'Pictogramme édité avec succès.';
+                $session->getFlashBag()->add('success', $error);
+                
+                return $this->redirect($this->generateUrl('list_picto'));
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'picto' => $picto
+        );
     }
 }

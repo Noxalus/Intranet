@@ -1,0 +1,10 @@
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+<h1>Edition du pictogramme {{ picto.description }}</h1>
+
+<form method="POST"  {{ form_enctype(form) }}>
+    {{ form_widget(form) }}    
+    <input type="submit" value="Editer" class="btn btn-success" />
+</form>
+{% endblock content %}
