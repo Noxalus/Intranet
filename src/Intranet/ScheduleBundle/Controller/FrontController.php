@@ -27,6 +27,39 @@ class FrontController extends Controller
     }
 
     /**
+     * @Route("/liste", name="list_course")
+     * @Template()
+     */
+    public function listCourseAction()
+    {
+        $repository = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetScheduleBundle:CourseType');
+             
+        $types = $repository->findBy(array(), array('name' => 'ASC'));
+        return array(
+            'types' => $types
+        );
+    }
+    
+    /**
+     * @Route("/{id}/voir", name="coursetype_display")
+     * @Template()
+     */
+    public function displayCourseAction($id)
+    {
+ 
+        $type = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:CourseType')
+                ->find($id);
+        
+        return array(
+            'type' => $type,
+            'user' => $this->get('security.context')->getToken()->getUser(),
+        );
+    }
+    
+    /**
      * @Route("{day}-{month}-{year}", name="planning_date")
      * @Template()
      */

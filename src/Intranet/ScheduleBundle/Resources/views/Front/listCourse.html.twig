@@ -1,0 +1,28 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Liste des types de cours</h1>
+{% if is_granted('ROLE_TEACHER') %}
+    <div>
+       <p><a href="{{ path('projects_add') }}" />Ajouter un Type de cours</a></p>
+    </div>
+    {% endif %}
+    
+    {% if types|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Nom</th>
+                <th>Professeur</th>
+            </tr>
+        {% for type in types %}
+            <tr>
+                <td><a href="{{ path('coursetype_display', {'id': type.id}) }}">{{ type.name }}</a></td>
+                <td>{{ type.teacher }}</td>
+            </tr>
+        {% endfor %}
+        </ul>
+        </table>
+    {% else %}
+        <p class="text-error">Aucun type de cours définis !</p>
+    {% endif %}
+{% endblock %}

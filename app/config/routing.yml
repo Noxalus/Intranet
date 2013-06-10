@@ -1,3 +1,8 @@
+intranet_note:
+    resource: "@IntranetNoteBundle/Controller/"
+    type:     annotation
+    prefix:   /note
+
 intranet_users:
     resource: "@IntranetUserBundle/Controller/"
     type:     annotation

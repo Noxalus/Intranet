@@ -1,0 +1,10 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Contrôle de {{ type.name}}</h1>
+ <form method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" class="btn btn-primary" />
+  </form>
+{% endblock %}

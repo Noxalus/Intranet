@@ -1,0 +1,16 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>{{type.name}}</h1>
+{% if user.id == type.teacher.id %}
+    <div>
+       <p>Vous êtes le professeur pour ce cours.<br/>
+       <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" />Ajouter les notes d'un examen</a></p>
+    </div>
+{% endif %}
+    
+    <div>
+        <p><strong>Professeur :</strong> {{ type.teacher.firstname }} {{ type.teacher.lastname }}</p>
+        <p>{{type.description}}</p>
+    </div>
+{% endblock %}

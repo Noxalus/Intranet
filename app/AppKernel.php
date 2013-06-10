@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Intranet\ProjectBundle\IntranetProjectBundle(),
             new Intranet\NewsBundle\IntranetNewsBundle(),
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
+            new Intranet\NoteBundle\IntranetNoteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
