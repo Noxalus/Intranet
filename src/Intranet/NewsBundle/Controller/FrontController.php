@@ -13,7 +13,7 @@ use Intranet\NewsBundle\Form\Type\PictoNewsType;
 class FrontController extends Controller
 {
     /**
-     * @Route("/{num_page}", name="home")
+     * @Route("/page/{num_page}", name="home")
      * @Template()
      */
     public function indexAction($num_page = 0)
