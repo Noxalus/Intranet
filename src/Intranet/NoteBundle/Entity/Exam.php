@@ -24,23 +24,23 @@ class Exam
     /**
      * @var string
      *
-     * @ORM\Column(name="Nom", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $nom;
+    private $name;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="Date", type="date")
+     * @ORM\Column(name="date", type="date")
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="details", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $details;
+    private $description;
 
 
     /**
@@ -48,14 +48,14 @@ class Exam
      *
      * @ORM\ManyToOne(targetEntity="\Intranet\ScheduleBundle\Entity\CourseType")
      */
-    private $cours;
+    private $courseType;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="maxnote", type="integer")
+     * @ORM\Column(name="max_mark", type="integer")
      */
-    private $maxnote;
+    private $maxMark;
     
     /**
      * @var decimal
@@ -63,23 +63,6 @@ class Exam
      * @ORM\Column(name="coef", type="decimal")
      */
     private $coef;
-    
-    /**
-     * @Assert\File
-     */
-    private $file;
-    
-    public function setFile($file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    public function getFile()
-    {
-        return $this->file;
-    }
     
     /**
      * Get id
@@ -92,26 +75,26 @@ class Exam
     }
 
     /**
-     * Set nom
+     * Set name
      *
-     * @param string $nom
+     * @param string $name
      * @return Exam
      */
-    public function setNom($nom)
+    public function setName($name)
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get nom
+     * Get name
      *
      * @return string 
      */
-    public function getNom()
+    public function getName()
     {
-        return $this->nom;
+        return $this->name;
     }
 
     /**
@@ -138,72 +121,72 @@ class Exam
     }
 
     /**
-     * Set details
+     * Set description
      *
-     * @param string $details
+     * @param string $description
      * @return Exam
      */
-    public function setDetails($details)
+    public function setDescription($description)
     {
-        $this->details = $details;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get details
+     * Get description
      *
      * @return string 
      */
-    public function getDetails()
+    public function getDescription()
     {
-        return $this->details;
+        return $this->description;
     }
 
     /**
-     * Set cours
+     * Set courseType
      *
-     * @param \stdClass $cours
+     * @param \stdClass $courseType
      * @return Exam
      */
-    public function setCours($cours)
+    public function setCourseType($courseType)
     {
-        $this->cours = $cours;
+        $this->courseType = $courseType;
 
         return $this;
     }
 
     /**
-     * Get cours
+     * Get courseType
      *
      * @return \stdClass 
      */
-    public function getCours()
+    public function getCourseType()
     {
-        return $this->cours;
+        return $this->courseType;
     }
 
     /**
-     * Set maxnote
+     * Set maxMark
      *
-     * @param integer $maxnote
+     * @param integer $maxMark
      * @return Exam
      */
-    public function setMaxnote($maxnote)
+    public function setMaxnote($maxMark)
     {
-        $this->maxnote = $maxnote;
+        $this->maxMark = $maxMark;
 
         return $this;
     }
 
     /**
-     * Get maxnote
+     * Get maxMark
      *
      * @return integer 
      */
     public function getMaxnote()
     {
-        return $this->maxnote;
+        return $this->maxMark;
     }
 
     /**
@@ -227,5 +210,28 @@ class Exam
     public function getCoef()
     {
         return $this->coef;
+    }
+
+    /**
+     * Set maxMark
+     *
+     * @param integer $maxMark
+     * @return Exam
+     */
+    public function setMaxMark($maxMark)
+    {
+        $this->maxMark = $maxMark;
+    
+        return $this;
+    }
+
+    /**
+     * Get maxMark
+     *
+     * @return integer 
+     */
+    public function getMaxMark()
+    {
+        return $this->maxMark;
     }
 }

@@ -2,15 +2,35 @@
 
 {% block content %}
 <h1>{{type.name}}</h1>
-{% if user.id == type.teacher.id %}
-    <div>
-       <p>Vous êtes le professeur pour ce cours.<br/>
-       <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" />Ajouter les notes d'un examen</a></p>
-    </div>
-{% endif %}
-    
     <div>
         <p><strong>Professeur :</strong> {{ type.teacher.firstname }} {{ type.teacher.lastname }}</p>
         <p>{{type.description}}</p>
+        <h2>Examens</h2>
+        {% if user.id == type.teacher.id %}
+            <div>
+               <p>Vous êtes le professeur pour ce cours.<br/>
+               <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" />Ajouter un examen</a></p>
+            </div>
+        {% endif %}
+        {% if type.exams|length > 0 %}
+            <table class="table">
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Moyenne</th>
+                </tr>
+                
+                {% for exam in type.exams %}
+                    <tr>
+                        <td><a href="{{ path('display_exam', {'exam_id': exam.id}) }}">{{ exam.name }}</a></td>
+                        <td>{{ exam.description }}</td>
+                        <td>0</td>
+                    </tr>
+                {% endfor %}
+                
+            </table>
+        {% else %}
+            <p class="text-error">Aucun examen n'est prévu pour cette matière !</p>
+        {% endif %}
     </div>
 {% endblock %}

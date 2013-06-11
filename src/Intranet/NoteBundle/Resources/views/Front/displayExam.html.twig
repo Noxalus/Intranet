@@ -1,0 +1,50 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Affichage d'un examen</h1>
+
+<h2>{{ exam.name }}</h2>
+
+<p>{{ exam.description }}</p>
+
+<h2>Notes</h2>
+{% if user.id == exam.courseType.teacher.id %}
+<div>
+    <form method="POST" action="{{ path('add_marks', {'exam_id' : exam.id}) }}" enctype="multipart/form-data">
+    <fieldset>
+    <label for="file">Fichier (.csv):</label>
+    <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="input-append">
+            <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Selectionnez un fichier</span><span class="fileupload-exists">Changer</span><input type="file" name="file" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Supprimer</a>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="icon-book"></i>Ajouter des notes</button>
+    </fieldset>
+</form>
+<hr />
+</div>
+{% endif %}
+
+{% if marks|length > 0 %}
+    <table class="table">
+        <tr>
+            <th>Login</th>
+            <th>Note</th>
+            <th>Commentaire</th>
+            <th>Actions</th>
+        </tr>
+        
+        {% for mark in marks %}
+            <tr>
+                <td>{{ mark.user.lastName }} {{ mark.user.firstName }}</td>
+                <td>{{ mark.value }}/{{ exam.maxMark }}</td>
+                <td>{{ mark.comment }}</td>
+                <td><a href="#">Editer</a> / <a href="#">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p class="text-error">Aucune note n'a été rentrée pour cette examen !</p>
+{% endif %}
+
+{% endblock %}
