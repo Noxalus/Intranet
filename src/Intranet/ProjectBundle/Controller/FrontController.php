@@ -13,7 +13,6 @@ use Intranet\ProjectBundle\Entity\ProjectSubmission;
 
 class FrontController extends Controller
 {
-
     /**
      * @Route("/projets", name="projects")
      * @Template()
@@ -234,5 +233,55 @@ class FrontController extends Controller
         }
         return $this->redirect($this->generateUrl('projects'));
         
+    }
+    
+    /**
+     * @Route("/projet/{project_id}/ajouter/rendu/{deadline_id}", name="add_submission")
+     */
+    public function addSubmissionAction($project_id, $deadline_id)
+    {
+        $submission = new ProjectSubmission();
+        
+        $formBuilder = $this->createFormBuilder($submission);
+
+        $formBuilder->add('file', 'file')
+                    ->add('md5', 'text');
+
+        $form = $formBuilder->getForm();
+
+        $request = $this->get('request');
+        
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $md5 = md5_file($_FILES['form']['tmp_name']['file']);
+                if ($md5 === strtolower($submission->getMd5()))
+                {
+                    $submission->setCreatedAt(new \DateTime());
+                    $repository = $this->getDoctrine()
+                        ->getManager()
+                        ->getRepository('IntranetProjectBundle:ProjectDeadline');
+
+                    $deadline = $repository->find($deadline_id);
+
+                    $submission->setDate(new \DateTime());
+                    $submission->setDeadline($deadline);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($submission);
+                    $em->flush();
+                }
+                else
+                {
+                    $session = $request->getSession();
+                    $session->getFlashBag()->add('error', 'Le hash MD5 du fichier ne correspond pas à celui que vous avez entré !');
+                }
+            }
+        }
+        
+        return $this->redirect($this->generateUrl('projects_display', array('id' => $project_id)));
     }
 }

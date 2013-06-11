@@ -1,4 +1,5 @@
-<form method="POST" action="#" {{ form_enctype(form) }}>
+{% if not deadline is null %}
+<form method="POST" action="{{ path('add_submission', {'project_id': deadline.project.id, 'deadline_id': deadline.id}) }}" {{ form_enctype(form) }}>
     <fieldset>
         <div class="fileupload fileupload-new" data-provides="fileupload">
             <span class="fileupload-new"><span class="btn btn-file">Fichier{{ form_widget(form.file) }}</span></span>
@@ -12,3 +13,4 @@
         {{ form_rest(form) }}
     </fieldset>
 </form>
+{% endif %}

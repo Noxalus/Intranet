@@ -37,36 +37,19 @@ class RenderController extends Controller
         
         $formBuilder = $this->createFormBuilder($submission);
 
-        $formBuilder->add('file', 'file')
+        $formBuilder->add('file')
                     ->add('md5', 'text');
 
         $form = $formBuilder->getForm();
-
-        $request = $this->get('request');
         
-        /*
-        echo '<pre>';
-        print_r($request);
-        echo '</pre>';
-        */  
+        $repository = $this->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IntranetProjectBundle:ProjectDeadline');
         
-        if ($request->getMethod() == 'POST')
-        {
-            echo 'COUCOU';
-            exit;
-            $form->bind($request);
-
-            if ($form->isValid())
-            {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($submission);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('projects'));
-            }
-        }
+        $deadline = $repository->find($deadline_id);
         
         return array(
+            'deadline' => $deadline,
             'form' => $form->createView()
         );
     }

@@ -5,15 +5,18 @@ namespace Intranet\ProjectBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * ProjectSubmission
  *
  * @ORM\Table(name="intranet_project_submission")
  * @ORM\Entity(repositoryClass="Intranet\ProjectBundle\Entity\ProjectSubmissionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ProjectSubmission
 {
+    use ORMBehaviors\Timestampable\Timestampable;
     /**
      * @var integer
      *
@@ -33,7 +36,7 @@ class ProjectSubmission
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=32)
+     * @ORM\Column(name="md5", type="string", length=32)
      */
     private $md5;
 
