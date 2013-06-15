@@ -19,7 +19,7 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'text');
-        $builder->add('description', 'textarea');
+        $builder->add('description', 'ckeditor');
 
         $builder->add('deadlines', 'collection', array(
             'type' => new DeadlineType(),

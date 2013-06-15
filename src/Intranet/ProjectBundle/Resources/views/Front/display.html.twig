@@ -4,7 +4,7 @@
 {% if projectGroup is not null %}
     <h1>{{ projectGroup.project.name }}</h1>
 
-    <p>{{ projectGroup.project.description }}</p>
+    <p>{{ projectGroup.project.description|raw }}</p>
 
     <h3>Liste des membres</h3>
 
