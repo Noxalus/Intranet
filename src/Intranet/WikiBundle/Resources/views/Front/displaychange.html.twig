@@ -1,0 +1,25 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="span7">
+    <h1>{{ article.articleId.name }}</h1>
+
+    {% if article.articleId.active == false %}
+    <p>Attention : Cet article a été supprimé.</p>
+    {% endif %}
+    <p>Ceci est la vue après la modification du {{ article.date|date('m/d/Y') }} par {{ article.userId.username }}.
+        La dernière modification a été faite le {{ actu.date|date('m/d/Y') }} par {{ actu.userId.username }}</p>
+    
+    <ul>
+        <li><a href="{{ path('wikiArticle_history', { 'id_article' : article.articleId.id } ) }}">Voir l'historique</a></li>
+    </ul>
+
+    <br/><br/>
+    {{ article.content | raw}}
+    
+</div>
+</div>
+
+{% endblock %}
