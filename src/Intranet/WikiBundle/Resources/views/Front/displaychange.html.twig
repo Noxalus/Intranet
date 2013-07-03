@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<div class="row">
-<div class="span7">
+
     <h1>{{ article.articleId.name }}</h1>
 
     {% if article.articleId.active == false %}
@@ -19,7 +18,6 @@
     <br/><br/>
     {{ article.content | raw}}
     
-</div>
-</div>
+
 
 {% endblock %}

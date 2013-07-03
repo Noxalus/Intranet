@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<div class="row">
-<div class="span7">
+
     <h1>Wiki</h1>
 
     <p>
@@ -16,7 +15,6 @@
     <li><a href="{{ path('wiki_display', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
     {% endfor %}
     </ul>
-</div>
-</div>
+
 
 {% endblock %}
