@@ -28,8 +28,8 @@ class FrontController extends Controller
 
         $formBuilder
                 ->add('name', 'text')
-                ->add('date', 'date', array(
-                    'format' => 'dd/MM/yyyy',
+                ->add('date', 'datetime', array(
+                    // 'format' => 'dd/mm/yyyy hh:ii',
                     'widget' => 'single_text'))
                 ->add('description', 'textarea', array('required' => false))
                 ->add('maxnote', 'integer', array('data' => 20));
