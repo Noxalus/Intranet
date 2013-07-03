@@ -1,3 +1,8 @@
+intranet_wiki:
+    resource: "@IntranetWikiBundle/Controller/"
+    type:     annotation
+    prefix:   /wiki
+
 intranet_note:
     resource: "@IntranetNoteBundle/Controller/"
     type:     annotation

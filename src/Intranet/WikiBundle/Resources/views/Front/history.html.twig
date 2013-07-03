@@ -1,0 +1,21 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="span7">
+    <h1>Modifications dans le wiki</h1>
+    
+<ul>
+    {% for modif in history %}
+        <li>
+            {% if modif.type == 1 %}Création
+            {% elseif modif.type == 0 %}Modification
+            {% else %}Suppression
+            {% endif %} de <a href="{{ path('wiki_display_change', { 'id_modif' : modif.id } ) }}">{{ modif.articleId.name }}</a> par {{ modif.userId.username }} le {{ modif.date | date('m/d/Y') }}</li>
+    {% endfor %}
+</ul>
+</div>
+</div>
+
+{% endblock %}

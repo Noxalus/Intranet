@@ -1,0 +1,22 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="span7">
+    <h1>Wiki</h1>
+
+    <p>
+        <a href="{{ path('wiki_history') }}">Voir l'historique</a><br/>
+        <a href="{{ path('add_article_wiki')}}">Créer un article</a>
+    </p>
+
+    <ul>
+    {% for article in articles %}
+    <li><a href="{{ path('wiki_display', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+</div>
+
+{% endblock %}

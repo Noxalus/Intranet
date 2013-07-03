@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Intranet\NewsBundle\IntranetNewsBundle(),
             new Trsteel\CkeditorBundle\TrsteelCkeditorBundle(),
             new Intranet\NoteBundle\IntranetNoteBundle(),
+            new Intranet\WikiBundle\IntranetWikiBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

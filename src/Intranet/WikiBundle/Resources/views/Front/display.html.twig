@@ -1,0 +1,26 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<div class="row">
+<div class="span7">
+    <h1>{{ article.articleId.name }}</h1>
+
+    {% if article.articleId.active == false %}
+    <p>Attention : Cet article a été supprimé.</p>
+    {% endif %}
+    <p>Dernière modification le {{ article.date|date('m/d/Y') }} par {{ article.userId.username }}</p>
+    
+    <ul>
+        <li><a href="{{ path('wiki_edit', { 'id_article' : article.articleId.id } ) }}">Editer</a></li>
+        <li><a href="{{ path('wiki_delete', {'id_article' : article.articleId.id})}}">Supprimer</a></li>
+        <li><a href="{{ path('wikiArticle_history', { 'id_article' : article.articleId.id } ) }}">Voir l'historique</a></li>
+    </ul>
+
+    <br/><br/>
+    {{ article.content | raw}}
+    
+</div>
+</div>
+
+{% endblock %}
