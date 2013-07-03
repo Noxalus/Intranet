@@ -10,6 +10,16 @@
 <h2>Notes</h2>
 {% if user.id == exam.courseType.teacher.id %}
 <div>
+    <div class="alert alert-info">
+    <h3>Rappels</h3>
+    <p>Le fichier CSV envoyé doit correspondre à ces critères:<br /></p>
+    <ul>
+        <li>Il contient 3 colonnes: login, note, commentaire</li>
+        <li>La première ligne est réservé au nom des colonnes</li>
+        <li>Il n'est pas obligatoire de mettre un commentaire à chaque note</li>
+        <li>Le caractère de séparation des données est le ";" et non la ","</li>
+    </ul>
+    </div>
     <form method="POST" action="{{ path('add_marks', {'exam_id' : exam.id}) }}" enctype="multipart/form-data">
     <fieldset>
     <label for="file">Fichier (.csv):</label>
@@ -39,7 +49,10 @@
                 <td>{{ mark.user.lastName }} {{ mark.user.firstName }}</td>
                 <td>{{ mark.value }}/{{ exam.maxMark }}</td>
                 <td>{{ mark.comment }}</td>
-                <td><a href="#">Editer</a> / <a href="#">Supprimer</a></td>
+                <td>
+                    <a href="{{ path('edit_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}">Editer</a> / 
+                    <a href="{{ path('delete_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}">Supprimer</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

@@ -57,12 +57,6 @@ class Exam
      */
     private $maxMark;
     
-    /**
-     * @var decimal
-     *
-     * @ORM\Column(name="coef", type="decimal")
-     */
-    private $coef;
     
     /**
      * Get id
@@ -187,29 +181,6 @@ class Exam
     public function getMaxnote()
     {
         return $this->maxMark;
-    }
-
-    /**
-     * Set coef
-     *
-     * @param decimal $coef
-     * @return Exam
-     */
-    public function setCoef($coef)
-    {
-        $this->coef = $coef;
-
-        return $this;
-    }
-
-    /**
-     * Get coef
-     *
-     * @return integer 
-     */
-    public function getCoef()
-    {
-        return $this->coef;
     }
 
     /**

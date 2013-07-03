@@ -1,0 +1,33 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Affichage des notes de {{ user.firstName }} {{ user.lastName }}</h1>
+
+{% if user.id == app.user.id or is_granted('ROLE_TEACHER') %}
+
+
+{% if marks|length > 0 %}
+    <table class="table">
+        <tr>
+            <th>Matière</th>
+            <th>Note</th>
+            <th>Commentaire</th>
+        </tr>
+        
+        {% for mark in marks %}
+            <tr>
+                <td>{{ mark.exam.courseType.name }} (<i>{{ mark.exam.name }}</i>)</td>
+                <td>{{ mark.value }}/{{ mark.exam.maxMark }}</td>
+                <td>{{ mark.comment }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p class="text-error">Aucune note !</p>
+{% endif %}
+    
+{% else %}
+    <p class="text-error">Vous n'avez pas le droit d'accéder à cette page !</p>
+{% endif %}
+
+{% endblock %}

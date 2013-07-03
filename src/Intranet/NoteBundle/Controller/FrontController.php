@@ -5,6 +5,7 @@ namespace Intranet\NoteBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\NoteBundle\Entity\Exam;
 use Intranet\NoteBundle\Entity\Note;
 
@@ -31,8 +32,7 @@ class FrontController extends Controller
                     'format' => 'dd/MM/yyyy',
                     'widget' => 'single_text'))
                 ->add('description', 'textarea', array('required' => false))
-                ->add('maxnote', 'integer', array('data' => 20))
-                ->add('coef', 'number');
+                ->add('maxnote', 'integer', array('data' => 20));
 
         $form = $formBuilder->getForm();
 
@@ -148,6 +148,131 @@ class FrontController extends Controller
         }
 
         return $this->redirect($this->generateUrl('display_exam', array('exam_id' => $exam_id)));
+    }
+    
+    /**
+     * @Route("/editer/{exam_id}/{mark_id}", name="edit_mark")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function editMarkAction($exam_id, $mark_id)
+    {
+        $request = $this->get('request');
+        $session = $request->getSession();
+        
+        $mark = $this->getDoctrine()
+                ->getRepository('IntranetNoteBundle:Note')
+                ->find($mark_id);
+
+        if ($mark)
+        {
+            $formBuilder = $this->createFormBuilder($mark);
+            $formBuilder->add('value', 'text');
+                    
+            $form = $formBuilder->getForm();
+            $request = $this->get('request');
+
+            if ($request->getMethod() == 'POST')
+            {
+                // On vérifie que la note n'est pas supérieure à la note maximale
+                if (/* TODO */true)
+                {
+                    $form->bind($request);
+
+                    if ($form->isValid())
+                    {                      
+                        // On l'enregistre notre objet $mark dans la base de données
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($mark);
+                        $em->flush();
+
+                        $error = 'Note éditée avec succès.';
+                        $session->getFlashBag()->add('success', $error);
+
+                        return $this->redirect($this->generateUrl('display_exam', array('exam_id' => $exam_id)));
+                    }
+                }
+            }
+            return array(
+                'form' => $form->createView(),
+            );
+        }
+        else
+        {
+            $error = 'Il semblerait que cette note n\'existe pas dans la base de données. L\'édition est donc impossible.';
+            $session->getFlashBag()->add('error', $error);
+            
+            return $this->redirect($this->generateUrl('display_exam', array('exam_id' => $exam_id)));
+        }
+        
+    }
+    
+    /**
+     * @Route("/supprimer/{exam_id}/{mark_id}", name="delete_mark")
+     * @Template()
+     * @Secure(roles="ROLE_TEACHER")
+     */
+    public function deleteMarkAction($exam_id, $mark_id)
+    {
+        $request = $this->get('request');
+        $session = $request->getSession();
+        
+        $mark = $this->getDoctrine()
+                ->getRepository('IntranetNoteBundle:Note')
+                ->find($mark_id);
+             
+        if ($mark)
+        {
+            $form = $this->createFormBuilder()->getForm();
+
+            $request = $this->getRequest();
+            if ($request->getMethod() == 'POST')
+            {
+                $form->bind($request);
+
+                if ($form->isValid())
+                {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($mark);
+                    $em->flush();
+
+                    $error = 'Note supprimé avec succès.';
+                    $session->getFlashBag()->add('success', $error);
+                    
+                    return $this->redirect($this->generateUrl('display_exam', array('exam_id' => $exam_id)));
+                }
+            }
+
+            return array(
+                'mark'    => $mark,
+                'form'    => $form->createView()
+                );
+        }
+        else
+        {
+            $error = 'Il semblerait que cette note n\'existe pas dans la base de données. Elle n\'a donc pas pu être supprimée.';
+            $session->getFlashBag()->add('error', $error);
+        }
+        
+        return $this->redirect($this->generateUrl('display_exam', array('exam_id' => $exam_id)));
+    }
+    
+    /**
+     * @Route("/afficher/utilisateur/{user_id}", name="display_user_marks")
+     * @Template()
+     */
+    public function displayUserMarksAction($user_id)
+    {
+        $user = $this->getDoctrine()
+                ->getRepository('IntranetUserBundle:User')
+                ->find($user_id);
+
+        $marks = $this->getDoctrine()->getRepository('IntranetNoteBundle:Note')->findBy(array('user' => $user));
+        
+        return array(
+            'marks' => $marks,
+            'user' => $user
+        );
     }
 
 }
