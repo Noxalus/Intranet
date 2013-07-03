@@ -46,7 +46,7 @@ class Exam
     /**
      * @var \stdClass
      *
-     * @ORM\ManyToOne(targetEntity="\Intranet\ScheduleBundle\Entity\CourseType")
+     * @ORM\ManyToOne(targetEntity="\Intranet\ScheduleBundle\Entity\CourseType", inversedBy="exams")
      */
     private $courseType;
 
