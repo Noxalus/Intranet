@@ -1,0 +1,18 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+    {% render(controller('IntranetWikiBundle:Render:search')) %}
+    <h1>Résultats de la recherche</h1>
+    <br />
+    {% if not results is null and results|length > 0 %}
+        <ul>
+        {% for modif in results %}
+            <li><a href="{{ path('wiki_display_article', { 'id_article' : modif.article.id } ) }}">{{ modif.article.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-error">Aucun résultat pour cette recherche !</p>
+        <hr />
+        <p><a href="{{ path('index_wiki') }}">Revenir à la page d'accueil</a></p>
+    {% endif %}
+{% endblock %}

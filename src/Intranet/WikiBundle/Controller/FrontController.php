@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Intranet\WikiBundle\Entity\Article;
 use Intranet\WikiBundle\Entity\Modif;
+use Intranet\WikiBundle\Entity\Thematic;
+use Intranet\WikiBundle\Form\Type\ModifType;
 
 class FrontController extends Controller
 {
@@ -18,65 +20,55 @@ class FrontController extends Controller
     {
         $repository = $this->getDoctrine()
                    ->getManager()
-                   ->getRepository('IntranetWikiBundle:Article');
+                   ->getRepository('IntranetWikiBundle:Thematic');
              
-        $art = $repository->findBy(array('active' => true), array('name' => 'DESC'));
+        $thematics = $repository->findAll();
         
         return array(
-            'articles' => $art
+            'thematics' => $thematics
         );
     }
     
     /**
-     * @Route("/ajouter", name="add_article_wiki")
+     * @Route("/ajouter", name="wiki_add_article")
      * @Template()
      */
     public function addAction()
     {
-        $formBuilder = $this->createFormBuilder();
 
-        $formBuilder
-                ->add('Nom', 'text')
-                ->add('Contenu', 'ckeditor');
-
-        $form = $formBuilder->getForm();
+        $modif = new Modif();
+        
+        $form = $this->createForm(new ModifType(), $modif);
 
         $request = $this->get('request');
-
         if ($request->getMethod() == 'POST')
         {
             $form->bind($request);
 
             if ($form->isValid())
             {
-                $article = new Article();
-                $modif = new Modif();
-                
+                $em = $this->getDoctrine()->getManager();
+
                 $user = $this->get('security.context')->getToken()->getUser();
                 
-                
-                $article->setActive(true);
-                $article->setName($_POST['form']['Nom']);
-                $modif->setContent($_POST['form']['Contenu']);
-                $modif->setDate(new \DateTime());
-                $modif->setUserId($user);
-                $modif->setArticleId($article);
+                $modif->setUser($user);
                 $modif->setType(1);
+                $modif->getArticle()->setActive(true);
+                $modif->setDate(new \DateTime());
                 
-                
-                // On l'enregistre notre objet $article dans la base de données
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($article);
+                $em->persist($modif->getArticle());
                 $em->persist($modif);
                 $em->flush();
-
-                $session = $request->getSession();
-                $error = 'Article ajouté avec succès.';
-                $session->getFlashBag()->add('success', $error);
                 
+                
+                $em->persist($modif);
+                $em->flush();
+                
+
                 return $this->redirect($this->generateUrl('index_wiki'));
             }
         }
+        
         return array(
             'form' => $form->createView(),
         );
@@ -99,7 +91,7 @@ class FrontController extends Controller
              
        
         
-        $modif = $repository->findBy(array('articleId' => $article->getId()), array('date' => 'DESC'));
+        $modif = $repository->findBy(array('article' => $article->getId()), array('date' => 'DESC'));
         
         if (!$article || count($modif) == 0)
         {
@@ -132,7 +124,7 @@ class FrontController extends Controller
                 $newModif->setContent($_POST['form']['Contenu']);
                 $newModif->setDate(new \DateTime());
                 $newModif->setUserId($user);
-                $newModif->setArticleId($article);
+                $newModif->setArticle($article);
                 $newModif->setType(0);
                 
                 
@@ -155,11 +147,14 @@ class FrontController extends Controller
     }
     
     /**
-     * @Route("/article/{id_article}/voir", name="wiki_display")
+     * @Route("/article/{id_article}/voir", name="wiki_display_article")
      * @Template()
      */
-    public function displayAction($id_article)
+    public function displayArticleAction($id_article)
     {
+        $request = $this->get('request');
+        $session = $request->getSession();
+        
         $article = $this->getDoctrine()
                 ->getRepository('IntranetWikiBundle:Article')
                 ->find($id_article);
@@ -168,7 +163,7 @@ class FrontController extends Controller
                    ->getManager()
                    ->getRepository('IntranetWikiBundle:Modif');
              
-        $modif = $repository->findBy(array('articleId' => $article->getId()), array('date' => 'DESC'));
+        $modif = $repository->findBy(array('article' => $article->getId()), array('date' => 'DESC'));
         
         if (!$article || count($modif) == 0)
         {
@@ -178,7 +173,7 @@ class FrontController extends Controller
         }
         
         return array(
-            'article' => $modif[0],
+            'modif' => $modif[0],
         );
 
     }
@@ -211,14 +206,14 @@ class FrontController extends Controller
                    ->getRepository('IntranetWikiBundle:Modif');
         
         $modif = $repository->find($id_modif);
-        $history = $repository->findBy(array('articleId' => $modif->getArticleId()->getId()), array('date' => 'DESC'));
+        $history = $repository->findBy(array('article' => $modif->getArticle()->getId()), array('date' => 'DESC'));
         
         if ($history[0]->getId() == $id_modif)
-            return $this->redirect($this->generateUrl('wiki_display', array('id_article' => $modif->getArticleId()->getId())));
+            return $this->redirect($this->generateUrl('wiki_display', array('id_article' => $modif->getArticle()->getId())));
         
         $article = $this->getDoctrine()
                 ->getRepository('IntranetWikiBundle:Article')
-                ->find($modif->getArticleId()->getId());
+                ->find($modif->getArticle()->getId());
         
         return array(
             'article' => $modif,
@@ -240,7 +235,7 @@ class FrontController extends Controller
                 ->getRepository('IntranetWikiBundle:Article')
                 ->find($id_article);
         
-        $modifs = $repository->findBy(array('articleId' => $id_article), array('date' => 'DESC'));
+        $modifs = $repository->findBy(array('article' => $id_article), array('date' => 'DESC'));
         
         return array(
             'article' => $article,
@@ -279,7 +274,7 @@ class FrontController extends Controller
                     $article->setActive(false);
                     $newModif->setDate(new \DateTime());
                     $newModif->setUserId($user);
-                    $newModif->setArticleId($article);
+                    $newModif->setArticle($article);
                     $newModif->setType(2);
                     $newModif->setContent('<p>Cet article a été supprimé</p>');
                     
@@ -309,4 +304,103 @@ class FrontController extends Controller
         return $this->redirect($this->generateUrl('home'));
     }
     
+    
+    /**
+     * @Route("/ajouter/thematique", name="wiki_add_thematic")
+     * @Template()
+     */
+    public function addThematicAction()
+    {        
+        $thematic = new Thematic();
+
+        $formBuilder = $this->createFormBuilder($thematic);
+
+        $formBuilder
+                ->add('name', 'text')
+                ->add('description', 'ckeditor');
+
+        $form = $formBuilder->getForm();
+
+        $request = $this->get('request');
+
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                // On l'enregistre notre objet $article dans la base de données
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($thematic);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('index_wiki'));
+            }
+        }
+        
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+        
+    
+    /**
+     * @Route("/thematique/{id}/voir", name="wiki_display_thematic")
+     * @Template()
+     */
+    public function displayThematicAction($id)
+    {
+        $request = $this->get('request');
+        $session = $request->getSession();
+        
+        $thematic = $this->getDoctrine()
+                ->getRepository('IntranetWikiBundle:Thematic')
+                ->find($id);
+        
+        if (!$thematic)
+        {
+            $error = 'Il semblerait que cette thématique n\'existe pas dans la base de données.';
+            $session->getFlashBag()->add('error', $error);   
+            return $this->redirect($this->generateUrl('index_wiki'));
+        }
+        
+        return array(
+            'thematic' => $thematic,
+        );
+    }
+    
+    
+    /**
+     * @Route("/recherche/resultats", name="wiki_search_results")
+     * @Template()
+     */
+    public function searchResultsAction()
+    {
+        $results = null;
+        $formBuilder = $this->createFormBuilder();
+
+        $formBuilder->add('search', 'text', array('label' => 'Recherche'));
+
+        $form = $formBuilder->getForm();
+        
+        $request = $this->get('request');
+        
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {                
+                $repository = $this->getDoctrine()
+                        ->getRepository('IntranetWikiBundle:Article');
+                
+                $results = $repository->searchWikiContent($_POST['form']['search']);
+            }
+        }
+        
+        return array(
+            'form' => $form->createView(),
+            'results' => $results
+        );
+    }
 }

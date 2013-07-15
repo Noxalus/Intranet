@@ -156,27 +156,4 @@ class Modif
     {
         return $this->article;
     }
-
-    /**
-     * Set user
-     *
-     * @param \Intranet\UserBundle\Entity\User $user
-     * @return Modif
-     */
-    public function setUser(\Intranet\UserBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Intranet\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 }

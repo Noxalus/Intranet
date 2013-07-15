@@ -2,8 +2,9 @@
 
 {% block content %}
 
-    <h1>{{ article.articleId.name }}</h1>
-
+    <h1>{{ thematic.name }}</h1>
+    
+    {#
     {% if article.articleId.active == false %}
     <p>Attention : Cet article a été supprimé.</p>
     {% endif %}
@@ -16,7 +17,18 @@
     </ul>
 
     <br/><br/>
-    {{ article.content | raw}}
+    #}
 
+    {{ thematic.description|raw }}
+    
+    {% if thematic.articles|length > 0 %}
+        <hr />
+        <p>Articles en rapport:</p>
+        <ul>
+        {% for article in thematic.articles %}
+            <li><a href="{{ path('wiki_display_article', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 
 {% endblock %}

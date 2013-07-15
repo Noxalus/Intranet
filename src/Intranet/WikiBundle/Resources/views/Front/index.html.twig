@@ -2,19 +2,38 @@
 
 {% block content %}
 
+    {% render(controller('IntranetWikiBundle:Render:search')) %}
 
     <h1>Wiki</h1>
 
     <p>
         <a href="{{ path('wiki_history') }}">Voir l'historique</a><br/>
-        <a href="{{ path('add_article_wiki')}}">Créer un article</a>
+        <a href="{{ path('wiki_add_thematic')}}">Créer une thématique</a><br />
+        <a href="{{ path('wiki_add_article')}}">Créer un article</a>
     </p>
+    <hr />
 
-    <ul>
-    {% for article in articles %}
-    <li><a href="{{ path('wiki_display', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
-    {% endfor %}
-    </ul>
+    {% if thematics|length > 0 %}
+    <div class="row">
+        {% for thematic in thematics %}
+            <div class="well span3" style="height: 100px;">
+                <a href="{{ path('wiki_display_thematic', { 'id' : thematic.id } ) }}">{{ thematic.name }}</a>
+
+                {% if thematic.articles|length > 0 %}
+                    <ul>
+                    {% for article in thematic.articles %}
+                        <li><a href="{{ path('wiki_display_article', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                     <p class="text-error">Aucun article</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="text-error">Le wiki ne contient pour le moment pas de catégorie !</p>
+    {% endif %}
 
 
 {% endblock %}

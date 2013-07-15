@@ -11,7 +11,7 @@
             {% if modif.type == 1 %}Création
             {% elseif modif.type == 0 %}Modification
             {% else %}Suppression
-            {% endif %} de <a href="{{ path('wiki_display_change', { 'id_modif' : modif.id } ) }}">{{ modif.articleId.name }}</a> par {{ modif.userId.username }} le {{ modif.date | date('m/d/Y') }}</li>
+            {% endif %} de <a href="{{ path('wiki_display_change', { 'id_modif' : modif.id } ) }}">{{ modif.article.name }}</a> par {{ modif.user.username }} le {{ modif.date | date('m/d/Y') }}</li>
     {% endfor %}
 </ul>
 

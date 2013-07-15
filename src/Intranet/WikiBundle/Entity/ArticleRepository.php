@@ -12,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArticleRepository extends EntityRepository
 {
+    public function searchWikiContent($search)
+    {
+        $result = $this->_em->createQueryBuilder()
+                    ->select('m')
+                    ->from('IntranetWikiBundle:Modif', 'm')
+                    ->join('m.article', 'a')
+                    ->where('m.content LIKE :search')
+                    ->orWhere('a.name LIKE :search')
+                    ->setParameter('search', '%' . $search . '%')
+                    ->getQuery()
+                    ->getResult();
+        
+        return $result;
+    }
 }
