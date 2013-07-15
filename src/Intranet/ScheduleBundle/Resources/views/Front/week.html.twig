@@ -1,0 +1,60 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+
+    <h1>Emploi du temps</h1>
+    <div style='text-align:right; margin:10px'>
+        <a href="{{ path('planningWeek', {'id': id - 1}) }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-circle-arrow-left"></i></a> 
+        <a href="#" class="btn btn-inverse btn-mini"><i class="icon-white icon-calendar"></i></a> 
+        <a href="{{ path('planningWeek', {'id': id + 1}) }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-circle-arrow-right"></i></a>
+    </div> 
+    <div id='calendar'></div>
+{% endblock %}
+{% block javascripts %}
+<link href='{{ asset('js/fullcalendar/fullcalendar.css') }}' rel='stylesheet' />
+<link href='{{ asset('js/fullcalendar/fullcalendar.print.css') }}' rel='stylesheet' media='print' />
+<script src='{{ asset('js/jquery/jquery-1.9.1.min.js') }}'></script>
+<script src='{{ asset('js/jquery/jquery-ui-1.10.2.custom.min.js') }}'></script>
+<script src='{{ asset('js/fullcalendar/fullcalendar.min.js') }}'></script>
+<script>
+
+	$(document).ready(function() {
+	
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		
+		$('#calendar').fullCalendar({
+			header: false,
+			disableDragging : true,
+			disableResizing : true,
+			editable: false,
+			firstDay: 1,
+			defaultView: 'agendaWeek',
+			axisFormat: 'HH:mm',
+                        timeFormat: 'HH:mm{ - HH:mm}',
+			dayNamesShort:['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+			columnFormat: 'ddd d/M',
+			allDaySlot : false,
+                        year: '{{ date|date('Y')}}',
+                        month: '{{ date|date('m') - 1}}',
+                        date: '{{ date|date('d')}}',
+			events: [
+                            {% for event in events %}
+                            	{
+					title: '{{ event['title'] }}',
+					start: new Date({{ event['start']}}),
+                                        end: new Date({{event['end'] }}),
+					allDay: false,
+                                        url: '{{ path('course_search', { 'name' : event['title'] } ) }}'
+				},
+                            {% endfor %}
+			]
+		});
+		
+	});
+
+</script>
+{% endblock %}
