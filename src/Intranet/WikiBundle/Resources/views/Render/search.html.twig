@@ -1,5 +1,9 @@
-<div class="alert alert-info" style="float: right;">
+<div class="alert alert-info form-search" style="float: right;">
     <form method="POST" action="{{ path('wiki_search_results') }}" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
+        {{ form_widget(form.search,{'attr':{'class': 'input-medium search-query'}}) }}
+        {{ form_errors(form.search) }}
+        
+        {{ form_rest(form) }}
+        <button type="submit" class="btn">Rechercher</button>
     </form>
 </div>

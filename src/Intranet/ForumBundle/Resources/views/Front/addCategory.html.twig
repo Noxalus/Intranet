@@ -1,0 +1,15 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<h1>Ajouter une catégorie</h1>
+
+<div class="well">
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}

@@ -4,6 +4,7 @@
     {% render(controller('IntranetWikiBundle:Render:search')) %}
     <h1>Résultats de la recherche</h1>
     <br />
+    <p>Ces articles contiennent le ou les termes recherchés:</p>
     {% if not results is null and results|length > 0 %}
         <ul>
         {% for modif in results %}

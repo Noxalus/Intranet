@@ -36,7 +36,7 @@ class Article
     private $active;
     
     /**
-     * @ORM\ManyToOne(targetEntity="\Intranet\WikiBundle\Entity\Thematic")
+     * @ORM\ManyToOne(targetEntity="\Intranet\WikiBundle\Entity\Thematic", inversedBy="articles")
      */
     private $thematic;
 

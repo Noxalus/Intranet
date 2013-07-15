@@ -1,0 +1,19 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+{% include 'IntranetForumBundle:Includes:topic.html.twig' %}
+
+{% if topic.posts|length > 0 %}
+    <div>
+    {% for post in topic.posts %}
+        {% include 'IntranetForumBundle:Includes:post.html.twig' %}
+    {% endfor %}
+    </div>
+{% endif %}
+
+<a href="{{ path('forum_add_post', {'topic_id': topic.id}) }}" class="btn btn-success">Répondre</a>
+<br /><br />
+<a href="{{ path('forum_display_category', {'id': topic.category.id }) }}"><- Retour à la liste des sujets</a>
+
+{% endblock %}

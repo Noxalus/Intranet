@@ -1,0 +1,39 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<h1>Forum</h1>
+
+<ul>
+    <li><a href="{{ path('forum_add_category') }}">Ajouter une catégorie</a></li>
+</ul>
+
+{% if categories|length > 0 %}
+    <table class="table table-striped">
+        <tr>
+            <th>Catégorie</th>
+            <th>Sujet(s)</th>
+            <th>Message(s)</th>
+        </tr>
+    {% for category in categories %}
+        <tr>
+            <td>
+                <a href="{{ path('forum_display_category', { 'id': category.id }) }}"><b>{{ category.name }}</a></b><br />
+                <i>{{ category.description }}</i>
+            </td>
+            <td>{{ category.topics|length }}</td>
+            <td>
+                {% set messageNumber = 0 %}
+                {% for topic in category.topics %}
+                    {% set messageNumber = messageNumber + topic.posts|length + 1 %}
+                {% endfor %}
+                {{ messageNumber }}
+            </td>
+        <tr>
+    {% endfor %}
+    </table>
+{% else %}
+<p class="text-error">Aucune catégorie n'a été créée dans le forum !</p>
+{% endif %}
+
+{% endblock %}
