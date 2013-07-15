@@ -3,6 +3,7 @@
 namespace Intranet\ScheduleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections;
 
 /**
  * CourseType
@@ -34,17 +35,6 @@ class CourseType
      * @ORM\Column(name="description", type="text")
      */
     private $description;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Intranet\UserBundle\Entity\User")
-     */
-    private $teacher;
-
-    /**
-    * @ORM\ManyToMany(targetEntity="Intranet\UserBundle\Entity\User")
-    * @ORM\JoinTable(name="intranet_course_student_relationship")
-    */
-    private $students;
     
     /**
      * @ORM\OneToMany(targetEntity="Intranet\NoteBundle\Entity\Exam", orphanRemoval=true, mappedBy="courseType",cascade={"persist","remove"})
@@ -53,7 +43,7 @@ class CourseType
     
     public function __construct()
     {
-        $this->exams = new ArrayCollection();
+        $this->exams = new Collections\ArrayCollection();
     }
 
     /**
@@ -111,79 +101,10 @@ class CourseType
     {
         return $this->description;
     }
-
-    /**
-     * Set teacher
-     *
-     * @param \stdClass $teacher
-     * @return CourseType
-     */
-    public function setTeacher($teacher)
-    {
-        $this->teacher = $teacher;
-    
-        return $this;
-    }
-
-    /**
-     * Get teacher
-     *
-     * @return \stdClass 
-     */
-    public function getTeacher()
-    {
-        return $this->teacher;
-    }
-
-    /**
-     * Set students
-     *
-     * @param \stdClass $students
-     * @return CourseType
-     */
-    public function setStudents($students)
-    {
-        $this->students = $students;
-    
-        return $this;
-    }
-
-    /**
-     * Get students
-     *
-     * @return \stdClass 
-     */
-    public function getStudents()
-    {
-        return $this->students;
-    }
     
     public function __toString()
     {
         return $this->name;
-    }
-
-    /**
-     * Add students
-     *
-     * @param \Intranet\UserBundle\Entity\User $students
-     * @return CourseType
-     */
-    public function addStudent(\Intranet\UserBundle\Entity\User $students)
-    {
-        $this->students[] = $students;
-    
-        return $this;
-    }
-
-    /**
-     * Remove students
-     *
-     * @param \Intranet\UserBundle\Entity\User $students
-     */
-    public function removeStudent(\Intranet\UserBundle\Entity\User $students)
-    {
-        $this->students->removeElement($students);
     }
 
     /**

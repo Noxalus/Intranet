@@ -3,15 +3,13 @@
 {% block content %}
 <h1>{{type.name}}</h1>
     <div>
-        <p><strong>Professeur :</strong> {{ type.teacher.firstname }} {{ type.teacher.lastname }}</p>
         <p>{{type.description}}</p>
-        <h2>Examens</h2>
-        {% if user.id == type.teacher.id %}
-            <div>
-               <p>Vous êtes le professeur pour ce cours.<br/>
-               <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" />Ajouter un examen</a></p>
-            </div>
-        {% endif %}
+        <br/>
+        <h3>Examens
+        {% if is_granted('ROLE_TEACHER') %}
+            <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" class="btn btn-success btn-small"><i class="icon-white icon-plus-sign"></i></a>
+        {% endif %}</h3>
+
         {% if type.exams|length > 0 %}
             <table class="table">
                 <tr>

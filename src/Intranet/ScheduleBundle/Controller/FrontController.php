@@ -14,18 +14,91 @@ class FrontController extends Controller
 
     /**
      * @Route("", name="planning")
+     * @Template
      */
     public function indexAction()
     {
-        $currentDate = explode('-', (new \DateTime())->format('d-m-Y'));
-
-        return $this->redirect($this->generateUrl('planning_date', [
-                            'day' => $currentDate[0],
-                            'month' => $currentDate[1],
-                            'year' => $currentDate[2]
-        ]));
+        $xml=simplexml_load_file("http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=-1&group=MTI&auth=a5834TiL"); // Une semaine à partir d'aujourd'hui
+        $events = array();
+        date_default_timezone_set('Europe/Paris');
+        
+        for ($i = 0; $i < count($xml->week->day); $i++)
+        {
+            $d = date_create_from_format('j/m/Y H:i:s', $xml->week->day[$i]->date);
+            $date = strtotime($d->format('Y-m-d')) * 1000;
+            for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
+            {
+                $course['title'] = (string)$xml->week->day[$i]->course[$j]->title;
+                $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
+                $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
+                $events[count($events)] = $course;
+            }
+        }
+        
+        
+        return array(
+            "id" => $xml->week->id,
+            'events' => $events
+        );
+        
     }
 
+    /**
+     * @Route("semaine/{id}", name="planningWeek")
+     * @Template
+     */
+    public function weekAction($id)
+    {
+        $xml=simplexml_load_file("http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=".$id."&group=MTI&auth=a5834TiL");        $events = array();
+        date_default_timezone_set('Europe/Paris');
+        
+        for ($i = 0; $i < count($xml->week->day); $i++)
+        {
+            $d = date_create_from_format('j/m/Y H:i:s', $xml->week->day[$i]->date);
+            $date = strtotime($d->format('Y-m-d')) * 1000;
+            for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
+            {
+                $course['title'] = (string)$xml->week->day[$i]->course[$j]->title;
+                $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
+                $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
+                $events[count($events)] = $course;
+            }
+        }
+        
+        
+        return array(
+            "id" => $xml->week->id,
+            'events' => $events,
+            'date' => $d
+        );
+        
+    }
+    
+     /**
+     * @Route("/planning/cours/{name}", name="course_search")
+     * @Template()
+     */
+    public function searchCourseAction($name)
+    {
+        $repository = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetScheduleBundle:CourseType');
+             
+        $course = $repository->findOneByName($name);
+        
+        if (!$course)
+        {
+            $course = new CourseType();
+            $course->setName($name);
+            $course->setDescription('');
+            
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($course);
+                $em->flush();      
+        }
+        return $this->redirect($this->generateUrl('coursetype_display', array('id' => $course->getId())));   
+    }
+    
     /**
      * @Route("/liste", name="list_course")
      * @Template()

@@ -304,6 +304,11 @@ a#trans:hover
 	width:200px;
 }
 
+#calendar {
+	width: 900px;
+	margin: 0 auto;
+	}
+
 .btn-success {
 	
 }
