@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new Intranet\NoteBundle\IntranetNoteBundle(),
             new Intranet\WikiBundle\IntranetWikiBundle(),
             new Intranet\ForumBundle\IntranetForumBundle(),
+            new Intranet\ServiceBundle\IntranetServiceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
