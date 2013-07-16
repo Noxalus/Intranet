@@ -8,7 +8,7 @@
 <p>{{ exam.description }}</p>
 
 <h2>Notes</h2>
-{% if user.id == exam.courseType.teacher.id %}
+{# if user.id == exam.courseType.teacher.id #}
 <div>
     <div class="alert alert-info">
     <h3>Rappels</h3>
@@ -33,7 +33,7 @@
 </form>
 <hr />
 </div>
-{% endif %}
+{# endif #}
 
 {% if marks|length > 0 %}
     <table class="table">
@@ -50,7 +50,9 @@
                 <td>{{ mark.value }}/{{ exam.maxMark }}</td>
                 <td>{{ mark.comment }}</td>
                 <td>
-                    <a href="{{ path('edit_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}">Editer</a> / 
+                    <div id="edit_mark"></div>
+                    <a class="edit_button" data-markId="{{ mark.id }}" href="#{# path('edit_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) #}" id="edit_mark_link" 
+                       onClick="loadForm()">Editer</a> / 
                     <a href="{{ path('delete_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}">Supprimer</a>
                 </td>
             </tr>
@@ -60,4 +62,44 @@
     <p class="text-error">Aucune note n'a été rentrée pour cette examen !</p>
 {% endif %}
 
+{% endblock %}
+    
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+function loadForm(url) {
+    $.ajax({
+        url:url,
+        methode: "GET",
+        success: function(data){
+            alert("done");
+            $("#edit_mark").html(data);
+        }
+    });
+};
+    
+    $(document).ready (function () { 
+        $(".edit_button").click (function () {
+           var elt = $(this);
+           var markId = elt.attr("data-markId");
+           console.log("markId", markId);
+           var url = {{ path('edit_mark', {'exam_id' : "{{ exam.id }}", 'mark_id': ""})}} + "/" + markId;
+           console.log(url);
+           loadForm(url);
+        });
+    });
+    
+/*
+$.ajaxSetup ({  
+   cache: false  
+});  
+var ajax_load = "<img src='img/load.gif' alt='loading...' />";  
+
+//  load() functions  
+var loadUrl = "http://www.google.fr";  
+$("#edit_mark_link").click(function(){
+   $("#edit_mark").html(ajax_load).load(loadUrl);  
+});
+*/
+</script>
 {% endblock %}
