@@ -28,7 +28,7 @@ class FrontController extends Controller
             $date = strtotime($d->format('Y-m-d')) * 1000;
             for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
             {
-                $course['title'] = (string)$xml->week->day[$i]->course[$j]->title;
+                $course['title'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
                 $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
                 $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
                 $events[count($events)] = $course;
@@ -58,7 +58,7 @@ class FrontController extends Controller
             $date = strtotime($d->format('Y-m-d')) * 1000;
             for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
             {
-                $course['title'] = (string)$xml->week->day[$i]->course[$j]->title;
+                $course['title'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
                 $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
                 $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
                 $events[count($events)] = $course;
