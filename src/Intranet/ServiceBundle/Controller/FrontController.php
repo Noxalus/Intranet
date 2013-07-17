@@ -135,6 +135,72 @@ class FrontController extends Controller {
             'form' => $form->createView(),
         );
     }
+    
+    /**
+     * @Route("/ticket/{id}/voir", name="show_ticket")
+     * @Template()
+     */
+    public function ticketAction($id)
+    {
+        $ticket = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetServiceBundle:Ticket')
+                   ->find($id);
+        $msgs = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetServiceBundle:Message')
+                   ->findBy(array('ticket' => $ticket), array('date' => 'ASC'));
+        
+        $formBuilder = $this->createFormBuilder();
+        $formBuilder->add('statut', 'choice', array(
+                    'choices'   => array(
+                        'En Cours' => 'En Cours',
+                        'Terminé' => 'Terminé'
+                    ),
+                    'expanded' => false,
+                    'multiple' => false))
+                ->add('message', 'ckeditor');
+
+        $form = $formBuilder->getForm();
+
+        $request = $this->get('request');
+
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+            
+            if ($form->isValid())
+            {
+                $msg = new Message();
+                
+                $user = $this->get('security.context')->getToken()->getUser();
+                
+                $ticket->setState($request->request->get('form')['statut']);
+                $msg->setTicket($ticket);
+                $msg->setContent($request->request->get('form')['message']);
+                $msg->setDate(new \DateTime());
+                $msg->setUser($user);
+               
+                // On l'enregistre notre objet dans la base de données
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($ticket);
+                $em->persist($msg);
+                $em->flush();
+
+                $session = $request->getSession();
+                $error = 'Message envoyé.';
+                $session->getFlashBag()->add('success', $error);
+                
+                return $this->redirect($this->generateUrl('show_ticket', array('id' => $id)));
+            }
+        }
+        
+        return array(
+            'ticket' => $ticket,
+            'msgs' => $msgs,
+            'form' => $form->createView()
+        );
+    }
 }
 
 ?>

@@ -5,7 +5,7 @@
 <h1>Liste des tickets</h1>
 
 {% for tick in tickets %}
-    [{{tick.state}}] {{tick.title}}<br/>
+    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
 {% endfor %}
 
 {% endblock %}

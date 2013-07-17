@@ -1,0 +1,24 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<h1>{{ ticket.title }}</h1>
+
+{% for message in msgs %}
+<div class="msg">
+    <h3>{{ message.user.firstname }} {{ message.user.lastname }}, le {{ message.date|date('d/m/Y') }}</h3>
+    {{ message.content|raw }}
+</div>
+{% endfor %}
+{% if ticket.state == 'En Cours' %}
+
+<br/>
+<div class="well">
+  <form method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" class="btn btn-primary" />
+  </form>
+</div>
+
+{% endif %}
+{% endblock %}
