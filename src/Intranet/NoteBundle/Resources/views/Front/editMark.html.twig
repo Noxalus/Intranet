@@ -1,11 +1,5 @@
-{# empty Twig template #}
-{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
-
-{% block content %}
-<div class="well">
-  <form method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <input type="submit" class="btn btn-primary" />
+  <form method="post" action="{{ path('edit_mark', {'exam_id' : mark.exam.id, 'mark_id': mark.id}) }}" {{ form_enctype(form) }}>
+    {{ form_widget(form.value, {'attr':{'style': 'width: 18px'}}  ) }}
+    {{ form_rest(form) }}
+    <input type="submit" class="btn btn-success btn-mini" value="OK">
   </form>
-</div>
-{% endblock %}

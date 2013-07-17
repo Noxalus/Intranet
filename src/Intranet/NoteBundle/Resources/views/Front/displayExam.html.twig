@@ -47,12 +47,12 @@
         {% for mark in marks %}
             <tr>
                 <td>{{ mark.user.lastName }} {{ mark.user.firstName }}</td>
-                <td>{{ mark.value }}/{{ exam.maxMark }}</td>
+                <td><div id="edit_mark_{{ mark.id }}">{{ mark.value }}/{{ exam.maxMark }}</div></td>
                 <td>{{ mark.comment }}</td>
                 <td>
-                    <div id="edit_mark"></div>
-                    <a class="edit_button" data-markId="{{ mark.id }}" href="#{# path('edit_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) #}" id="edit_mark_link" 
-                       onClick="loadForm()">Editer</a> / 
+                    <a class="edit_button" data-markId="{{ mark.id }}" data-url="{{ path('edit_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}" style="cursor: pointer;">
+                        Editer
+                    </a> / 
                     <a href="{{ path('delete_mark', {'exam_id' : exam.id, 'mark_id': mark.id}) }}">Supprimer</a>
                 </td>
             </tr>
@@ -67,27 +67,26 @@
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
-function loadForm(url) {
+function loadForm(url, markId) {
     $.ajax({
         url:url,
         methode: "GET",
         success: function(data){
-            alert("done");
-            $("#edit_mark").html(data);
+            $("#edit_mark_" + markId).html(data);
         }
     });
 };
     
-    $(document).ready (function () { 
-        $(".edit_button").click (function () {
-           var elt = $(this);
-           var markId = elt.attr("data-markId");
-           console.log("markId", markId);
-           var url = {{ path('edit_mark', {'exam_id' : "{{ exam.id }}", 'mark_id': ""})}} + "/" + markId;
-           console.log(url);
-           loadForm(url);
-        });
+$(document).ready (function () { 
+    $(".edit_button").click (function () {
+       var elt = $(this);
+       var markId = elt.attr("data-markId");
+       console.log("markId", markId);
+       var url = elt.attr("data-url");
+       console.log("url", url);
+       loadForm(url, markId);
     });
+});
     
 /*
 $.ajaxSetup ({  

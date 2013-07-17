@@ -29,8 +29,8 @@ class FrontController extends Controller
         $formBuilder
                 ->add('name', 'text')
                 ->add('date', 'datetime', array(
-                    // 'format' => 'dd/mm/yyyy hh:ii',
-                    'widget' => 'single_text'))
+                      //'format' => 'yyyy-mm-dd hh:ii',
+                      'widget' => 'single_text'))
                 ->add('description', 'textarea', array('required' => false))
                 ->add('maxnote', 'integer', array('data' => 20));
 
@@ -44,8 +44,10 @@ class FrontController extends Controller
 
             if ($form->isValid())
             {
-                $exam->setCourseType($type);
                 $em = $this->getDoctrine()->getManager();
+
+                $exam->setCourseType($type);
+                
                 $em->persist($exam);
                 $em->flush();
 
@@ -195,6 +197,7 @@ class FrontController extends Controller
             }
             return array(
                 'form' => $form->createView(),
+                'mark' => $mark
             );
         }
         else
