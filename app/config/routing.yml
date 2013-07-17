@@ -6,7 +6,7 @@ intranet_forum:
 intranet_service:
     resource: "@IntranetServiceBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /service
 
 intranet_wiki:
     resource: "@IntranetWikiBundle/Controller/"

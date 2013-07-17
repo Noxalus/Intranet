@@ -1,0 +1,11 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<h1>Liste des tickets</h1>
+
+{% for tick in tickets %}
+    [{{tick.state}}] {{tick.title}}<br/>
+{% endfor %}
+
+{% endblock %}
