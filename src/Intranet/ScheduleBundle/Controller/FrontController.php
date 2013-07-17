@@ -35,9 +35,8 @@ class FrontController extends Controller
             }
         }
         
-        
         return array(
-            "id" => $xml->week->id,
+            'id' => $xml->week->id,
             'events' => $events
         );
         
@@ -49,7 +48,8 @@ class FrontController extends Controller
      */
     public function weekAction($id)
     {
-        $xml=simplexml_load_file("http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=".$id."&group=MTI&auth=a5834TiL");        $events = array();
+        $xml = simplexml_load_file('http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=' . $id . '&group=MTI&auth=a5834TiL');        
+        $events = array();
         date_default_timezone_set('Europe/Paris');
         
         for ($i = 0; $i < count($xml->week->day); $i++)
@@ -67,7 +67,7 @@ class FrontController extends Controller
         
         
         return array(
-            "id" => $xml->week->id,
+            'id' => $xml->week->id,
             'events' => $events,
             'date' => $d
         );
@@ -105,13 +105,65 @@ class FrontController extends Controller
      */
     public function listCourseAction()
     {
-        $repository = $this->getDoctrine()
-                   ->getManager()
-                   ->getRepository('IntranetScheduleBundle:CourseType');
-             
-        $types = $repository->findBy(array(), array('name' => 'ASC'));
+        // Une semaine à partir d'aujourd'hui
+        $xml = simplexml_load_file('http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=-1&group=MTI&auth=a5834TiL');
+        
+        $currentMonday = new \DateTime($xml->week[0]['date']);
+        
+        $id = $xml->week->id;
+
+        $semestre = 'Semestre';
+        
+        $url = '';
+        // We take the first semester
+        if ($currentMonday->format('W') < 32)
+        {
+            $semestre .= ' 1';
+
+            $newId = $id - $currentMonday->format('W');
+            $url = 'http://webservices.chronos.epita.net/GetWeeks.aspx?num=30&week=' . $newId . '&group=MTI&auth=a5834TiL';
+        }
+        // We take the second semester
+        else
+        {
+            $semestre .= ' 2';
+            
+            if ($currentMonday->format('W') >= 36)
+                $newId = $id - ($currentMonday->format('W') - 36);
+            else
+                $newId = $id + (36 - $currentMonday->format('W'));
+            
+            $url = 'http://webservices.chronos.epita.net/GetWeeks.aspx?num=16&week=' . $newId . '&group=MTI&auth=a5834TiL';
+        }
+        
+        var_dump($url);
+        
+        $xml = simplexml_load_file($url);
+        $courses = array();
+        date_default_timezone_set('Europe/Paris');
+        
+        var_dump(count($xml));
+        exit;
+        
+        for($w = 0; $w < count($xml->week); $w++)
+        {
+            for ($i = 0; $i < count($xml->week[$w]->day); $i++)
+            {
+                for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
+                {
+                    $course['name'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
+                    $courses[] = $course;
+                }
+            }
+        }
+        
+        var_dump($courses);
+        exit;
+        
         return array(
-            'types' => $types
+            'id' => $xml->week->id,
+            'courses' => $courses,
+            'semestre' => $semestre
         );
     }
     

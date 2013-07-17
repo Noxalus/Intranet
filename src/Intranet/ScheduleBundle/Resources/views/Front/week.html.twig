@@ -1,16 +1,21 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
-
-
     <h1>Emploi du temps</h1>
-    <div style='text-align:right; margin:10px'>
+    
+    <div style="float: left; margin: 10px;">
+        <a href="{{ path('list_course') }}" class="btn btn-info">Liste des cours</a>
+    </div>
+    
+    <div style="float:right; margin:14px;">
         <a href="{{ path('planningWeek', {'id': id - 1}) }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-circle-arrow-left"></i></a> 
         <a href="#" class="btn btn-inverse btn-mini"><i class="icon-white icon-calendar"></i></a> 
         <a href="{{ path('planningWeek', {'id': id + 1}) }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-circle-arrow-right"></i></a>
-    </div> 
+    </div>
+    
     <div id='calendar'></div>
 {% endblock %}
+    
 {% block javascripts %}
 <link href='{{ asset('js/fullcalendar/fullcalendar.css') }}' rel='stylesheet' />
 <link href='{{ asset('js/fullcalendar/fullcalendar.print.css') }}' rel='stylesheet' media='print' />
