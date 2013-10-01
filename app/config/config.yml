@@ -84,3 +84,21 @@ liip_imagine:
             quality: 50
             filters:
                 thumbnail: { size: [50, 50], mode: outbound }
+
+# CKEditor Configuration
+trsteel_ckeditor:
+    class: Trsteel\CkeditorBundle\Form\Type\CkeditorType
+    transformers: ['strip_js', 'strip_css', 'strip_comments']
+    toolbar: ['document', 'insert', 'clipboard', 'editing', 'about', '/', 'basicstyles', 'paragraph', 'styles']
+    toolbar_groups:
+        document: ['Maximize', '-', 'Templates', 'Preview']
+        editing: ['Find', '-', 'Scayt']
+        about: ['About']
+        clipboard: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']
+        basicstyles: ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'RemoveFormat']
+        paragraph: ['NumberedList', 'BulletedList', '-', 'Blockquote', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+        insert: ['SpecialChar', '-', 'Image', 'Smiley', 'Flash', '-', 'Link']
+        styles: ['Styles','Format']
+    width: 100% #Integer or %
+    height: 300 #Integer or %
+    language: 'fr'
