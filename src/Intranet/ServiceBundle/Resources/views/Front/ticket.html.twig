@@ -4,6 +4,9 @@
 
 <h1>{{ ticket.title }}</h1>
 
+<p><a href="{{ path('new_assign', {'id_ticket' : ticket.id}) }}">Ajouter un destinataire</a></p>
+<br/><br/>
+
 {% for message in msgs %}
 <div class="msg">
     <h3>{{ message.user.firstname }} {{ message.user.lastname }}, le {{ message.date|date('d/m/Y') }}</h3>

@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketAssignmentRepository extends EntityRepository
 {
+    public function makeTicketUnread($id)
+    {
+        $qb = $this->_em->createQueryBuilder()
+            ->update($this->_entityName, 's')
+            ->where('s.ticket >= :id')
+            ->set('s.isRead', 0)
+            ->setParameter('id', $id, \Doctrine\DBAL\Types\Type::INTEGER);
+        $q = $qb->getQuery();
+        $p = $q->execute();
+        
+    }
 }
