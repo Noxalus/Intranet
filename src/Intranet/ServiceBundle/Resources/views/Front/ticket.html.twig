@@ -5,20 +5,25 @@
 <h1>{{ ticket.title }}</h1>
 
 <p><a href="{{ path('new_assign', {'id_ticket' : ticket.id}) }}">Ajouter un destinataire</a></p>
-<br/><br/>
-
+<br/>
+    
 {% for message in msgs %}
-<div class="msg">
-    <h3>{{ message.user.firstname }} {{ message.user.lastname }}, le {{ message.date|date('d/m/Y') }}</h3>
-    {{ message.content|raw }}
+<div class="msg well">
+    
+    <div style="float: right; margin-left: 15px;">{{ user_photo(message.user, 'user_photo_medium') }}</div>
+    <div>
+        <h3>{{ message.user.firstname }} {{ message.user.lastname }}</h3><small class="subtitle">le {{ message.date|date('d/m/Y') }}</small>
+        <div class="news-content">{{ message.content|raw }}</div>
+    </div>
+
 </div>
 {% endfor %}
 {% if ticket.state == 'En Cours' %}
-
 <br/>
 <div class="well">
   <form method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
+    <br />
     <input type="submit" class="btn btn-primary" />
   </form>
 </div>

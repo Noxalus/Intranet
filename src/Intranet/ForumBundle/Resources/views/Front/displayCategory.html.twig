@@ -26,7 +26,7 @@
     </table>
 {% endif %}
 
-<a href="{{ path('forum_add_topic', {'category_id': category.id}) }}" class="btn btn-success">Ajouter un sujet</a>
 <a href="{{ path('forum_index') }}" class="btn btn-inverse"><i class="icon-white icon-chevron-left"></i> Retour à l'index</a>
+<a href="{{ path('forum_add_topic', {'category_id': category.id}) }}" class="btn btn-success">Ajouter un sujet</a>
 
 {% endblock %}

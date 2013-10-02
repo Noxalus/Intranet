@@ -14,6 +14,7 @@
     {% endif %}
     
     {% for article in news %}
+    <div class="well">
         <h3>
             {% if article.picto != null %}
             <img src="./../{{ article.picto.getWebPath() }}" alt="{{article.picto.description}}" height="30" width="30"/> {%endif %}{{ article.title }}
@@ -22,9 +23,12 @@
                 <a href="{{ path('delete_news', { 'id_article' : article.id }) }}" class="btn btn-danger btn-mini"><i class="icon-white icon-remove"></i></a>
             {% endif %}
             <br />
-            <small>{{ article.date|date('Y/m/d à H:i:s') }} - par {{ article.author.firstname }} {{ article.author.lastname }}</small>
         </h3>
-    {{ article.content|raw }}
+            
+        <small class="news-subtitle subtitle">{{ article.date|date('Y/m/d à H:i:s') }} - par {{ article.author.firstname }} {{ article.author.lastname }}</small>
+
+        <div class="news-content">{{ article.content|raw }}</div>
+    </div>
         <br />
     {% endfor %}
     <br/>

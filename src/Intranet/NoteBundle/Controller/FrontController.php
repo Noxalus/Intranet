@@ -81,7 +81,7 @@ class FrontController extends Controller
         $formBuilder = $this->createFormBuilder($exam);
 
         $formBuilder
-                ->add('name', 'text', 'Nom')
+                ->add('name', 'text', array('label' => 'Nom'))
                 ->add('date', 'datetime', array(
                         'label' => 'Date',
                         //'format' => 'yyyy-mm-dd hh:ii',

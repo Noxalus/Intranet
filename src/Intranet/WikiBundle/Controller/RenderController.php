@@ -14,7 +14,7 @@ class RenderController extends Controller
     {
         $formBuilder = $this->createFormBuilder();
 
-        $formBuilder->add('search', 'text', array('label' => 'Recherche'));
+        $formBuilder->add('search', 'text', array('label' => 'Recherche', 'attr' => array('style' => 'margin-top: 10px;')));
 
         $form = $formBuilder->getForm();
         

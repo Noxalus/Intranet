@@ -2,9 +2,6 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml }
-#    - { resource: sonata_news.yml }
-#    - { resource: sonata_media.yml }
-#    - { resource: sonata_formater.yml }
 
 framework:
     #esi:             ~
@@ -80,6 +77,10 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [150, 150], mode: inset }
+        user_photo_medium:
+            quality: 75
+            filters:
+              thumbnail: { size: [110, 110], mode: inset }
         thumbnail:
             quality: 50
             filters:

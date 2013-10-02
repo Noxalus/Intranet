@@ -1,14 +1,16 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
-{% set statusColors = {'En Cours': '#FFFFFF'} %}
+{% set statusColors = {'En Cours': '#FFFFFF', 'Terminé': '#FFFFFF'} %}
 
 {% block content %}
 
 <h1>Liste des tickets</h1>
 
-<!--<table class="table">
+{% if ticketsNR|length > 0 %}
+<h3>Tickets nons lus</h3>
+<table class="table">
     <tr>
-        <th>Status</th>
+        <th style="width: 150px;">Statuts</th>
         <th>Nom</th>
     </tr>
     <tr>
@@ -20,21 +22,28 @@
                <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
             </td>
         {% endfor %}
-    </tr>
-</table>-->
-
-{% if ticketsNR|length > 0 %}
-<h3>Tickets nons lus</h3>
-{% for tick in ticketsNR %}
-    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
-{% endfor %}
+    </tr> 
+</table>
 {% endif %}
 
 {% if ticketsR|length > 0 %}
 <h3>Tickets lus</h3>
-{% for tick in ticketsR %}
-    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
-{% endfor %}
+<table class="table">
+    <tr>
+        <th style="width: 150px;">Statuts</th>
+        <th>Nom</th>
+    </tr>
+    <tr>
+        {% for tick in ticketsR %}
+            <td>
+                {{tick.state}}
+            </td>
+            <td>
+               <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
+            </td>
+        {% endfor %}
+    </tr> 
+</table>
 {% endif %}
     
 {% endblock %}

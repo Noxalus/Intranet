@@ -12,7 +12,9 @@
     </div>
 {% endif %}
 
-<a href="{{ path('forum_add_post', {'topic_id': topic.id}) }}" class="btn btn-success">Répondre</a>
+<hr />
+
 <a href="{{ path('forum_display_category', {'id': topic.category.id }) }}" class="btn btn-inverse"><i class="icon-white icon-chevron-left"></i> Retour à la liste des sujets</a>
+<a href="{{ path('forum_add_post', {'topic_id': topic.id}) }}" class="btn btn-success">Répondre</a>
 
 {% endblock %}

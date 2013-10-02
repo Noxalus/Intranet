@@ -208,7 +208,7 @@ class FrontController extends Controller
         {
             $formBuilder = $this->createFormBuilder($sch);
             $formBuilder
-                    ->add('comment', 'ckeditor');
+                    ->add('comment', 'ckeditor', array('label' => 'Commentaire'));
             $form = $formBuilder->getForm();
             $request = $this->get('request');
 

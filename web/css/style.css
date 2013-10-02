@@ -429,3 +429,22 @@ ul.forum-profile-icons li
     text-align: center;
     padding-top: 10px;
 }
+
+.subtitle
+{
+    font-weight: normal;
+    line-height: 1;
+    color: #999999;
+    margin-top: -10px;
+    position: absolute;
+}
+
+.news-subtitle
+{
+    margin-left: 40px;
+}
+
+.news-content
+{
+    margin-top: 30px;
+}
