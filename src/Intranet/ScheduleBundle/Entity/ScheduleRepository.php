@@ -42,6 +42,7 @@ class ScheduleRepository extends EntityRepository
                 ->select('s')
                 ->from($this->_entityName, 's')
                 ->where('s.date >= :date')
+                ->andWhere('s.isGhost = 0')
                 ->add('orderBy', 's.date ASC')
                 //->setFirstResult($offset)
                 ->setMaxResults($max)
@@ -52,6 +53,16 @@ class ScheduleRepository extends EntityRepository
         $results = $query->getResult();
 
         return $results;
+    }
+    
+    public function makeAllGhost()
+    {
+        $qb = $this->_em->createQueryBuilder()
+            ->update($this->_entityName, 's')
+            ->set('s.isGhost', 1);
+        $q = $qb->getQuery();
+        $p = $q->execute();
+        
     }
 
 }

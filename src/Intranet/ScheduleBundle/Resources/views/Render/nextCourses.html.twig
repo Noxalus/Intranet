@@ -4,8 +4,8 @@
     <ul>
         {% for schedule in schedules %}
             <li>
-                <b>Le {{ schedule.date|date('d/m') }} à {{ schedule.date|date('H') }}h{{ schedule.date|date('i') }}</b>:<br />
-                {{ schedule.type.name }} (pendant {{ schedule.duration / 60 }}h)
+                <a href="{{  path('course_display', { 'id' : schedule.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i></a> <b>Le {{ schedule.date|date('d/m') }} à {{ schedule.date|date('H') }}h{{ schedule.date|date('i') }}</b>:<br />
+                {{ schedule.type.name }} 
             </li>
         {% endfor %}
     </ul>

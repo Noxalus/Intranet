@@ -30,6 +30,9 @@ class FrontController extends Controller
             {
                 $course['title'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
                 $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
+                $course['duration'] = $xml->week->day[$i]->course[$j]->duration;
+                $course['date'] = str_replace('/', '',(string)$xml->week->day[$i]->date);
+                $course['hour'] = $xml->week->day[$i]->course[$j]->hour;
                 $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
                 $events[count($events)] = $course;
             }
@@ -74,18 +77,22 @@ class FrontController extends Controller
         
     }
     
-     /**
-     * @Route("/planning/cours/{name}", name="course_search")
+    /**
+     * @Route("/planning/cours/{name}/{date}/{hour}/{duration}", name="course_search")
      * @Template()
      */
-    public function searchCourseAction($name)
+    public function searchCourseAction($name, $date, $hour, $duration)
     {
+        $d = date_create_from_format('jmY H:i:s', $date);
+        $d->modify('+'.($hour * 15 * 60 ).' seconds');
+        
+        
         $repository = $this->getDoctrine()
                    ->getManager()
                    ->getRepository('IntranetScheduleBundle:CourseType');
-             
+
         $course = $repository->findOneByName($name);
-        
+
         if (!$course)
         {
             $course = new CourseType();
@@ -96,7 +103,25 @@ class FrontController extends Controller
                 $em->persist($course);
                 $em->flush();      
         }
-        return $this->redirect($this->generateUrl('coursetype_display', array('id' => $course->getId())));   
+        
+        $sch = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->findOneBy(array('date' => $d,
+                                  'duration' => $duration,
+                                  'type' => $course));
+
+        if (!$sch) { // If course doesn't exist : it's created
+            $sch = new Schedule();
+            $sch->setDate($date);
+            $sch->setDuration($duration);
+            $sch->setType($course);
+            $sch->setisGhost(false);
+            $em->persist($sch);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('course_display', array('id' => $sch->getId())));   
     }
     
     /**
@@ -105,236 +130,166 @@ class FrontController extends Controller
      */
     public function listCourseAction()
     {
-        // Une semaine à partir d'aujourd'hui
-        $xml = simplexml_load_file('http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week=-1&group=MTI&auth=a5834TiL');
-        
-        $currentMonday = new \DateTime($xml->week[0]['date']);
-        
-        $id = $xml->week->id;
+        $repository = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('IntranetScheduleBundle:CourseType');
 
-        $semestre = 'Semestre';
-        
-        $url = '';
-        // We take the first semester
-        if ($currentMonday->format('W') < 32)
-        {
-            $semestre .= ' 1';
-
-            $newId = $id - $currentMonday->format('W');
-            $url = 'http://webservices.chronos.epita.net/GetWeeks.aspx?num=30&week=' . $newId . '&group=MTI&auth=a5834TiL';
-        }
-        // We take the second semester
-        else
-        {
-            $semestre .= ' 2';
-            
-            if ($currentMonday->format('W') >= 36)
-                $newId = $id - ($currentMonday->format('W') - 36);
-            else
-                $newId = $id + (36 - $currentMonday->format('W'));
-            
-            $url = 'http://webservices.chronos.epita.net/GetWeeks.aspx?num=16&week=' . $newId . '&group=MTI&auth=a5834TiL';
-        }
-        
-        var_dump($url);
-        
-        $xml = simplexml_load_file($url);
-        $courses = array();
-        date_default_timezone_set('Europe/Paris');
-        
-        var_dump(count($xml));
-        exit;
-        
-        for($w = 0; $w < count($xml->week); $w++)
-        {
-            for ($i = 0; $i < count($xml->week[$w]->day); $i++)
-            {
-                for ($j = 0; $j < count($xml->week->day[$i]->course); $j++)
-                {
-                    $course['name'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
-                    $courses[] = $course;
-                }
-            }
-        }
-        
-        var_dump($courses);
-        exit;
+        $courses = $repository->findBy(array(), array('number' => 'DESC'));
         
         return array(
-            'id' => $xml->week->id,
-            'courses' => $courses,
-            'semestre' => $semestre
+            'courses' => $courses
         );
     }
     
     /**
-     * @Route("/{id}/voir", name="coursetype_display")
+     * @Route("/{id}/voir", name="course_display")
      * @Template()
      */
     public function displayCourseAction($id)
+    {
+ 
+        $sch = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->find($id);
+       
+        
+        return array(
+            'type' => $sch->getType(),
+            'sch' => $sch,
+            'user' => $this->get('security.context')->getToken()->getUser(),
+        );
+    }
+    
+    /**
+     * @Route("/matiere/{id}/voir", name="coursetype_display")
+     * @Template()
+     */
+    public function displayCourseTypeAction($id)
     {
  
         $type = $this->getDoctrine()
                 ->getRepository('IntranetScheduleBundle:CourseType')
                 ->find($id);
         
+        $courses = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->findBy(array('type' => $id, 'isGhost' => 0), array('date' => 'ASC'));
+        
+        $ghosts = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->findBy(array('type' => $id, 'isGhost' => 1), array('date' => 'ASC'));
+        
         return array(
             'type' => $type,
+            'courses' => $courses,
+            'ghosts' => $ghosts,
             'user' => $this->get('security.context')->getToken()->getUser(),
         );
     }
     
     /**
-     * @Route("{day}-{month}-{year}", name="planning_date")
+     * @Route("/cours/{id}/editer", name="edit_course")
      * @Template()
+     * @Secure(roles="ROLE_TEACHER")
      */
-    public function scheduleAction($day, $month, $year)
+    public function editCourseAction($id)
     {
-        $currentDate = new \DateTime($year . "-" . $month . "-" . $day);
-        $monday = clone $currentDate->modify(('Sunday' == $currentDate->format('l')) ? 'Monday last week' : 'Monday this week');
+        $request = $this->get('request');
+        $session = $request->getSession();
+        
+        $sch = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->find($id);
 
-        $nextWeek = clone $monday;
-        $previousWeek = clone $monday;
-
-        $nextWeek->modify('Monday next week');
-        $previousWeek->modify('Monday last week');
-
-        $datesOfWeek = array();
-
-        $interval = new \DateInterval('P1D');
-        $schedule = array();
-        $dayNames = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
-
-        $rowspans = array();
-        for ($i = 1; $i <= 7; $i++)
+        if ($sch)
         {
-            $courses = $this->getDoctrine()
-                    ->getManager()
-                    ->getRepository('IntranetScheduleBundle:Schedule')
-                    ->findCoursesFromDate($monday);
+            $formBuilder = $this->createFormBuilder($sch);
+            $formBuilder
+                    ->add('comment', 'ckeditor');
+            $form = $formBuilder->getForm();
+            $request = $this->get('request');
 
-            foreach ($courses as $course)
+            if ($request->getMethod() == 'POST')
             {
-                $date_from = clone $course->getDate();
-                $date_to = (clone $date_from);
-                $date_to->add(new \DateInterval('PT' . $course->getDuration() . 'M'));
+                $form->bind($request);
 
-                $schedule[$dayNames[$i - 1]][$date_from->format('H\hi')][] = array(
-                    'name' => $course->getType()->getName(),
-                    'duration' => $course->getDuration() / 30,
-                    'end' => $date_to->format('H\hi')
-                );
+                if ($form->isValid())
+                {                      
+                    // On l'enregistre notre objet $article dans la base de données
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($sch);
+                    $em->flush();
 
-                while ($date_from != $date_to)
-                {
-                    $rowspans[$dayNames[$i - 1]][$date_from->format('H\hi')] = true;
-                    $date_from->add(new \DateInterval('PT30M'));
+                    $error = 'Commentaire du cours éditée avec succès.';
+                    $session->getFlashBag()->add('success', $error);
+
+                    return $this->redirect($this->generateUrl('course_display', array('id'=> $id)));
                 }
             }
-            
-            $datesOfWeek[] = $monday->format("d/m/Y");
-            $monday->add($interval);
+            return array(
+                'form' => $form->createView(),
+            );
         }
-         
-        return array(
-            'schedule' => $schedule,
-            'datesOfWeek' => $datesOfWeek,
-            'nextWeek' => $nextWeek->format("d-m-Y"),
-            'previousWeek' => $previousWeek->format("d-m-Y"),
-            'rowspans' => $rowspans
-        );
-    }
-
-    /**
-     * @Route("ajouter/cours", name="planning_ajouter_cours")
-     * @Template()
-     * @Secure(roles="ROLE_USER")
-     */
-    public function addCourseAction()
-    {
-        $schedule = new Schedule();
-
-        $formBuilder = $this->createFormBuilder($schedule);
-
-        $formBuilder
-                ->add('date', 'datetime')
-                ->add('duration', 'integer')
-                ->add('comment', 'textarea', array('required' => false))
-                ->add('type', 'entity', array(
-                    'class' => 'IntranetScheduleBundle:CourseType',
-                        )
-        );
-
-        $form = $formBuilder->getForm();
-
-        $request = $this->get('request');
-
-        if ($request->getMethod() == 'POST')
+        else
         {
-            $form->bind($request);
-
-            if ($form->isValid())
-            {
-                // On l'enregistre notre objet $article dans la base de données
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($schedule);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('planning'));
-            }
+            $error = 'Il semblerait que cett cours n\'existe pas dans la base de données. L\'édition est donc impossible.';
+            $session->getFlashBag()->add('error', $error);   
+            return $this->redirect($this->generateUrl('list_course'));
         }
         
-        return array(
-            'form' => $form->createView(),
-        );
     }
 
-    /**
-     * @Route("ajouter/cours/type", name="planning_ajouter_type_cours")
+    
+        /**
+     * @Route("/matiere/{id}/editer", name="edit_coursetype")
      * @Template()
-     * @Secure(roles="ROLE_USER")
+     * @Secure(roles="ROLE_TEACHER")
      */
-    public function addCourseTypeAction()
+    public function editTypeAction($id)
     {
-        $courseType = new CourseType();
-
-        $formBuilder = $this->createFormBuilder($courseType);
-
-        $formBuilder
-                ->add('name', 'text')
-                ->add('description', 'textarea')
-                ->add('teacher', 'entity', array(
-                    'class' => 'IntranetUserBundle:User',
-                        )
-                )
-                ->add('students', 'entity', array(
-                    'class' => 'IntranetUserBundle:User',
-                    'multiple' => true
-                        )
-        );
-
-        $form = $formBuilder->getForm();
-
         $request = $this->get('request');
+        $session = $request->getSession();
+        
+        $coursetype = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:CourseType')
+                ->find($id);
 
-        if ($request->getMethod() == 'POST')
+        if ($coursetype)
         {
-            $form->bind($request);
+            $formBuilder = $this->createFormBuilder($coursetype);
+            $formBuilder
+                    ->add('description', 'ckeditor');
+            $form = $formBuilder->getForm();
+            $request = $this->get('request');
 
-            if ($form->isValid())
+            if ($request->getMethod() == 'POST')
             {
-                // On l'enregistre notre objet $article dans la base de données
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($courseType);
-                $em->flush();
+                $form->bind($request);
 
-                return $this->redirect($this->generateUrl('planning'));
+                if ($form->isValid())
+                {                      
+                    // On l'enregistre notre objet $article dans la base de données
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($coursetype);
+                    $em->flush();
+
+                    $error = 'Description de la matière éditée avec succès.';
+                    $session->getFlashBag()->add('success', $error);
+
+                    return $this->redirect($this->generateUrl('coursetype_display', array('id'=> $id)));
+                }
             }
+            return array(
+                'form' => $form->createView(),
+            );
         }
-        return array(
-            'form' => $form->createView(),
-        );
+        else
+        {
+            $error = 'Il semblerait que cette matière n\'existe pas dans la base de données. L\'édition est donc impossible.';
+            $session->getFlashBag()->add('error', $error);   
+            return $this->redirect($this->generateUrl('list_course'));
+        }
+        
     }
-
 }
 

@@ -1,0 +1,84 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>{{type.name}}
+{% if is_granted('ROLE_TEACHER') %}
+    <a href="{{ path('edit_coursetype', { 'id' : type.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-pencil"></i></a>
+{% endif %}</h1>
+<div>
+    <p>{{type.description|raw}}</p>
+    <br/>
+    <h3>Examens
+        {% if is_granted('ROLE_TEACHER') %}
+            <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" class="btn btn-success btn-small"><i class="icon-white icon-plus-sign"></i></a>
+        {% endif %}</h3>
+
+        {% if type.exams|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Moyenne</th>
+            </tr>
+
+                {% for exam in type.exams %}
+            <tr>
+                <td><a href="{{ path('display_exam', {'exam_id': exam.id}) }}">{{ exam.name }}</a></td>
+                <td>{{ exam.description }}</td>
+                <td>0</td>
+            </tr>
+                {% endfor %}
+
+        </table>
+        {% else %}
+        <p class="text-error">Aucun examen n'est prévu pour cette matière !</p>
+        {% endif %}
+
+        <br/>
+        <h3>Cours</h3>
+
+        {% if courses|length > 0 %}
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Date</th>
+                <th>Commentaire</th>
+            </tr>
+
+                {% for course in courses %}
+            <tr>
+                <td><a href="{{  path('course_display', { 'id' : course.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a></td>
+                <td>Le {{ course.date|date('d/m') }} à {{ course.date|date('H') }}h{{ course.date|date('i') }}</b></td>
+                <td>{% if course.comment %}{{course.comment|raw}}{% endif %}</td>
+            </tr>
+                {% endfor %}
+
+        </table>
+        {% else %}
+        <p class="text-error">Aucun cours n'est prévu pour cette matière !</p>
+        {% endif %}
+
+         {% if ghosts|length > 0 %}
+         {% if is_granted('ROLE_TEACHER') %}
+        <br/><h3>Cours Fantômes</h3>
+
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Date</th>
+                <th>Commentaire</th>
+            </tr>
+
+                {% for course in ghosts %}
+            <tr>
+                <td><a href="{{  path('course_display', { 'id' : course.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a></td>
+                <td>Le {{ course.date|date('d/m') }} à {{ course.date|date('H') }}h{{ course.date|date('i') }}</b></td>
+                <td>{% if course.comment %}course.comment{% endif %}</td>
+            </tr>
+                {% endfor %}
+
+        </table>
+        {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Création d'un examen de {{ type.name}}</h1>
+ <form method="post" {{ form_enctype(form) }}>
+ 
+	<div>
+		{{ form_label(form.name) }}
+		{{ form_widget(form.name) }}
+		{{ form_errors(form.name) }}
+	</div>
+	
+	<div>
+		{{ form_label(form.date) }}
+		<div class="input-append date form_datetime">
+			{{ form_widget(form.date, {'attr':{'readonly': 'readonly'}}  ) }}
+			<span class="add-on"><i class="icon-th"></i></span>
+		</div>
+		{{ form_errors(form.date) }}
+	</div>
+	
+	<div>
+		{{ form_label(form.description) }}
+		{{ form_widget(form.description) }}
+		{{ form_errors(form.description) }}
+	</div>
+	
+	<div>
+		{{ form_label(form.maxnote) }}
+		{{ form_widget(form.maxnote) }}
+		{{ form_errors(form.maxnote) }}
+	</div>
+	
+    <input type="submit" class="btn btn-primary" />
+	{{ form_rest(form) }}
+  </form>
+{% endblock %}

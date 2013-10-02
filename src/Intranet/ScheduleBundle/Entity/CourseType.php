@@ -41,6 +41,13 @@ class CourseType
      */
     private $exams;
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
+    
     public function __construct()
     {
         $this->exams = new Collections\ArrayCollection();
@@ -79,6 +86,29 @@ class CourseType
         return $this->name;
     }
 
+    /**
+     * Set name
+     *
+     * @param int $number
+     * @return CourseType
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    
+        return $this;
+    }
+
+    /**
+     * Get number
+     *
+     * @return string 
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+    
     /**
      * Set description
      *

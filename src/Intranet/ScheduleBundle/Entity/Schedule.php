@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Schedule
  *
- * @ORM\Table(name="intranet_schedule")
+ * @ORM\Table(name="intranet_course_schedule")
  * @ORM\Entity(repositoryClass="Intranet\ScheduleBundle\Entity\ScheduleRepository")
  */
 class Schedule
@@ -46,6 +46,15 @@ class Schedule
      * @ORM\ManyToOne(targetEntity="CourseType")
      */
     private $type;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isGhost", type="boolean")
+     */
+    private $isGhost;
+    
+    
 
     public function __construct()
     {
@@ -155,4 +164,26 @@ class Schedule
         return $this->type;
     }
 
+        /**
+     * Set type
+     *
+     * @param $isGhost
+     * @return Schedule
+     */
+    public function setisGhost($isGhost)
+    {
+        $this->isGhost = $isGhost;
+
+        return $this;
+    }
+
+    /**
+     * Get isGhost
+     *
+     * @return \stdClass 
+     */
+    public function getisGhost()
+    {
+        return $this->isGhost;
+    }
 }

@@ -1,19 +1,19 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
-<h1>{{ semestre }}</h1>
+<h1>Liste des cours</h1>
 
     
     {% if courses|length > 0 %}
         <table class="table">
             <tr>
                 <th>Nom</th>
-                <th>Professeur</th>
+                <th>Nombre de cours</th>
             </tr>
         {% for course in courses %}
             <tr>
-                <td><a href="">{{ course.name }}</a></td>
-                <td></td>
+                <td><a href="{{ path('coursetype_display', {'id' : course.id}) }}">{{ course.name }}</a></td>
+                <td>{{ course.number }}</td>
             </tr>
         {% endfor %}
         </ul>

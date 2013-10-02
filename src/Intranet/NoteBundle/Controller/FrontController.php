@@ -60,6 +60,56 @@ class FrontController extends Controller
             'form' => $form->createView(),
         );
     }
+    
+        /**
+     * @Route("/{id_typeCourse}/{date}/addExam", name="add_examd")
+     * @Template()
+     */
+    public function addExamDAction($id_typeCourse, $date)
+    {
+        $type = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:CourseType')
+                ->find($id_typeCourse);
+
+        $exam = new Exam();
+
+        $formBuilder = $this->createFormBuilder($exam);
+
+        $formBuilder
+                ->add('name', 'text')
+                ->add('date', 'datetime', array(
+                        //'format' => 'yyyy-mm-dd hh:ii',
+                        'widget' => 'single_text',
+                        'data' => date_create_from_format('jmY H:i:s', $date)))
+                ->add('description', 'textarea', array('required' => false))
+                ->add('maxnote', 'integer', array('data' => 20));
+
+        $form = $formBuilder->getForm();
+
+        $request = $this->get('request');
+
+        if ($request->getMethod() == 'POST')
+        {
+            $form->bind($request);
+
+            if ($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+
+                $exam->setCourseType($type);
+                
+                $em->persist($exam);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('coursetype_display', array('id' => $id_typeCourse)));
+            }
+        }
+
+        return array(
+            'type' => $type,
+            'form' => $form->createView(),
+        );
+    }
 
     /**
      * @Route("/voir/{exam_id}", name="display_exam")

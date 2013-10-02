@@ -1,15 +1,20 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
-<h1>{{type.name}}</h1>
+<h1>Cours de <a href="{{ path('coursetype_display', {'id' : type.id}) }}">{{type.name}}</a>
+{% if is_granted('ROLE_TEACHER') %}
+    <a href="{{ path('edit_course', { 'id' : sch.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-pencil"></i></a>
+{% endif %}</h1>
     <div>
-        <p>{{type.description}}</p>
+        <p><b>Le {{ sch.date|date('d/m') }} à {{ sch.date|date('H') }}h{{ sch.date|date('i') }}</b></p>
+        {% if sch.comment %}
+            <p>{{ sch.comment|raw }}</p>
+        {% endif %}
         <br/>
-        <h3>Examens
+        <h3>Examens de la matière
         {% if is_granted('ROLE_TEACHER') %}
-            <a href="{{ path('add_exam', {'id_typeCourse' : type.id}) }}" class="btn btn-success btn-small"><i class="icon-white icon-plus-sign"></i></a>
+                <a href="{{ path('add_examd', {'id_typeCourse' : type.id, 'date' : sch.date|date('jmY H:i:s')}) }}" class="btn btn-success btn-small"><i class="icon-white icon-plus-sign"></i></a>
         {% endif %}</h3>
-
         {% if type.exams|length > 0 %}
             <table class="table">
                 <tr>
@@ -30,5 +35,6 @@
         {% else %}
             <p class="text-error">Aucun examen n'est prévu pour cette matière !</p>
         {% endif %}
+
     </div>
 {% endblock %}

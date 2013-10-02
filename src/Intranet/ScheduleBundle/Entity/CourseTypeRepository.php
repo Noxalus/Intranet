@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class CourseTypeRepository extends EntityRepository
 {
+    public function makeAllGhost()
+    {
+        $qb = $this->_em->createQueryBuilder()
+            ->update($this->_entityName, 's')
+            ->set('s.number', 0);
+        $q = $qb->getQuery();
+        $p = $q->execute();
+        
+    }
 }
