@@ -33,6 +33,12 @@ class TicketAssignment
      */
     private $user;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isRead", type="boolean")
+     */
+    private $isRead;
 
     /**
      * Get id
@@ -67,6 +73,29 @@ class TicketAssignment
         return $this->ticket;
     }
 
+    /**
+     * Set isRead
+     *
+     * @param \stdClass $ticket
+     * @return TicketAssignment
+     */
+    public function setisRead($isRead)
+    {
+        $this->isRead = $isRead;
+
+        return $this;
+    }
+
+    /**
+     * Get isRead
+     *
+     * @return \stdClass 
+     */
+    public function getisRead()
+    {
+        return $this->isRead;
+    }
+    
     /**
      * Set user
      *

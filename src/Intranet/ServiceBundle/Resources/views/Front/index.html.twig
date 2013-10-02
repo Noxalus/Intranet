@@ -6,13 +6,13 @@
 
 <h1>Liste des tickets</h1>
 
-<table class="table">
+<!--<table class="table">
     <tr>
         <th>Status</th>
         <th>Nom</th>
     </tr>
     <tr>
-        {% for tick in tickets %}
+        {% for tick in ticketsNR %}
             <td>
                 {{tick.state}}
             </td>
@@ -21,6 +21,20 @@
             </td>
         {% endfor %}
     </tr>
-</table>
+</table>-->
 
+{% if ticketsNR|length > 0 %}
+<h3>Tickets nons lus</h3>
+{% for tick in ticketsNR %}
+    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
+{% endfor %}
+{% endif %}
+
+{% if ticketsR|length > 0 %}
+<h3>Tickets lus</h3>
+{% for tick in ticketsR %}
+    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
+{% endfor %}
+{% endif %}
+    
 {% endblock %}

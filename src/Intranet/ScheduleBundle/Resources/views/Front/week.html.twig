@@ -53,7 +53,7 @@
 					start: new Date({{ event['start']}}),
                                         end: new Date({{event['end'] }}),
 					allDay: false,
-                                        url: '{{ path('course_search', { 'name' : event['title'] } ) }}'
+                                        url: '{{ path('course_search', { 'name' : event['title'], 'date' : event['date'], 'hour' : event['hour'], 'duration' : event['duration']} ) }}'
 				},
                             {% endfor %}
 			]

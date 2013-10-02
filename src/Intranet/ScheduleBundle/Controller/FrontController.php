@@ -63,6 +63,9 @@ class FrontController extends Controller
             {
                 $course['title'] = str_replace('/', '', (string)$xml->week->day[$i]->course[$j]->title);
                 $course['start'] = $date + ($xml->week->day[$i]->course[$j]->hour * 15 * 60 * 1000);
+                $course['duration'] = $xml->week->day[$i]->course[$j]->duration;
+                $course['date'] = str_replace('/', '',(string)$xml->week->day[$i]->date);
+                $course['hour'] = $xml->week->day[$i]->course[$j]->hour;
                 $course['end'] = $date + (($xml->week->day[$i]->course[$j]->hour + $xml->week->day[$i]->course[$j]->duration) * 15 * 60 * 1000);
                 $events[count($events)] = $course;
             }
