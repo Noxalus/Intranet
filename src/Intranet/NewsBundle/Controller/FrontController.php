@@ -51,14 +51,15 @@ class FrontController extends Controller
         $formBuilder = $this->createFormBuilder($article);
 
         $formBuilder
-                ->add('title', 'text')
+                ->add('title', 'text', array('label' => 'Titre'))
                 ->add('picto', 'entity', array(
+                    'label' => 'Pictogramme',
                     'class' => 'IntranetNewsBundle:PictoNews',
                     'property' => 'description',
                     'empty_value' => 'Choisissez le pictogramme',
                     'expanded' => false,
                     'multiple' => false,))
-                ->add('content', 'ckeditor');
+                ->add('content', 'ckeditor', array('label' => 'Contenu'));
 
         $form = $formBuilder->getForm();
 
@@ -110,14 +111,15 @@ class FrontController extends Controller
         {
             $formBuilder = $this->createFormBuilder($article);
             $formBuilder
-                    ->add('title', 'text')
+                    ->add('title', 'text', array('label' => 'Titre'))
                     ->add('picto', 'entity', array(
+                    'label' => 'Pictogramme',
                     'class' => 'IntranetNewsBundle:PictoNews',
                     'property' => 'description',
                     'empty_value' => 'Choisissez le pictogramme',
                     'expanded' => false,
                     'multiple' => false,))
-                    ->add('content', 'ckeditor');
+                    ->add('content', 'ckeditor', array('label' => 'Contenu'));
             $form = $formBuilder->getForm();
             $request = $this->get('request');
 

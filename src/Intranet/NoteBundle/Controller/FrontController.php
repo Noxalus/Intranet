@@ -27,12 +27,17 @@ class FrontController extends Controller
         $formBuilder = $this->createFormBuilder($exam);
 
         $formBuilder
-                ->add('name', 'text')
+                ->add('name', 'text', array('label' => 'Nom'))
                 ->add('date', 'datetime', array(
+                      'label' => 'Date',
                       //'format' => 'yyyy-mm-dd hh:ii',
                       'widget' => 'single_text'))
-                ->add('description', 'textarea', array('required' => false))
-                ->add('maxnote', 'integer', array('data' => 20));
+                ->add('description', 'textarea', array(
+                    'label' => 'Description',
+                    'required' => false))
+                ->add('maxnote', 'integer', array(
+                    'label' => 'Note maximale',
+                    'data' => 20));
 
         $form = $formBuilder->getForm();
 
@@ -76,13 +81,18 @@ class FrontController extends Controller
         $formBuilder = $this->createFormBuilder($exam);
 
         $formBuilder
-                ->add('name', 'text')
+                ->add('name', 'text', 'Nom')
                 ->add('date', 'datetime', array(
+                        'label' => 'Date',
                         //'format' => 'yyyy-mm-dd hh:ii',
                         'widget' => 'single_text',
                         'data' => date_create_from_format('jmY H:i:s', $date)))
-                ->add('description', 'textarea', array('required' => false))
-                ->add('maxnote', 'integer', array('data' => 20));
+                ->add('description', 'textarea', array(
+                    'label' => 'Description',
+                    'required' => false))
+                ->add('maxnote', 'integer', array(
+                    'label' => 'Note maximale',
+                    'data' => 20));
 
         $form = $formBuilder->getForm();
 
@@ -219,7 +229,7 @@ class FrontController extends Controller
         if ($mark)
         {
             $formBuilder = $this->createFormBuilder($mark);
-            $formBuilder->add('value', 'text');
+            $formBuilder->add('value', 'text', array('label' => 'Valeur'));
                     
             $form = $formBuilder->getForm();
             $request = $this->get('request');

@@ -11,7 +11,7 @@ class ModifType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('article', new ArticleType())
+        $builder->add('article', new ArticleType(), array('label' => 'Article'))
                 ->add('content', 'ckeditor', array('label' => 'Contenu'));
     }
 

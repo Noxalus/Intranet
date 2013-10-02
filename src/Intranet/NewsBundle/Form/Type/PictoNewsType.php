@@ -17,8 +17,8 @@ class PictoNewsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           ->add('description', 'text')
-           ->add('file');
+           ->add('description', 'text', array('label' => 'Description'))
+           ->add('file', 'file', array('label' => 'Fichier'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

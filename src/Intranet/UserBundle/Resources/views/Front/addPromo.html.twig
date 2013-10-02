@@ -12,20 +12,23 @@ $(this).attr("checked",status);
 <h1>Ajout d'une promotion</h1>
 
 {% if users|length == 0 %}
-<form method="POST" action="{{ path('user_add_promo') }}" enctype="multipart/form-data">
-    <fieldset>
-    <label for="promo">Promotion:</label>
-    <input type="number" name="promo" value="{{ 'now'|date('Y') + 1 }}" min="1984" max="{{ 'now'|date('Y') + 3 }}" />
-    <label for="file">Fichier (.csv):</label>
-    <div class="fileupload fileupload-new" data-provides="fileupload">
-        <div class="input-append">
-            <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Selectionnez un fichier</span><span class="fileupload-exists">Changer</span><input type="file" name="file" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Supprimer</a>
+<div class="well">
+    <form method="POST" action="{{ path('user_add_promo') }}" enctype="multipart/form-data">
+        <fieldset>
+        <label for="promo">Promotion:</label>
+        <input type="number" name="promo" value="{{ 'now'|date('Y') + 1 }}" min="1984" max="{{ 'now'|date('Y') + 3 }}" />
+        <label for="file">Fichier (.csv):</label>
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="input-append">
+                <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Selectionnez un fichier</span><span class="fileupload-exists">Changer</span><input type="file" name="file" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Supprimer</a>
+            </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-success"><i class="icon-book"></i>Envoyer</button>
-    </fieldset>
-</form>
+        <button type="submit" class="btn btn-primary">Valider</button>
+        </fieldset>
+    </form>
+</div>
 {% else %}
+<div class="well">
 <form action="{{ path('user_add_promo_selection') }}" method="POST">
     <fieldset>
 <table class="table">
@@ -49,5 +52,6 @@ $(this).attr("checked",status);
 <input type="submit" value="Inscrire" class="btn btn-success" />
 </fieldset>
 </form>
+</div>
 {% endif %}
 {% endblock %}

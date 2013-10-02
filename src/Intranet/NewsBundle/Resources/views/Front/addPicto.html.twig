@@ -2,10 +2,11 @@
 
 {% block content %}
 <h1>Ajouter un pictogramme</h1>
-<p>Attention : la taille de l'image de pictogramme doit être de 50px par 50px.</p>
+<p class="text-info">Attention : la taille de l'image de pictogramme doit être de 50px par 50px.</p>
 <div class="well">
   <form method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
+    <br />
     <input type="submit" class="btn btn-primary" />
   </form>
 </div>

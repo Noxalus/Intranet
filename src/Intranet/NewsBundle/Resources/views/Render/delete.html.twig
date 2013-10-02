@@ -1,0 +1,18 @@
+<!-- Button to trigger modal -->
+<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Suppression d'un article</h3>
+  </div>
+  <div class="modal-body">
+    <p>Vous êtes sur le point de supprimer un article.</p>
+    <p>Cette action est irréversible. Êtes-vous sur de vouloir supprimer l'article "{{ article.title }}" ?</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
+    <button class="btn btn-primary">Valider</button>
+  </div>
+</div>

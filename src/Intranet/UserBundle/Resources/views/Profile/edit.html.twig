@@ -3,10 +3,12 @@
 {% block content %}
 <h1>Edition du profil de {{ user.firstName }} {{ user.lastName }}</h1>
 
-{{ user_photo(user, 'user_photo') }}
-
-<form action="{{ path('user_profile_edit', {'user_id': user.id }) }}" method="POST"  {{ form_enctype(form) }}>
-    {{ form_widget(form) }}    
-    <input type="submit" value="Editer" class="btn btn-success" />
-</form>
+<div class="well">
+    <div style="float: right;">{{ user_photo(user, 'user_photo') }}</div>
+    <form action="{{ path('user_profile_edit', {'user_id': user.id }) }}" method="POST"  {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <br />
+        <input type="submit" value="Valider" class="btn btn-primary" />
+    </form>
+</div>
 {% endblock content %}

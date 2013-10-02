@@ -316,8 +316,8 @@ class FrontController extends Controller
         $formBuilder = $this->createFormBuilder($thematic);
 
         $formBuilder
-                ->add('name', 'text')
-                ->add('description', 'ckeditor');
+                ->add('name', 'text', array('label' => 'Nom'))
+                ->add('description', 'ckeditor', array('label' => 'Description'));
 
         $form = $formBuilder->getForm();
 

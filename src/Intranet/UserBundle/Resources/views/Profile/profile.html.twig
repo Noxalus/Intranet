@@ -5,20 +5,27 @@
 <h1>Profil de {{ user.firstName }} {{ user.lastName }}</h1>
 
 
-<div>
-{{ user_photo(user, 'user_photo') }}
+<div class="well" style="min-height: 150px;">
+    <div style="float: right;">{{ user_photo(user, 'user_photo') }}</div>
+    <div>
+        <p>
+            <strong>Nom</strong>: {{ user.lastName }}<br />
+            <strong>Prénom</strong>: {{ user.firstName }}<br />
+            <strong>Login</strong>: {{ user.username }}<br />
+            <strong>Adresse email</strong>: {{ user.email }}<br />
+            <strong>Promotion</strong>: {{ user.promo }}
+        </p>
 
-<p>
-    <strong>Adresse email</strong>: {{ user.email }}<br />
-    <strong>Promotion</strong>: {{ user.promo }}
-</p>    
+        <p>
+            <strong>Informations relatives</strong>:<br />
+            <ul>
+                <li><a href="{{ path('display_user_marks', { 'user_id': user.id }) }}">Voir ses notes</a></li>
+                <li><a href="#">Voir ses projets</a></li>
+            </ul>
+        </p>
+    </div>
 </div>
 
-<ul>
-<li><a href="{{ path('display_user_marks', { 'user_id': app.user.id }) }}">Voir les notes</a></li>
-<li><a href="#">Voir les projets</a></li>
-</ul>
-
-<p><a href="{{ path('user_profile_edit', {'user_id': user.id }) }}" class="btn btn-info">Editer</a></p>
+<p><a href="{{ path('user_profile_edit', {'user_id': user.id }) }}" class="btn btn-warning">Editer</a></p>
 
 {% endblock content %}

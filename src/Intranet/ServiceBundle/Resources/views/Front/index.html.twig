@@ -1,11 +1,26 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
+{% set statusColors = {'En Cours': '#FFFFFF'} %}
+
 {% block content %}
 
 <h1>Liste des tickets</h1>
 
-{% for tick in tickets %}
-    [{{tick.state}}] <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
-{% endfor %}
+<table class="table">
+    <tr>
+        <th>Status</th>
+        <th>Nom</th>
+    </tr>
+    <tr>
+        {% for tick in tickets %}
+            <td>
+                {{tick.state}}
+            </td>
+            <td>
+               <a href="{{ path('show_ticket', {'id' : tick.id}) }}">{{tick.title}}</a><br/>
+            </td>
+        {% endfor %}
+    </tr>
+</table>
 
 {% endblock %}
