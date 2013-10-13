@@ -11,17 +11,21 @@
     </dl>
     <div class="forum-post-body">
         <p class="forum-post-date">{{ post.updatedAt|date('d/m/Y à H:i:s') }}</p>
-        
-        {% if user == app.user or is_granted('ROLE_TEACHER') %}
-            <ul class="forum-profile-icons">
-                <li class="delete-icon"><a href="{{ path('forum_delete_post', {'id': post.id }) }}" class="btn btn-danger btn-mini"><i class="icon-white icon-remove-sign"></i></a></li>
-                <li class="edit-icon"><a href="{{ path('forum_edit_post', {'id': post.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-edit"></i></a></li>
-            </ul>
-        {% endif %}
-
+        <ul class="forum-profile-icons">
+            <li class="quote-icon"><a href="{{ path('forum_add_post', {'topic_id': post.topic.id, 'quoted_post_id': post.id }) }}" class="btn btn-info btn-mini" title="Citer ce message"><i class="icon-white icon-comment"></i></a></li>
+            {% if user == app.user or is_granted('ROLE_TEACHER') %}
+                <li class="delete-icon"><a href="{{ path('forum_delete_post', {'id': post.id }) }}" class="btn btn-danger btn-mini" title="Supprimer ce message"><i class="icon-white icon-remove-sign"></i></a></li>
+                <li class="edit-icon"><a href="{{ path('forum_edit_post', {'id': post.id }) }}" class="btn btn-warning btn-mini" title="Editer ce message"><i class="icon-white icon-edit"></i></a></li>
+            {% endif %}
+        </ul>
         <div class="forum-post-content">
             {{ post.content|raw }}
         </div>
+        {% if not post.editBy is null %}
+        <div class="forum-post-edit">
+            <p><i>Dernière édition par {{ post.editBy.username }} le {{ post.updatedAt|date('d/m/Y à H:i:s') }}</i></p>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endif %}

@@ -193,17 +193,30 @@ class FrontController extends Controller
     }
     
      /**
-     * @Route("/sujet/{topic_id}/ajouter", name="forum_add_post")
+     * @Route("/sujet/{topic_id}/ajouter/{quoted_post_id}", name="forum_add_post", defaults={"quoted_post_id" = null})
      * @Template()
      */
-    public function addPostAction($topic_id)
+    public function addPostAction($topic_id, $quoted_post_id)
     {
         $request = $this->get('request');
 
         $post = new Post();
         
+        if ($quoted_post_id != null)
+        {
+            // Get the quoted post
+            $quotedPost = $this->getDoctrine()
+                ->getRepository('IntranetForumBundle:Post')
+                ->find($quoted_post_id);
+            
+            if ($quotedPost != null)
+            {
+                $post->setContent('<blockquote><div><cite>' . $quotedPost->getAuthor()->getUsername() . ' a écrit:</cite>' . $quotedPost->getContent() . '</div></blockquote>');
+            }
+        }
+        
         $form = $this->createForm(new PostType(), $post);
-
+                
         if ($request->getMethod() == 'POST')
         {
             $form->bind($request);
@@ -250,6 +263,10 @@ class FrontController extends Controller
 
             if ($form->isValid())
             {
+                // Get current user
+                $user = $this->get('security.context')->getToken()->getUser();
+                $post->setEditBy($user);
+                
                 $em->persist($post);
                 $em->flush();
                 

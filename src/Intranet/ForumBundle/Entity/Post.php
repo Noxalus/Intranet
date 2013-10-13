@@ -45,6 +45,13 @@ class Post
      * @ORM\ManyToOne(targetEntity="Topic", inversedBy="posts")
      */
     private $topic;
+    
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\Intranet\UserBundle\Entity\User")
+     */
+    private $editBy;
 
     /**
      * Get id
@@ -123,5 +130,28 @@ class Post
     public function getAuthor()
     {
         return $this->author;
+    }
+    
+    /**
+     * Set editBy
+     *
+     * @param \Intranet\UserBundle\Entity\User $editBy
+     * @return Post
+     */
+    public function setEditBy(\Intranet\UserBundle\Entity\User $editBy = null)
+    {
+        $this->editBy = $editBy;
+
+        return $this;
+    }
+
+    /**
+     * Get editBy
+     *
+     * @return \Intranet\UserBundle\Entity\User 
+     */
+    public function getEditBy()
+    {
+        return $this->editBy;
     }
 }
