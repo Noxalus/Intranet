@@ -9,6 +9,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\NewsBundle\Entity\Article;
 use Intranet\NewsBundle\Entity\PictoNews;
 use Intranet\NewsBundle\Form\Type\PictoNewsType;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontController extends Controller
 {
@@ -298,5 +299,21 @@ class FrontController extends Controller
             'form' => $form->createView(),
             'picto' => $picto
         );
+    }
+    
+    /**
+     * Generate the article feed
+     * @Route("/rss.xml", name="rss_feed")
+     * 
+     * @return Response XML Feed
+     */
+    public function feedAction()
+    {
+        $articles = $this->getDoctrine()->getRepository('IntranetNewsBundle:Article')->findAll();
+
+        $feed = $this->get('eko_feed.feed.manager')->get('article');
+        $feed->addFromArray($articles);
+
+        return new Response($feed->render('rss')); // or 'atom'
     }
 }

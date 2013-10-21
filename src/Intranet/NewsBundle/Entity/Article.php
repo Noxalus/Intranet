@@ -3,6 +3,7 @@
 namespace Intranet\NewsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
 
 /**
  * Article
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="intranet_news_article")
  * @ORM\Entity(repositoryClass="Intranet\NewsBundle\Entity\ArticleRepository")
  */
-class Article
+class Article implements RoutedItemInterface
 {
     /**
      * @var integer
@@ -178,5 +179,30 @@ class Article
     public function getPicto()
     {
         return $this->picto;
+    }
+
+    public function getFeedItemDescription() {
+        return $this->content;  
+    }
+
+    public function getFeedItemPubDate() {
+        return $this->date;
+    }
+
+    public function getFeedItemRouteName() {
+        return 'home';
+    }
+
+    public function getFeedItemRouteParameters() {
+        return null;
+        // return array('id' => $this->id);
+    }
+
+    public function getFeedItemTitle() {
+        return $this->title;
+    }
+
+    public function getFeedItemUrlAnchor() {
+        
     }
 }

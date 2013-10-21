@@ -174,10 +174,27 @@ class FrontController extends Controller
     {
         $request = $this->get('request');
         $session = $request->getSession();
+        $user = $this->get('security.context')->getToken()->getUser();
         
         $topic = $this->getDoctrine()
                 ->getRepository('IntranetForumBundle:Topic')
                 ->find($id);
+        
+        $tvRepository = $this->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IntranetForumBundle:TopicView');
+        
+        $lastPost = $tvRepository->getLastPost($topic);
+        
+        if ($tvRepository->hasReadTopic($user, $topic))
+        {
+            echo 'Already read';
+        }
+        else
+        {
+            
+            echo 'Not read!';
+        }
         
         if (!$topic)
         {

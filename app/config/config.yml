@@ -103,3 +103,13 @@ trsteel_ckeditor:
     width: 100% #Integer or %
     height: 300 #Integer or %
     language: 'fr'
+    
+# RSS Feed Configuration
+eko_feed:
+    feeds:
+        article:
+            title:       'Mes news'
+            description: 'Dernières news intranet MTI'
+            link:        'http://intranet-mti.epita.net'
+            encoding:    'utf-8'
+            author:      'Intranet' # Only required for Atom feeds
