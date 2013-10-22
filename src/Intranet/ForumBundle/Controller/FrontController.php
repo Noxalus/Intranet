@@ -188,12 +188,12 @@ class FrontController extends Controller
         
         if ($tvRepository->hasReadTopic($user, $topic))
         {
-            echo 'Already read';
+            //echo 'Already read';
         }
         else
         {
             
-            echo 'Not read!';
+            //echo 'Not read!';
         }
         
         if (!$topic)

@@ -731,12 +731,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/eko/FeedBundle.git",
-                "reference": "dbad85d80e9a003daa8cb2a0e1ad945653bc6fd5"
+                "reference": "0bd5e897bfab958c7310953c019f20d05a75fc39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eko/FeedBundle/zipball/dbad85d80e9a003daa8cb2a0e1ad945653bc6fd5",
-                "reference": "dbad85d80e9a003daa8cb2a0e1ad945653bc6fd5",
+                "url": "https://api.github.com/repos/eko/FeedBundle/zipball/0bd5e897bfab958c7310953c019f20d05a75fc39",
+                "reference": "0bd5e897bfab958c7310953c019f20d05a75fc39",
                 "shasum": ""
             },
             "require": {
@@ -775,7 +775,7 @@
                 "feed",
                 "rss"
             ],
-            "time": "2013-09-08 16:09:05"
+            "time": "2013-10-18 18:58:20"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -784,12 +784,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "f9ea1de0698e3055c9916e88c19f42e28844ef61"
+                "reference": "4025c4113bc000cef331ea833a52123080d2faa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/f9ea1de0698e3055c9916e88c19f42e28844ef61",
-                "reference": "f9ea1de0698e3055c9916e88c19f42e28844ef61",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4025c4113bc000cef331ea833a52123080d2faa4",
+                "reference": "4025c4113bc000cef331ea833a52123080d2faa4",
                 "shasum": ""
             },
             "require": {
@@ -844,7 +844,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2013-10-09 22:58:46"
+            "time": "2013-10-21 09:54:07"
         },
         {
             "name": "imagine/imagine",
