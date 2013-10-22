@@ -3,6 +3,7 @@
 namespace Intranet\ForumBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * TopicViewRepository
@@ -12,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class TopicViewRepository extends EntityRepository
 {
-    public function hasReadTopic($user, $topic)
+    public function getTopicView($user, $topic)
     {
         $queryBuilder = $this->_em->createQueryBuilder()
                 ->select('tv')
@@ -26,10 +27,10 @@ class TopicViewRepository extends EntityRepository
 
         $result = $query->getOneOrNullResult();
 
-        return $result !== null;
+        return $result;
     }
     
-    public function getLastPost($topic)
+    public function getLastPostFromTopic($topic)
     {
         $queryBuilder = $this->_em->createQueryBuilder()
                 ->select('p')
@@ -37,6 +38,26 @@ class TopicViewRepository extends EntityRepository
                 ->where('p.topic = :topic')
                 ->orderBy('p.createdAt', 'ASC')
                 ->setParameter('topic', $topic);
+
+        $query = $queryBuilder->getQuery();
+
+        $result = $query->getResult();
+
+        if (count($result) > 0)
+            return $result[0];
+        else
+            return null;
+    }
+    
+    public function getLastPostFromCategory($category)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder()
+                ->select('p')
+                ->from('IntranetForumBundle:Post', 'p')
+                ->leftJoin('IntranetForumBundle:Topic', 't', Join::WITH, 'p.topic = t.id')
+                ->where('t.category = :category')
+                ->orderBy('p.createdAt', 'ASC')
+                ->setParameter('category', $category);
 
         $query = $queryBuilder->getQuery();
 
