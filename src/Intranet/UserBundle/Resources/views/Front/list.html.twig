@@ -28,9 +28,11 @@
             <td>{{ user.lastName }}</td>
             <td>{{ user.email }}</td>
             <td>
-                {% for role in user.roles %} 
-                    {{ role }} <br />
-                {% endfor %}
+                {% if 'ROLE_TEACHER' in user.roles %}
+                    <em>Professeur</em>
+                {% else %}
+                    Étudiant
+                {% endif %}
             </td>
             <td>
                 {% if user.lastLogin is null %}

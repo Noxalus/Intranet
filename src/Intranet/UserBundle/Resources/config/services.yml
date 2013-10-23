@@ -4,7 +4,7 @@ services:
         arguments:  [@fos_user.user_manager]
         
     intranet.twig.extension:
-        class: Intranet\UserBundle\Twig\Extension\IntranetTwigExtension
+        class: Intranet\CoreBundle\Twig\Extension\IntranetTwigExtension
         tags:
             - { name: twig.extension }
         calls:
