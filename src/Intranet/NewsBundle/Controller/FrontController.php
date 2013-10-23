@@ -10,6 +10,7 @@ use Intranet\NewsBundle\Entity\Article;
 use Intranet\NewsBundle\Entity\PictoNews;
 use Intranet\NewsBundle\Form\Type\PictoNewsType;
 use Symfony\Component\HttpFoundation\Response;
+use Eko\FeedBundle\Field\MediaItemField;
 
 class FrontController extends Controller
 {
@@ -37,6 +38,28 @@ class FrontController extends Controller
             'news' => $news,
             'num_page' => $num_page,
             'ismore' => $more
+        );
+    }
+    
+    /**
+     * @Route("/afficher/{article_id}", name="display_news")
+     * @Template()
+     */
+    public function displayAction($article_id)
+    {
+        $repository = $this->getDoctrine()
+                   ->getManager()
+                   ->getRepository('IntranetNewsBundle:Article');
+             
+        $article = $repository->find($article_id);
+        
+        if ($article === null)
+        {
+            
+        }
+        
+        return array(
+            'article' => $article
         );
     }
     
@@ -303,7 +326,7 @@ class FrontController extends Controller
     
     /**
      * Generate the article feed
-     * @Route("/rss.xml", name="rss_feed")
+     * @Route("/rss.xml", name="rss_feed_news")
      * 
      * @return Response XML Feed
      */
@@ -313,7 +336,8 @@ class FrontController extends Controller
 
         $feed = $this->get('eko_feed.feed.manager')->get('article');
         $feed->addFromArray($articles);
-
-        return new Response($feed->render('rss')); // or 'atom'
+        $feed->addItemField(new MediaItemField('getFeedMediaItem'));
+        
+        return new Response($feed->render('atom')); // or 'atom'
     }
 }

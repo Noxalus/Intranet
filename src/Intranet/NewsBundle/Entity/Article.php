@@ -183,7 +183,7 @@ class Article implements RoutedItemInterface
     }
 
     public function getFeedItemDescription() {
-        return $this->content;  
+        return $this->content;
     }
 
     public function getFeedItemPubDate() {
@@ -191,12 +191,11 @@ class Article implements RoutedItemInterface
     }
 
     public function getFeedItemRouteName() {
-        return 'home';
+        return 'display_news';
     }
 
     public function getFeedItemRouteParameters() {
-        return null;
-        // return array('id' => $this->id);
+        return array('article_id' => $this->id);
     }
 
     public function getFeedItemTitle() {
@@ -205,5 +204,19 @@ class Article implements RoutedItemInterface
 
     public function getFeedItemUrlAnchor() {
         
+    }
+    
+    /**
+     * Returns a custom media field
+     *
+     * @return string
+     */
+    public function getFeedMediaItem()
+    {
+        return array(
+            'type' => 'image/jpeg',
+            'length' => 500,
+            'value' => $this->picto->getAbsolutePath()
+        );
     }
 }

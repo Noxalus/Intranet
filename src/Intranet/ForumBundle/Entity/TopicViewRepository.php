@@ -68,4 +68,6 @@ class TopicViewRepository extends EntityRepository
         else
             return null;
     }
+    
+    
 }
