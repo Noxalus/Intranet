@@ -1,0 +1,9 @@
+services:
+    intranet.twig.extension:
+        class: Intranet\CoreBundle\Twig\Extension\IntranetTwigExtension
+        arguments:
+          doctrine: "@doctrine"
+        tags:
+            - { name: twig.extension }
+        calls:
+            - [ setContainer, [ @service_container ] ]

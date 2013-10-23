@@ -36,7 +36,7 @@ class TopicViewRepository extends EntityRepository
                 ->select('p')
                 ->from('IntranetForumBundle:Post', 'p')
                 ->where('p.topic = :topic')
-                ->orderBy('p.createdAt', 'ASC')
+                ->orderBy('p.createdAt', 'DESC')
                 ->setParameter('topic', $topic);
 
         $query = $queryBuilder->getQuery();
@@ -56,7 +56,7 @@ class TopicViewRepository extends EntityRepository
                 ->from('IntranetForumBundle:Post', 'p')
                 ->leftJoin('IntranetForumBundle:Topic', 't', Join::WITH, 'p.topic = t.id')
                 ->where('t.category = :category')
-                ->orderBy('p.createdAt', 'ASC')
+                ->orderBy('p.createdAt', 'DESC')
                 ->setParameter('category', $category);
 
         $query = $queryBuilder->getQuery();
@@ -69,5 +69,71 @@ class TopicViewRepository extends EntityRepository
             return null;
     }
     
+    public function hasReadTopic($user, $topic)
+    {
+        $tv = $this->getTopicView($user, $topic);
+        $lastPost = $this->getLastPostFromTopic($topic);
+        
+        if ($tv != null)
+        {
+            // There is a new post since last time ?
+           return ($tv->getPost() == $lastPost);
+        }
+        else
+        {
+            if ($lastPost != null)
+            {
+                $diffNow = $lastPost->getCreatedAt()->diff(new \DateTime());
+
+                // If the last post is older than 6 months or if the user's subscription date is after
+                if ($diffNow->m > 6)
+                {
+                    return true;
+                }
+                else
+                {
+                    if ($user->getCreatedAt() != null)
+                    {
+                        return false;
+                    }
+                    else if ($lastPost->getCreatedAt() < $user->getCreatedAt())
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+                return true;
+        }
+    }
     
+    public function findTopicsByCategory($category)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder()
+                ->select('t')
+                ->from('IntranetForumBundle:Topic', 't')
+                ->where('t.category = :category')
+                ->setParameter('category', $category);
+
+        $query = $queryBuilder->getQuery();
+
+        $result = $query->getResult();
+
+        return $result;
+    }
+    
+    public function hasReadCategory($user, $category)
+    {
+        $topics = $this->findTopicsByCategory($category);
+        
+        foreach($topics as $topic)
+        {
+            if (!$this->hasReadTopic($user, $topic))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }   
 }

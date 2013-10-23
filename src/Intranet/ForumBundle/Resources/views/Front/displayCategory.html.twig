@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% set user = app.security.getToken().getUser() %}
+
 <h1>{{ category.name }}</h1>
 
 <p><i>{{ category.description }}</i></p>
@@ -15,7 +17,11 @@
             <th>Réponse(s)</th>
         </tr>
     {% for topic in topics %}
-        <tr>
+        {% if has_read_topic(user, topic) %}
+            <tr>
+        {% else %}
+            <tr class="info">
+        {% endif %}
             <td>
                 <a href="{{ path('forum_display_topic', {'id': topic.id }) }}">{{ topic.title }}</a>
             </td>

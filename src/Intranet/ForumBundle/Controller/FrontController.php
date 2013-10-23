@@ -11,6 +11,7 @@ use Intranet\ForumBundle\Entity\Post;
 use Intranet\ForumBundle\Form\CategoryType;
 use Intranet\ForumBundle\Form\TopicType;
 use Intranet\ForumBundle\Form\PostType;
+use Intranet\ForumBundle\Entity\TopicView;
 
 class FrontController extends Controller
 {
@@ -21,16 +22,16 @@ class FrontController extends Controller
     public function indexAction()
     {
         $repository = $this->getDoctrine()
-                   ->getManager()
-                   ->getRepository('IntranetForumBundle:Category');
-             
+                ->getManager()
+                ->getRepository('IntranetForumBundle:Category');
+
         $categories = $repository->findAll();
-        
+
         return array(
             'categories' => $categories
         );
     }
-    
+
     /**
      * @Route("/categorie/ajouter", name="forum_add_category")
      * @Template()
@@ -40,7 +41,7 @@ class FrontController extends Controller
         $request = $this->get('request');
 
         $category = new Category();
-        
+
         $form = $this->createForm(new CategoryType(), $category);
 
         if ($request->getMethod() == 'POST')
@@ -54,16 +55,16 @@ class FrontController extends Controller
                 $category->setCreatedAt(new \DateTime());
                 $em->persist($category);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('forum_index'));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/categorie/{id}", name="forum_display_category")
      * @Template()
@@ -72,39 +73,30 @@ class FrontController extends Controller
     {
         $request = $this->get('request');
         $session = $request->getSession();
-        
+
         $category = $this->getDoctrine()
                 ->getRepository('IntranetForumBundle:Category')
                 ->find($id);
-        
+
         if (!$category)
         {
             $error = 'Il semblerait que cette catégorie n\'existe pas dans la base de données.';
-            $session->getFlashBag()->add('error', $error);   
+            $session->getFlashBag()->add('error', $error);
             return $this->redirect($this->generateUrl('forum_index'));
         }
-        
+
         $repository = $this->getDoctrine()
-                   ->getManager()
-                   ->getRepository('IntranetForumBundle:Topic');
-             
+                ->getManager()
+                ->getRepository('IntranetForumBundle:Topic');
+
         $topics = $repository->findBy(array('category' => $id));
-        
-        $tvRepository = $this->getDoctrine()
-                    ->getManager()
-                    ->getRepository('IntranetForumBundle:TopicView');
-        
-        $lastPost = $tvRepository->getLastPostFromCategory($category);
-        
-        var_dump($lastPost);
-        exit;
-        
+
         return array(
             'category' => $category,
             'topics' => $topics
         );
     }
-    
+
     /**
      * @Route("/categorie/{category_id}/sujet/ajouter", name="forum_add_topic")
      * @Template()
@@ -114,7 +106,7 @@ class FrontController extends Controller
         $request = $this->get('request');
 
         $topic = new Topic();
-        
+
         $form = $this->createForm(new TopicType(), $topic);
 
         if ($request->getMethod() == 'POST')
@@ -126,22 +118,22 @@ class FrontController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $user = $this->get('security.context')->getToken()->getUser();
                 $category = $em->find('IntranetForumBundle:Category', $category_id);
-                
+
                 $topic->setCategory($category);
                 $topic->setAuthor($user);
-                
+
                 $em->persist($topic);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('forum_display_category', array('id' => $category_id)));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/sujet/editer/{id}", name="forum_edit_topic")
      * @Template()
@@ -152,11 +144,11 @@ class FrontController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $topic = $em->find('IntranetForumBundle:Topic', $id);
-        
+
         $form = $this->createForm(new TopicType(), $topic);
 
         $form->setData($topic);
-        
+
         if ($request->getMethod() == 'POST')
         {
             $form->bind($request);
@@ -165,16 +157,16 @@ class FrontController extends Controller
             {
                 $em->persist($topic);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('forum_display_topic', array('id' => $id)));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/sujet/{id}", name="forum_display_topic")
      * @Template()
@@ -187,51 +179,63 @@ class FrontController extends Controller
         $topic = $this->getDoctrine()
                 ->getRepository('IntranetForumBundle:Topic')
                 ->find($id);
-        
+
         // If topic doesn't exist => redirection
         if (!$topic)
         {
             $error = 'Il semblerait que ce sujet n\'existe pas dans la base de données.';
             $session->getFlashBag()->add('error', $error);
-            
+
             return $this->redirect($this->generateUrl('forum_index'));
         }
-        
+
         $tvRepository = $this->getDoctrine()
-                    ->getManager()
-                    ->getRepository('IntranetForumBundle:TopicView');
-        
-        $lastPost = $tvRepository->getLastPostTopic($topic);
-        
-        $diffNow = $lastPost->getCreatedAt()->diff(new \DateTime());
-        // If the last post is older than 6 months or if the user's subscription date is after
-        if ($diffNow->m > 6 || $lastPost->getCreatedAt() < $user->getCreatedAt())
-        {
-        }
-        else
+                ->getManager()
+                ->getRepository('IntranetForumBundle:TopicView');
+
+
+        if (!$tvRepository->hasReadTopic($user, $topic))
         {
             $topicView = $tvRepository->getTopicView($user, $topic);
-            
-            // User has never read this topic
-            if ($topicView === null)
-            {
-                // Insert new line into TopicView database
+            $lastPost = $tvRepository->getLastPostFromTopic($topic);
 
-            }
             // User has already read this topic
-            else
+            if ($topicView != null)
             {
                 // Update the existing line with the last post id
+                $topicView->setPost($lastPost);
                 
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($topicView);
+                $em->flush();
+            }
+             // User has never read this topic
+            else
+            {
+                
+                // No message into this topic ?
+                if ($lastPost != null)
+                {
+                    // Insert new line into TopicView database
+                    $newTopicView = new TopicView();
+                    $newTopicView->setUser($user);
+                    $newTopicView->setTopic($topic);
+                    $newTopicView->setPost($lastPost);
+                    $newTopicView->setParticipated(false);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($newTopicView);
+                    $em->flush();
+                }
             }
         }
-        
+
         return array(
             'topic' => $topic
         );
     }
-    
-     /**
+
+    /**
      * @Route("/sujet/{topic_id}/ajouter/{quoted_post_id}", name="forum_add_post", defaults={"quoted_post_id" = null})
      * @Template()
      */
@@ -240,22 +244,22 @@ class FrontController extends Controller
         $request = $this->get('request');
 
         $post = new Post();
-        
+
         if ($quoted_post_id != null)
         {
             // Get the quoted post
             $quotedPost = $this->getDoctrine()
-                ->getRepository('IntranetForumBundle:Post')
-                ->find($quoted_post_id);
-            
+                    ->getRepository('IntranetForumBundle:Post')
+                    ->find($quoted_post_id);
+
             if ($quotedPost != null)
             {
                 $post->setContent('<blockquote><div><cite>' . $quotedPost->getAuthor()->getUsername() . ' a écrit:</cite>' . $quotedPost->getContent() . '</div></blockquote>');
             }
         }
-        
+
         $form = $this->createForm(new PostType(), $post);
-                
+
         if ($request->getMethod() == 'POST')
         {
             $form->bind($request);
@@ -265,22 +269,22 @@ class FrontController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $user = $this->get('security.context')->getToken()->getUser();
                 $topic = $em->find('IntranetForumBundle:Topic', $topic_id);
-                
+
                 $post->setTopic($topic);
                 $post->setAuthor($user);
-                
+
                 $em->persist($post);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('forum_display_topic', array('id' => $topic->getId())));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/message/editer/{id}", name="forum_edit_post")
      * @Template()
@@ -291,11 +295,11 @@ class FrontController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $post = $em->find('IntranetForumBundle:Post', $id);
-        
+
         $form = $this->createForm(new PostType(), $post);
 
         $form->setData($post);
-        
+
         if ($request->getMethod() == 'POST')
         {
             $form->bind($request);
@@ -305,19 +309,19 @@ class FrontController extends Controller
                 // Get current user
                 $user = $this->get('security.context')->getToken()->getUser();
                 $post->setEditBy($user);
-                
+
                 $em->persist($post);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('forum_display_topic', array('id' => $post->getTopic()->getId())));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/message/supprimer/{id}", name="forum_delete_post")
      * @Template()
@@ -326,11 +330,11 @@ class FrontController extends Controller
     {
         $request = $this->get('request');
         $session = $request->getSession();
-        
+
         $post = $this->getDoctrine()
                 ->getRepository('IntranetForumBundle:Post')
                 ->find($id);
-             
+
         if ($post)
         {
             $form = $this->createFormBuilder()->getForm();
@@ -345,17 +349,17 @@ class FrontController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->remove($post);
                     $em->flush();
-               
+
                     $error = 'Message supprimé avec succès.';
                     $session->getFlashBag()->add('success', $error);
-                    
+
                     return $this->redirect($this->generateUrl('forum_display_topic', array('id' => $post->getTopic()->getId())));
                 }
             }
 
             return array(
                 'post' => $post,
-                'form'    => $form->createView()
+                'form' => $form->createView()
             );
         }
         else
@@ -363,7 +367,8 @@ class FrontController extends Controller
             $error = 'Il semblerait que ce message n\'existe pas dans la base de données. Il n\'a donc pas pu être supprimé.';
             $session->getFlashBag()->add('error', $error);
         }
-        
+
         return $this->redirect($this->generateUrl('home'));
     }
+
 }

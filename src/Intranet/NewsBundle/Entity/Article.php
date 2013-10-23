@@ -216,7 +216,7 @@ class Article implements RoutedItemInterface
         return array(
             'type' => 'image/jpeg',
             'length' => 500,
-            'value' => $this->picto->getAbsolutePath()
+            'value' => ''// $this->picto->getAbsolutePath()
         );
     }
 }
