@@ -194,7 +194,7 @@ class FrontController extends Controller
                 ->getRepository('IntranetForumBundle:TopicView');
 
 
-        if (!$tvRepository->hasReadTopic($user, $topic))
+        if ($tvRepository->hasReadTopic($user, $topic) <= 0)
         {
             $topicView = $tvRepository->getTopicView($user, $topic);
             $lastPost = $tvRepository->getLastPostFromTopic($topic);
@@ -212,7 +212,6 @@ class FrontController extends Controller
              // User has never read this topic
             else
             {
-                
                 // No message into this topic ?
                 if ($lastPost != null)
                 {
@@ -221,7 +220,7 @@ class FrontController extends Controller
                     $newTopicView->setUser($user);
                     $newTopicView->setTopic($topic);
                     $newTopicView->setPost($lastPost);
-                    $newTopicView->setParticipated(false);
+                    $newTopicView->setParticipated($lastPost->getAuthor() == $user);
 
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($newTopicView);

@@ -77,7 +77,17 @@ class TopicViewRepository extends EntityRepository
         if ($tv != null)
         {
             // There is a new post since last time ?
-           return ($tv->getPost() == $lastPost);
+           if ($tv->getPost() == $lastPost)
+           {
+               return 1;
+           }
+           else
+           {
+               if ($tv->getUser() == $user)
+                   return -1;
+               else
+                   return 1;
+           }
         }
         else
         {
@@ -88,22 +98,22 @@ class TopicViewRepository extends EntityRepository
                 // If the last post is older than 6 months or if the user's subscription date is after
                 if ($diffNow->m > 6)
                 {
-                    return true;
+                    return 1;
                 }
                 else
                 {
                     if ($user->getCreatedAt() != null)
                     {
-                        return false;
+                        return 0;
                     }
                     else if ($lastPost->getCreatedAt() < $user->getCreatedAt())
                     {
-                        return true;
+                        return 1;
                     }
                 }
             }
             else
-                return true;
+                return 1;
         }
     }
     
@@ -126,14 +136,23 @@ class TopicViewRepository extends EntityRepository
     {
         $topics = $this->findTopicsByCategory($category);
         
+        $notRead = false;
         foreach($topics as $topic)
         {
-            if (!$this->hasReadTopic($user, $topic))
+           $hasReadTopic = $this->hasReadTopic($user, $topic);
+            if ($hasReadTopic == -1)
             {
-                return false;
+                return -1;
+            }
+            else if ($hasReadTopic == 0)
+            {
+                $notRead = true;
             }
         }
         
-        return true;
+        if ($notRead)
+            return 0;
+        else
+            return 1;
     }   
 }

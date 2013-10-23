@@ -18,10 +18,14 @@
             <th>Message(s)</th>
         </tr>
     {% for category in categories %}
-        {% if has_read_category(user, category) %}
+        {# -1: Not read and has participated|0: Not read|1: Read #}
+        {% set hasReadCategoryValue = has_read_category(user, category) %}
+        {% if  hasReadCategoryValue == 1 %}
             <tr>
-        {% else %}
+        {% elseif hasReadCategoryValue == 0 %}
             <tr class="info">
+        {% elseif hasReadCategoryValue == -1 %}
+            <tr class="success">
         {% endif %}
             <td>
                 <a href="{{ path('forum_display_category', { 'id': category.id }) }}"><b>{{ category.name }}</a></b><br />

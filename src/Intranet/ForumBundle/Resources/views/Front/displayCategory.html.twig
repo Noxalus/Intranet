@@ -17,10 +17,14 @@
             <th>Réponse(s)</th>
         </tr>
     {% for topic in topics %}
-        {% if has_read_topic(user, topic) %}
+        {# -1: Not read and has participated|0: Not read|1: Read #}
+        {% set hasReadTopicValue = has_read_topic(user, topic) %}
+        {% if  hasReadTopicValue == 1 %}
             <tr>
-        {% else %}
+        {% elseif hasReadTopicValue == 0 %}
             <tr class="info">
+        {% elseif hasReadTopicValue == -1 %}
+            <tr class="success">
         {% endif %}
             <td>
                 <a href="{{ path('forum_display_topic', {'id': topic.id }) }}">{{ topic.title }}</a>
