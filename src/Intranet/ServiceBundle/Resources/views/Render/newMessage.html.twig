@@ -1,0 +1,10 @@
+{% if messages|length > 0 %}
+<div class="next_courses_block">
+    <h2>Tickets (<b>{{  messages|length }}</b>)</h2>
+    <ul>
+        {% for msg in messages %}
+            <li><a href="{{ path('show_ticket', {'id' : msg.id}) }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i></a> {{ msg.title }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

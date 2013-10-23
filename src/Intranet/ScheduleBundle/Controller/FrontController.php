@@ -223,6 +223,11 @@ class FrontController extends Controller
                     $em->persist($sch);
                     $em->flush();
 
+                    $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Modification d\'un cours', '<p>Les informations du cours de '.$sch->getType()->getName().' du '.$sch->getDate()->format('d/m/Y').' ont été modifiées.</p>');
+                
+                    
                     $error = 'Commentaire du cours éditée avec succès.';
                     $session->getFlashBag()->add('success', $error);
 
@@ -278,6 +283,10 @@ class FrontController extends Controller
 
                     $error = 'Description de la matière éditée avec succès.';
                     $session->getFlashBag()->add('success', $error);
+                    
+                                        $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Modification d\'un cours', '<p>Les informations concernant '.$coursetype->getName().' ont été modifiées.</p>');
 
                     return $this->redirect($this->generateUrl('coursetype_display', array('id'=> $id)));
                 }

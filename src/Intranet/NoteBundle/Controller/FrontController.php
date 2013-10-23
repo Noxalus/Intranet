@@ -56,6 +56,10 @@ class FrontController extends Controller
                 $em->persist($exam);
                 $em->flush();
 
+                $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Ajout d\'un examen', '<p>Une évaluation de '.$type->getName().' a été ajouté.</p>');
+                
                 return $this->redirect($this->generateUrl('coursetype_display', array('id' => $id_typeCourse)));
             }
         }
@@ -111,6 +115,10 @@ class FrontController extends Controller
                 $em->persist($exam);
                 $em->flush();
 
+                $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Ajout d\'un examen', '<p>Une évaluation de '.$type->getName().' a été ajouté.</p>');
+                
                 return $this->redirect($this->generateUrl('coursetype_display', array('id' => $id_typeCourse)));
             }
         }

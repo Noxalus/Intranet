@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArticleRepository extends EntityRepository
 {
+    public function postNotification($title, $content)
+    {
+        $em = $this->_em;
+        
+         $article = new Article();
+         $article->setTitle($title);
+         $article->setContent($content);
+         $article->setDate(new \DateTime());
+         
+         $em->persist($article);
+         $em->flush();
+    }
 }

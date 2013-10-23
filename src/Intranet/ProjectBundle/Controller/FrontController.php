@@ -84,6 +84,10 @@ class FrontController extends Controller
                 $em->persist($project);
                 $em->flush();
 
+                $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Ajout d\'un projet', '<p>Un nouveau projet a été ajouté : '.$project->getName().'.</p>');
+                
                 return $this->redirect($this->generateUrl('projects'));
             }
             else
@@ -169,6 +173,11 @@ class FrontController extends Controller
                     $msg = 'Projet édité avec succès.';
                     $session->getFlashBag()->add('success', $msg);
 
+                    $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Modification d\'un projet', '<p>Les informations du projet '.$project->getName().' ont été modifiées.</p>');
+                
+                    
                     return $this->redirect($this->generateUrl('projects'));
                 }
             }

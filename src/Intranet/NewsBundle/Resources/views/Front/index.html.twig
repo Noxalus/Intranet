@@ -16,8 +16,11 @@
     {% for article in news %}
     <div class="well">
         <h3>
-            {% if article.picto != null %}
-            <img src="./../{{ article.picto.getWebPath() }}" alt="{{article.picto.description}}" height="30" width="30"/> {%endif %}{{ article.title }}
+            {% if article.picto %}
+            <img src="./../{{ article.picto.getWebPath() }}" alt="{{article.picto.description}}" height="30" width="30"/> 
+            {% else %}
+            <img src="" height="30" width="30"/> 
+            {%endif %}{{ article.title }}
             {% if is_granted('ROLE_TEACHER') %}
                 <a href="{{ path('edit_news', { 'id_article' : article.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-pencil"></i></a>
                 <a href="{{ path('delete_news', { 'id_article' : article.id }) }}" class="btn btn-danger btn-mini"><i class="icon-white icon-remove"></i></a>
@@ -25,7 +28,13 @@
             <br />
         </h3>
             
-        <small class="news-subtitle subtitle">{{ article.date|date('Y/m/d à H:i:s') }} - par {{ article.author.firstname }} {{ article.author.lastname }}</small>
+        <small class="news-subtitle subtitle">{{ article.date|date('d/m/Y à H:i:s') }} - 
+            {% if article.author %}
+            par {{ article.author.firstname }} {{ article.author.lastname }}
+            {%else%}
+            Message de notification automatique.
+            {%endif%}
+            </small>
 
         <div class="news-content">{{ article.content|raw }}</div>
     </div>
@@ -53,6 +62,7 @@
     {{ user_photo(app.user, 'user_photo') }}
 </div>
     
+{% render(controller('IntranetServiceBundle:Render:newMessage')) %}
 {% render(controller('IntranetScheduleBundle:Render:nextCourses', {'max': 5})) %}
 {# render(controller('IntranetProjectBundle:Render:nextDeadlines', {'max': 5})) #}
 {% endif %}

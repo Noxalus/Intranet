@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Intranet\ScheduleBundle\Entity\Schedule;
 use Intranet\ScheduleBundle\Entity\CourseType;
+use Intranet\NewsBundle\Entity\Article;
 
 class UpdateCommand extends ContainerAwareCommand
 {
@@ -25,12 +26,32 @@ class UpdateCommand extends ContainerAwareCommand
         $typerepo = $em->getRepository('IntranetScheduleBundle:CourseType');
         $schedulerepo = $em->getRepository('IntranetScheduleBundle:Schedule');
         
+        
+        // Memorize old ghosts
+        $typeGhosts = array();
+        $ghostsT = $typerepo->findBy(array('number' => 0));
+        foreach ($ghostsT as $ghost)
+        {
+            $typeGhosts[] = $ghost->getId();
+        }
+        $schedGhosts = array();
+        $ghostsS = $schedulerepo->findBy(array('isGhost' => true));
+        foreach ($ghostsS as $ghost)
+        {
+            $schedGhosts[] = $ghost->getId();
+        }
+        
         // All schedules are now ghosts and coursesTypes don't contains any course
         $schedulerepo->makeAllGhost();
         $typerepo->makeAllGhost();
         
+        // Initialize variables
         date_default_timezone_set('Europe/Paris');
         $week = 0;
+        $newSched = array();
+        $deletedSched = array();
+        $newType = array();
+        $deletedType = array();
         
         while ($week < 52)
         {
@@ -54,6 +75,7 @@ class UpdateCommand extends ContainerAwareCommand
                         $em->persist($course);
                         $em->flush();
                         $output->writeln('Matiere cree : '.$name);
+                        $newType[] = $course;
                     }
                     else
                     {
@@ -77,6 +99,7 @@ class UpdateCommand extends ContainerAwareCommand
                         $em->persist($sch);
                         $em->flush();
                         $output->writeln('Cours de '.$name.' ajoute');
+                        $newSched[] = $sch;
                     }
                     else // If it exist : it's not a ghost
                     {
@@ -90,5 +113,56 @@ class UpdateCommand extends ContainerAwareCommand
             $output->writeln('recuperation Semaine '.$week.' OK');
             $week++;
         }
+        
+        // Lists the deleted types and schedules
+        $newGhostsT = $typerepo->findBy(array('number' => 0));
+        foreach ($newGhostsT as $ghost)
+        {
+            if (!in_array($ghost->getId(), $typeGhosts))
+                $deletedType[] =  $ghost;
+        }
+        $newGhostsS = $schedulerepo->findBy(array('isGhost' => true));
+        foreach ($newGhostsS as $ghost)
+        {
+            if (!in_array($ghost->getId(), $schedGhosts))
+                $deletedSched[] =  $ghost;
+        }
+        
+        // Make an article, id needed
+        if (!empty($newSched) || !empty($deletedSched) || !empty($newType) || !empty($deletedType))
+        {
+            // Make a news Article : Prepare the content
+            $content = '';
+            
+            if(!empty($newSched))
+            {
+                $output->writeln('new sched');
+                $content = $content.'<p>Les cours suivants ont été ajoutés :</p><ul>';
+                foreach ($newSched as $sch)
+                {
+                    $content = $content.'<li>Cours de '.$sch->getType()->getName().' du '.$sch->getDate()->format('d/m/Y').' à '.$sch->getDate()->format('H:i').'</li>';
+                }
+                $content = $content.'</ul>';
+            }
+            if(!empty($deletedSched))
+            {
+                if ($content != '')
+                    $content = $content.'<br/>';
+                $content = $content.'<p>Les cours suivants ont été supprimés :</p><ul>';
+                foreach ($deletedSched as $sch)
+                {
+                    $content = $content.'<li>Cours de '.$sch->getType()->getName().' du '.$sch->getDate()->format('d/m/Y').' à '.$sch->getDate()->format('H:i').'</li>';
+                }
+                $content = $content.'</ul>';
+            }
+            
+            
+            // Posts the article
+            $em->getRepository('IntranetNewsBundle:Article')->postNotification(
+                 'Mise à jour de l\'emploi du temps', 
+                 $content);
+            
+        }
+
     }
 }

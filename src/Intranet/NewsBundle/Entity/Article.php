@@ -47,6 +47,7 @@ class Article implements RoutedItemInterface
      * @var \stdClass
      *
      * @ORM\ManyToOne(targetEntity="\Intranet\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=true)
      */
     private $author;
 
