@@ -19,7 +19,10 @@ class UpdateCommand extends ContainerAwareCommand
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
-    {       
+    {
+        $logger = $this->getContainer()->get('chronos_logger');
+        $logger->info('Beggining update');
+        
         $em = $this->getContainer()
                 ->get('doctrine')
                 ->getEntityManager();
@@ -53,9 +56,11 @@ class UpdateCommand extends ContainerAwareCommand
         $newType = array();
         $deletedType = array();
         
+        $logger->info('Datas initialized');
+        
         while ($week < 52)
         {
-            $output->writeln('Semaine '.$week);
+            $logger->info('Processing week n°'.$week);
             $xml = simplexml_load_file('http://webservices.chronos.epita.net/GetWeeks.aspx?num=1&week='.$week.'&group=MTI&auth=a5834TiL');
             
             for ($i = 0; $i < count($xml->week->day); $i++)
@@ -74,7 +79,8 @@ class UpdateCommand extends ContainerAwareCommand
                         $course->setNumber(1);
                         $em->persist($course);
                         $em->flush();
-                        $output->writeln('Matiere cree : '.$name);
+                        $logger->info('CourseType created : '.$name);
+                        
                         $newType[] = $course;
                     }
                     else
@@ -98,19 +104,18 @@ class UpdateCommand extends ContainerAwareCommand
                         $sch->setisGhost(false);
                         $em->persist($sch);
                         $em->flush();
-                        $output->writeln('Cours de '.$name.' ajoute');
+                        $logger->info('Schedule created : '.$name);
                         $newSched[] = $sch;
                     }
                     else // If it exist : it's not a ghost
                     {
                         $sch->setisGhost(false);
                         $em->flush();
-                        $output->writeln('Cours de '.$name.' confirme');
+                        $logger->info('Schedule confirmed : '.$name);
                     }
                 }
             }
             
-            $output->writeln('recuperation Semaine '.$week.' OK');
             $week++;
         }
         
@@ -136,7 +141,6 @@ class UpdateCommand extends ContainerAwareCommand
             
             if(!empty($newSched))
             {
-                $output->writeln('new sched');
                 $content = $content.'<p>Les cours suivants ont été ajoutés :</p><ul>';
                 foreach ($newSched as $sch)
                 {
@@ -161,8 +165,9 @@ class UpdateCommand extends ContainerAwareCommand
             $em->getRepository('IntranetNewsBundle:Article')->postNotification(
                  'Mise à jour de l\'emploi du temps', 
                  $content);
-            
+            $logger->info('News article has been posted');
         }
+        $logger->info('End of update');
 
     }
 }

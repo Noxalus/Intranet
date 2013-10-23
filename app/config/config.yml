@@ -113,3 +113,13 @@ eko_feed:
             link:        'http://intranet-mti.epita.net'
             encoding:    'utf-8'
             author:      'Intranet' # Only required for Atom feeds
+            
+services:
+    chronos_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [special]
+        calls:
+            - [pushHandler, [@chronos_handler]]
+    chronos_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: [%kernel.logs_dir%/%kernel.environment%.cmd.updateschedule.log]
