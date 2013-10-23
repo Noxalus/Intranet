@@ -207,7 +207,7 @@ a#trans:hover
 #login-box
 {
     width: 300px;
-    height: 300px;
+    min-height: 300px;
     position: absolute;
     top: 42%;
     left: 50%;

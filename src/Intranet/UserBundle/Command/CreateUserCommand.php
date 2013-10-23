@@ -25,7 +25,7 @@ class CreateUserCommand extends ContainerAwareCommand
             ->setName('intranet:user:create')
             ->setDescription('Create a user.')
             ->setDefinition(array(
-                new InputArgument('username', InputArgument::REQUIRED, 'The username'),
+                new InputArgument('username', InputArgument::REQUIRED, 'The EPITA\'s login'),
                 new InputArgument('email', InputArgument::REQUIRED, 'The email'),
                 new InputArgument('password', InputArgument::REQUIRED, 'The password'),
                 new InputArgument('firstName', InputArgument::REQUIRED, 'The first name'),
@@ -43,7 +43,7 @@ This interactive shell will ask you for an email and then a password.
 
 You can alternatively specify the email and password as the second and third arguments:
 
-  <info>php app/console fos:user:create matthieu matthieu@example.com mypassword</info>
+  <info>php app/console intranet:user:create matthieu matthieu@example.com mypassword</info>
 
 You can create a super admin via the super-admin flag:
 
@@ -85,10 +85,10 @@ EOT
         if (!$input->getArgument('username')) {
             $username = $this->getHelper('dialog')->askAndValidate(
                 $output,
-                'Please choose a username:',
+                'Please choose a login:',
                 function($username) {
                     if (empty($username)) {
-                        throw new \Exception('Username can not be empty');
+                        throw new \Exception('Login can not be empty');
                     }
 
                     return $username;

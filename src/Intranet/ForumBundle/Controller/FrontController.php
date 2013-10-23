@@ -90,6 +90,15 @@ class FrontController extends Controller
              
         $topics = $repository->findBy(array('category' => $id));
         
+        $tvRepository = $this->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IntranetForumBundle:TopicView');
+        
+        $lastPost = $tvRepository->getLastPostFromCategory($category);
+        
+        var_dump($lastPost);
+        exit;
+        
         return array(
             'category' => $category,
             'topics' => $topics
@@ -175,33 +184,46 @@ class FrontController extends Controller
         $request = $this->get('request');
         $session = $request->getSession();
         $user = $this->get('security.context')->getToken()->getUser();
-        
         $topic = $this->getDoctrine()
                 ->getRepository('IntranetForumBundle:Topic')
                 ->find($id);
         
-        $tvRepository = $this->getDoctrine()
-                    ->getManager()
-                    ->getRepository('IntranetForumBundle:TopicView');
-        
-        $lastPost = $tvRepository->getLastPost($topic);
-        
-        if ($tvRepository->hasReadTopic($user, $topic))
-        {
-            echo 'Already read';
-        }
-        else
-        {
-            
-            echo 'Not read!';
-        }
-        
+        // If topic doesn't exist => redirection
         if (!$topic)
         {
             $error = 'Il semblerait que ce sujet n\'existe pas dans la base de données.';
             $session->getFlashBag()->add('error', $error);
             
             return $this->redirect($this->generateUrl('forum_index'));
+        }
+        
+        $tvRepository = $this->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IntranetForumBundle:TopicView');
+        
+        $lastPost = $tvRepository->getLastPostTopic($topic);
+        
+        $diffNow = $lastPost->getCreatedAt()->diff(new \DateTime());
+        // If the last post is older than 6 months or if the user's subscription date is after
+        if ($diffNow->m > 6 || $lastPost->getCreatedAt() < $user->getCreatedAt())
+        {
+        }
+        else
+        {
+            $topicView = $tvRepository->getTopicView($user, $topic);
+            
+            // User has never read this topic
+            if ($topicView === null)
+            {
+                // Insert new line into TopicView database
+
+            }
+            // User has already read this topic
+            else
+            {
+                // Update the existing line with the last post id
+                
+            }
         }
         
         return array(
