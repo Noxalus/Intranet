@@ -26,5 +26,35 @@ class RenderController extends Controller
             'schedules' => $schedules
         );
     }
+    
+    /**
+     * @Template()
+     */
+    public function ghostManagerAction($ghostcourse)
+    {
+        $formBuilder = $this->createFormBuilder();
+
+        $courses = $this->getDoctrine()
+                ->getRepository('IntranetScheduleBundle:Schedule')
+                ->findBy(array('type' => $ghostcourse->getType()->getId(), 'isGhost' => 0), array('date' => 'ASC'));
+        
+        $coursesArray = array();
+        $coursesArray[0] = 'Supprimer les informations';
+        foreach ($courses as $cours) {
+            $coursesArray[$cours->getId()] = 'Fusionner avec le cours du '.$cours->getDate()->format('d/m/Y à H').'h'.$cours->getDate()->format('i');
+        }
+        
+        $formBuilder
+                ->add('newshed', 'choice', array(
+                    'label' => 'Action :',
+                    'choices' => $coursesArray))
+                ->add('content', 'hidden', array('data' => $ghostcourse->getId()));
+
+        $form = $formBuilder->getForm();
+        
+        return array(
+            'form' => $form->createView()
+        );
+    }
 }
 

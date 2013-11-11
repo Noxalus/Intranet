@@ -63,17 +63,19 @@
         <br/><h3>Cours Fantômes</h3>
 
         <table class="table">
+            {% for course in ghosts %}
             <tr>
-                <th></th>
-                <th>Date</th>
-                <th>Commentaire</th>
-            </tr>
-
-                {% for course in ghosts %}
-            <tr>
-                <td><a href="{{  path('course_display', { 'id' : course.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a></td>
-                <td>Le {{ course.date|date('d/m') }} à {{ course.date|date('H') }}h{{ course.date|date('i') }}</b></td>
-                <td>{% if course.comment %}course.comment{% endif %}</td>
+                <td></td>
+                <td>
+                    <a href="{{  path('course_display', { 'id' : course.ghost.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a><br/><br/>
+                    Cours initialement prévu le {{ course.ghost.date|date('d/m') }} à {{ course.ghost.date|date('H') }}h{{ course.ghost.date|date('i') }}</b>
+                </td>
+                <td>  
+                    <form method="post" {{ form_enctype(course.form) }}>
+                        {{ form_widget(course.form) }}
+                        <input type="submit" class="btn btn-primary" />
+                    </form>
+                </td>
             </tr>
                 {% endfor %}
 

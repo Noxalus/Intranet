@@ -169,23 +169,92 @@ class FrontController extends Controller
      */
     public function displayCourseTypeAction($id)
     {
- 
+        
         $type = $this->getDoctrine()
                 ->getRepository('IntranetScheduleBundle:CourseType')
                 ->find($id);
-        
+                    
         $courses = $this->getDoctrine()
                 ->getRepository('IntranetScheduleBundle:Schedule')
                 ->findBy(array('type' => $id, 'isGhost' => 0), array('date' => 'ASC'));
         
+        $formArray = array();
+        $formArray[0] = 'Supprimer les informations';
+        foreach ($courses as $cours) {
+            $formArray[$cours->getId()] = 'Fusionner avec le cours du '.$cours->getDate()->format('d/m/Y à H').'h'.$cours->getDate()->format('i');
+        }
+                    
         $ghosts = $this->getDoctrine()
                 ->getRepository('IntranetScheduleBundle:Schedule')
                 ->findBy(array('type' => $id, 'isGhost' => 1), array('date' => 'ASC'));
+                    
+        $g = array();
+        foreach ($ghosts as $ghost) {
+            $pair = array();
+            $pair['ghost'] = $ghost;
+            
+            $formBuilder = $this->createFormBuilder()
+                                ->add('newshed', 'choice', array(
+                                    'label' => 'Action :',
+                                    'choices' => $formArray))
+                ->add('value', 'hidden', array('data' => $ghost->getId()));
+                    
+            $pair['form'] = $formBuilder->getForm()->createView();
+            $g[] = $pair;
+        }
+        
+        
+        $request = $this->get('request');
+        $session = $request->getSession();
+
+            if ($request->getMethod() == 'POST')
+            {
+                $form = $this->createFormBuilder()
+                             ->add('newshed', 'choice', array(
+                                    'label' => 'Action :',
+                                    'choices' => $formArray))
+                             ->add('value', 'hidden', array('data' => 0))
+                             ->getForm();
+                $form->bind($request);
+
+                if ($form->isValid())
+                {
+                    $coursesrepo = $this->getDoctrine()
+                                ->getRepository('IntranetScheduleBundle:Schedule');
+                            
+                    
+                    $old = $coursesrepo->find($form->get('value')->getData());
+                    $new = $coursesrepo->find($form->get('newshed')->getData());
+                    
+                    if ($new->getComment() != null || $new->getComment() != '')
+                        $new->setComment($new->getComment().'<br/>'.$old->getComment());
+                    else
+                        $new->setComment($old->getComment());
+                    
+                    // TODO : Gestion des PJ quand elles seront faites.
+                    
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($new);
+                    $em->remove($old);
+                    $em->flush();
+
+                    $this->getDoctrine()
+                     ->getRepository('IntranetNewsBundle:Article')
+                     ->postNotification('Modification d\'un cours', '<p>Les informations du cours de '.$new->getType()->getName().' du '.$new->getDate()->format('d/m/Y').' ont été modifiées.</p>');
+                
+                    
+                    $error = 'Modifications effectuées';
+                    $session->getFlashBag()->add('success', $error);
+
+                    return $this->redirect($this->generateUrl('coursetype_display', array('id'=> $id)));
+                }
+            }
+        
         
         return array(
             'type' => $type,
             'courses' => $courses,
-            'ghosts' => $ghosts,
+            'ghosts' => $g,
             'user' => $this->get('security.context')->getToken()->getUser(),
         );
     }
