@@ -1,0 +1,16 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Suppression d'un utilisateur</h1>
+
+<p>Vous êtes sur le point de supprimer un utilisateur. (<b>{{ user.username }}</b>)</p>
+ 
+  <p>
+    Cette action est irréversible. Êtes-vous sur de vouloir supprimer cet utilisateur ?
+  </p>
+ 
+  <form method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" value="Supprimer" class="btn btn-danger" />
+  </form>
+{% endblock %}

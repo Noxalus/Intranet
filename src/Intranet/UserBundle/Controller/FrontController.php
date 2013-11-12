@@ -12,15 +12,15 @@ use Intranet\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Intranet\UserBundle\Form\UserType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
-class FrontController extends Controller
-{
+class FrontController extends Controller {
+
     /**
      * @Route("/liste", name="user_list")
      * @Template()
      */
-    public function listAction()
-    {
+    public function listAction() {
         $userManager = $this->get('fos_user.user_manager');
         $users = $userManager->findUsers();
 
@@ -32,8 +32,7 @@ class FrontController extends Controller
     /**
      * @Route("/trombi", name="user_trombi")
      */
-    public function trombiDefaultAction()
-    {
+    public function trombiDefaultAction() {
         $user = $this->get('security.context')->getToken()->getUser();
         $promo = $user->getPromo();
 
@@ -46,8 +45,7 @@ class FrontController extends Controller
      * @Route("/trombi/{promo}", name="user_trombi_promo")
      * @Template()
      */
-    public function trombiAction($promo)
-    {
+    public function trombiAction($promo) {
         $repository = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('IntranetUserBundle:User');
@@ -56,8 +54,7 @@ class FrontController extends Controller
 
         $request = $this->get('request');
 
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $promo = $request->request->get('promo');
             return $this->redirect($this->generateUrl('user_trombi_promo', [
                                 'promo' => $promo
@@ -73,8 +70,7 @@ class FrontController extends Controller
     /**
      * @Route("/profil", name="user_my_profile")
      */
-    public function myProfileAction()
-    {
+    public function myProfileAction() {
         $user = $this->get('security.context')->getToken()->getUser();
 
         return $this->redirect($this->generateUrl('user_profile', [
@@ -86,20 +82,17 @@ class FrontController extends Controller
      * @Route("/profil/{username}", name="user_profile")
      * @Template("IntranetUserBundle:Profile:profile.html.twig")
      */
-    public function profileAction($username)
-    {
+    public function profileAction($username) {
         $currentUser = $this->get('security.context')->getToken()->getUser();
 
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($username);
 
-        if (!$user)
-        {
+        if (!$user) {
             return new Response('Ceci est une page d\'erreur 404', 404);
         }
 
-        if (!($this->get('security.context')->isGranted('ROLE_TEACHER') || $user == $currentUser))
-        {
+        if (!($this->get('security.context')->isGranted('ROLE_TEACHER') || $user == $currentUser)) {
             return new Response('Ceci est une page d\'erreur 403', 403);
         }
 
@@ -110,8 +103,7 @@ class FrontController extends Controller
      * @Route("/profil/editer/{user_id}", name="user_profile_edit")
      * @Template("IntranetUserBundle:Profile:edit.html.twig")
      */
-    public function profileEditAction($user_id)
-    {
+    public function profileEditAction($user_id) {
         $repository = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('IntranetUserBundle:User');
@@ -123,12 +115,10 @@ class FrontController extends Controller
         $form->setData($user);
 
         $request = $this->get('request');
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
                 // If we don't do anything on the Photo entity, the image won't be moved
@@ -150,11 +140,58 @@ class FrontController extends Controller
     }
 
     /**
+     * @Route("/supprimer/{user_id}", name="user_delete")
+     * @Template()
+     */
+    public function deleteAction($user_id) {
+        $request = $this->get('request');
+        $session = $request->getSession();
+
+        $user = $this->getDoctrine()
+                ->getRepository('IntranetUserBundle:User')
+                ->find($user_id);
+
+        if ($user)
+        {
+            $form = $this->createFormBuilder()->getForm();
+
+            $request = $this->getRequest();
+            if ($request->getMethod() == 'POST')
+            {
+                $form->bind($request);
+
+                if ($form->isValid())
+                {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($user);
+                    $em->flush();
+
+                    $error = 'Utilisateur supprimé avec succès.';
+                    $session->getFlashBag()->add('success', $error);
+
+                    return $this->redirect($this->generateUrl('user_list'));
+                }
+            }
+
+            return array(
+                'user' => $user,
+                'form' => $form->createView()
+            );
+        }
+        else
+        {
+            $error = 'Il semblerait que cet utilisateur n\'existe pas dans la base de données. Il n\'a donc pas pu être supprimé.';
+            $session->getFlashBag()->add('error', $error);
+        }
+
+        return $this->redirect($this->generateUrl('user_list'));
+    }
+    
+    /**
      * @Route("/ajouter/promo", name="user_add_promo")
      * @Template()
      */
-    public function addPromoAction()
-    {
+    public function addPromoAction() {
         $users = array();
 
         $request = $this->get('request');
@@ -162,34 +199,27 @@ class FrontController extends Controller
         $session = $request->getSession();
         $session->set('users', null);
 
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $promo = $request->request->get('promo');
             $file = $_FILES['file']['tmp_name'];
             $extensions = array('.csv');
             $extension = strrchr($_FILES['file']['name'], '.');
 
-            if (!in_array($extension, $extensions))
-            {
+            if (!in_array($extension, $extensions)) {
                 $error = 'Vous devez uploader un fichier de type .csv';
             }
 
-            if (!isset($error))
-            {
+            if (!isset($error)) {
                 $row = 1;
-                if (($handle = fopen($file, 'r')) !== FALSE)
-                {
+                if (($handle = fopen($file, 'r')) !== FALSE) {
                     $userManager = $this->container->get('fos_user.user_manager');
 
-                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
-                    {
+                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                         $num = count($data);
-                        if ($row > 1)
-                        {
+                        if ($row > 1) {
                             $infos = array();
                             $user = $userManager->createUser();
-                            for ($c = 0; $c < $num; $c++)
-                            {
+                            for ($c = 0; $c < $num; $c++) {
                                 $infos[] = $data[$c];
                             }
 
@@ -210,9 +240,7 @@ class FrontController extends Controller
 
                     $session->set('users', $users);
                 }
-            }
-            else
-            {
+            } else {
                 $session->getFlashBag()->add('error', $error);
             }
         }
@@ -226,28 +254,23 @@ class FrontController extends Controller
      * @Route("/ajouter/promo/selection", name="user_add_promo_selection")
      * @Template()
      */
-    public function addPromoSelectionAction()
-    {
+    public function addPromoSelectionAction() {
         $request = $this->get('request');
         $session = $request->getSession();
 
         $users = $session->get('users');
         $usersSelected = array();
 
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $parameters = $request->request;
             $userManager = $this->container->get('fos_user.user_manager');
 
-            foreach ($parameters as $key => $value)
-            {
-                if ($value === 'on')
-                {
+            foreach ($parameters as $key => $value) {
+                if ($value === 'on') {
                     $currentUser = $users[$key - 1];
 
                     // We check that this user doesn't exist
-                    if (!$userManager->findUserByUsername($currentUser->getUsername()))
-                    {
+                    if (!$userManager->findUserByUsername($currentUser->getUsername())) {
                         $password = '';
                         for ($i = 0; $i < 8; $i++)
                             $password .= chr(rand(32, 126));
@@ -273,9 +296,7 @@ class FrontController extends Controller
                         //$this->get('mailer')->send($message);
 
                         $usersSelected[] = $currentUser;
-                    }
-                    else
-                    {
+                    } else {
                         $error = $currentUser->getUsername() . ' existe déjà dans la base de données !';
                         $session->getFlashBag()->add('error', $error);
                     }
@@ -284,6 +305,41 @@ class FrontController extends Controller
         }
 
         return array('users' => $usersSelected);
+    }
+
+    /**
+     * @Route("/ajouter", name="user_add")
+     * @Template("IntranetUserBundle:Registration:add.html.twig")
+     * @Secure("ROLE_TEACHER")
+     */
+    public function addAction() {
+        $user = new User();
+
+        $form = $this->createForm(new UserType, $user);
+
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+
+                // If we don't do anything on the Photo entity, the image won't be moved
+                if ($user->getPhoto() != null) {
+                    if (!$user->getPhoto()->getCreatedAt())
+                        $user->getPhoto()->setCreatedAt(new \DateTime());
+                    $user->getPhoto()->setUpdatedAt(new \DateTime());
+                }
+
+                $em->persist($user);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('user_profile', array('username' => $user->getUsername())));
+            }
+        }
+        return array(
+            'form' => $form->createView()
+        );
     }
 
 }

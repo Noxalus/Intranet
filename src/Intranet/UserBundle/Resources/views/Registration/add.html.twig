@@ -1,0 +1,56 @@
+{% extends "IntranetCoreBundle:Core:layout.html.twig" %}
+
+{% block content %}
+<h1>Création d'un nouvel utilisateur</h1>
+
+<div class="well">
+    <form action="#" method="POST"  {{ form_enctype(form) }}>
+        <div id="intranet_userbundle_usertype">
+            <div>
+                {{ form_label(form.username) }}
+                {{ form_errors(form.username) }}
+                {{ form_widget(form.username) }}
+            </div>
+            <div>
+                {{ form_label(form.password) }}
+                {{ form_errors(form.password) }}
+                {{ form_widget(form.password) }}
+            </div>
+            <div>
+                {{ form_label(form.email) }}
+                {{ form_errors(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+            <div>
+                {{ form_label(form.firstName) }}
+                {{ form_errors(form.firstName) }}
+                {{ form_widget(form.firstName) }}
+            </div>
+            <div>
+                {{ form_label(form.lastName) }}
+                {{ form_errors(form.lastName) }}
+                {{ form_widget(form.lastName) }}
+            </div>
+            <div>
+                {{ form_label(form.promo) }}
+                {{ form_errors(form.promo) }}
+                {{ form_widget(form.promo) }}
+            </div>
+            {% if is_granted('ROLE_TEACHER') %}
+            <div>
+                {{ form_label(form.roles) }}
+                {{ form_errors(form.roles) }}
+                {{ form_widget(form.roles) }}
+            </div>
+            {% endif %}
+            <div>
+                    {{ form_label(form.photo) }}
+                    {{ form_errors(form.photo) }}
+                    {{ form_widget(form.photo) }}
+            </div>
+        </div>
+        <br />
+        <input type="submit" value="Ajouter" class="btn btn-success" />
+    </form>
+</div>
+{% endblock content %}

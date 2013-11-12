@@ -1,5 +1,8 @@
 <div id="hmenu">
-	<a id="deco" href="{{ path('fos_user_security_logout') }}"></a>
+    {% if is_granted('ROLE_TEACHER') %}
+    <a id="admin" href="{{ path('intranet_admin') }}"></a>
+    {% endif %}
+    <a id="deco" href="{{ path('fos_user_security_logout') }}"></a>
 	
     <ul id="trans-nav">
         <li><a class="mainmenu" href="{{ path('intranet_core_home_index') }}">Accueil</a></li>

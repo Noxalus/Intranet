@@ -33,6 +33,8 @@ class AppKernel extends Kernel
             new Intranet\WikiBundle\IntranetWikiBundle(),
             new Intranet\ForumBundle\IntranetForumBundle(),
             new Intranet\ServiceBundle\IntranetServiceBundle(),
+            new Intranet\AdminBundle\IntranetAdminBundle(),
+            new PunkAve\FileUploaderBundle\PunkAveFileUploaderBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -19,6 +19,9 @@
         <th>Mail</th>
         <th>Rôle</th>
         <th>Dernière visite</th>
+        {% if is_granted('ROLE_TEACHER') %}
+            <th>Actions</th>
+        {% endif %}
     </tr>
     {% for user in users %}
         <tr>
@@ -41,6 +44,12 @@
                     Le {{ user.lastLogin|date('d/m/Y à H:i:s') }}
                 {% endif %}
             </td>
+            {% if is_granted('ROLE_TEACHER') %}
+            <td>
+                <a href="{{ path('user_profile_edit', {'user_id': user.id }) }}" class="btn btn-warning btn-mini"><i class="icon-white icon-edit"></i></a> 
+                <a href="{{ path('user_delete', {'user_id': user.id }) }}" class="btn btn-danger btn-mini"><i class="icon-white icon-trash"></i></a>
+            </td>
+            {% endif %}
         </tr>
     {% endfor %}
 </table>

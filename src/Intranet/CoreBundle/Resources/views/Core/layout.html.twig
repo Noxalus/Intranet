@@ -66,13 +66,22 @@
     {% block javascripts %}
         {# Javascript files used by bootstrap Twitter #}
         <script type="text/javascript" src="{{ asset('js/jquery-2.0.0.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery-ui-1.10.2.custom.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>    
         <script type="text/javascript">
             $(".form_datetime").datetimepicker({
                 format: "yyyy-mm-dd hh:ii"
             });
-        </script>  
+        </script>
     {% endblock %}
+        
+    {% javascripts 
+    '@PunkAveFileUploaderBundle/Resources/public/js/jquery.fileupload.js'
+    '@PunkAveFileUploaderBundle/Resources/public/js/jquery.iframe-transport.js'
+    '@PunkAveFileUploaderBundle/Resources/public/js/FileUploader.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 </body>
 </html>

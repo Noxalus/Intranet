@@ -1,0 +1,57 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+
+<h1>Panneau d'administration</h1>
+
+<p>Bienvenue sur le panneau d'administration.</p>
+
+<h2>News</h2>
+
+<ul>
+    <li><a href="{{ path('add_news') }}">Ajouter une news</a></li>
+    <li><a href="{{ path('list_picto') }}">Gérer les pictogrammes</a></li>
+</ul>
+
+<h2>Projets</h2>
+
+<ul>
+    <li><a href="{{ path('projects_add') }}">Ajouter un projet</a></li>
+    <li><a href="{{ path('projects_group_add') }}">Ajouter un groupe de projet</a></li>
+</ul>
+
+<h2>Cours</h2>
+
+<ul>
+    <li><a href="#">Voir les cours fantômes</a></li>
+</ul>
+
+<h2>Utilisateurs</h2>
+
+<ul>
+    <li><a href="{{ path('user_add_promo') }}">Ajouter une promotion</a></li>
+    <li><a href="{{ path('user_add') }}">Ajouter un utilisateur</a></li>
+    <li><a href="{{ path('user_list') }}">Gérer les utilisateur</a></li>
+</ul>
+
+<h2>Wiki</h2>
+
+<ul>
+    <li><a href="{{ path('wiki_add_thematic')}}">Ajouter une thématique</a></li>
+    <li><a href="{{ path('wiki_add_article')}}">Ajouter un article</a></li>
+</ul>
+
+<h2>Forum</h2>
+
+<ul>
+    <li><a href="{{ path('forum_add_category') }}">Ajouter une catégorie</a></li>
+</ul>
+
+<h2>Services</h2>
+
+<ul>
+    <li><a href="#">?</a></li>
+</ul>
+
+
+{% endblock %}

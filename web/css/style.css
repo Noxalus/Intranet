@@ -14,12 +14,20 @@ body
 	box-shadow: 1px 1px 6px black;
 	margin-top:10px;
 	margin-bottom:10px;
+        
+        border-radius: 50px 50px 50px 50px;
+        -webkit-border-radius: 50px 50px 50px 50px;
+        -moz-border-radius: 50px 50px 50px 50px;
 }
 
 #header
 {
     height: 80px;
     background-color:#FFF;
+    
+    border-radius: 50px 50px 0px 0px;
+    -webkit-border-radius: 50px 50px 0px 0px;
+    -moz-border-radius: 50px 50px 0px 0px;
 }
 
 #hmenu
@@ -49,6 +57,15 @@ a#deco
 	background-image: url('../img/deco.png');
 	margin-left: 916px;
     margin-top: 2px;
+}
+
+a#admin
+{
+    width:29px;
+    height:37px;
+    position:absolute;
+    background-image: url('../img/admin.png');
+    margin-left: 880px;
 }
 
 #trans-nav li 
@@ -190,6 +207,10 @@ a#trans:hover
     padding-bottom:10px;
     text-align: right;
     padding-right: 20px;
+    
+    border-radius: 0px 0px 50px 50px;
+    -webkit-border-radius: 0px 0px 50px 50px;
+    -moz-border-radius: 0px 0px 50px 50px;
 }
 
 #logo-MTI
