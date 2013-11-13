@@ -74,9 +74,6 @@ class FrontController extends Controller
     public function addAction()
     {
         $article = new Article();
-
-        $attachment = new ArticleAttachment();
-        $article->addAttachment($attachment);
         
         $form = $this->createForm(new ArticleType(), $article);
 
@@ -342,25 +339,28 @@ class FrontController extends Controller
     /**
      * Serves an uploaded file.
      *
-     * @Route("/fichier/{id}", name="news_file")
+     * @Route("/news/fichier/{id}/{title}", name="news_file")
      * @Template()
      */
-    public function fileAction($id) {
+    public function fileAction($id, $title) {
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('IntranetNewsBundle:ArticleAttachment')->find($id);
 
+        $realExtension = pathinfo($entity->getPath(), PATHINFO_EXTENSION);
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArticleAttachment entity.');
-        }
-
+        }        
+        
         $headers = array(
-            'Content-Type' => $entity->getDocument()->getMimeType(),
-            'Content-Disposition' => 'attachment; filename="' . $entity->getDocument()->getName() . '"'
+            'Content-Type' => mime_content_type($entity->getAbsolutePath()),
+            'Content-Disposition' => 'attachment; filename="' . $entity->getTitle() . '.' + $realExtension . '"'
         );
 
-        $filename = $entity->getDocument()->getUploadRootDir() . '/' . $entity->getDocument()->getName();
+        $filename = $entity->getAbsolutePath();
 
+        
         return new Response(file_get_contents($filename), 200, $headers);
     }
 }

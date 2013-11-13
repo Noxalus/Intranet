@@ -20,7 +20,7 @@ class ArticleType extends AbstractType {
                     'multiple' => false,))
                 ->add('content', 'ckeditor', array('label' => 'Contenu'))
                 ->add('attachments', 'collection', array(
-                    'label' => 'Fichiers joints',
+                    'label' => ' ',
                     'type' => new ArticleAttachmentType(),
                     'allow_add' => true,
                     'allow_delete' => true,

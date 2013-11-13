@@ -40,7 +40,10 @@ class ArticleAttachment {
     public $path;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(
+     *     maxSize="6000000",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Choisissez un fichier PDF valide")
      */
     public $file;
 
@@ -222,4 +225,5 @@ class ArticleAttachment {
     {
         return $this->title;
     }
+
 }

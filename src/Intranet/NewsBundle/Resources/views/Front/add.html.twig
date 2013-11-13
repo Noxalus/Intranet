@@ -23,9 +23,8 @@
         {{ form_errors(form.content) }}
         {{ form_widget(form.content) }}
         </div>
-            
+        <br />
         <div>
-            <h3>Fichier joints</h3>
             <ul class="attachments unstyled" data-prototype="{{ form_widget(form.attachments.vars.prototype)|e }}">
             {% for attachment in form.attachments %}
                 <li>
@@ -51,7 +50,7 @@
 var collectionHolder = $('ul.attachments');
 
 // setup an "Ajouter une deadline" link
-var $addAttachmentLink = $('<a href="#" class="btn btn-success btn-mini add_attachment_link"><i class="icon-white icon-plus"></i></a>');
+var $addAttachmentLink = $('<a href="#" class="btn btn-success btn-mini add_attachment_link"><i class="icon-white icon-plus"></i> Ajouter un fichier joint</a>');
 var $newLinkLi = $('<li></li>').append($addAttachmentLink);
 
 jQuery(document).ready(function() {

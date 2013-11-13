@@ -27,7 +27,8 @@
 <p><i>Fichiers joints:</i></p>
 <ul>
     {% for attachment in article.attachments %}
-        <li><a href="{{ attachment.getWebPath() }}">{{ attachment.title }}</a></li>
+        {% set ext = '.' ~ attachment.path | split('.') | last %}
+        <li><a href="{{ path('news_file', { 'id': attachment.id, 'title': attachment.title ~ ext }) }}">{{ attachment.title }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
