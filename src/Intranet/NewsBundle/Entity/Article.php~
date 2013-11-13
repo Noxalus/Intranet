@@ -3,6 +3,7 @@
 namespace Intranet\NewsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
 
 /**
  * Article
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="intranet_news_article")
  * @ORM\Entity(repositoryClass="Intranet\NewsBundle\Entity\ArticleRepository")
  */
-class Article
+class Article implements RoutedItemInterface
 {
     /**
      * @var integer
@@ -46,9 +47,23 @@ class Article
      * @var \stdClass
      *
      * @ORM\ManyToOne(targetEntity="\Intranet\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=true)
      */
     private $author;
 
+    /**
+     * @var \stdClass
+     * @ORM\ManyToOne(targetEntity="PictoNews")
+     */
+    private $picto;
+    
+    /**
+     * @var ArticleAttachment
+     * 
+     * @ORM\OneToMany(targetEntity="ArticleAttachment", orphanRemoval=true, mappedBy="article", cascade={"persist", "remove"})
+     */
+    private $attachments;
+    
     /**
      * Get id
      *
@@ -149,5 +164,66 @@ class Article
     public function getAuthor()
     {
         return $this->author;
+    }
+    
+    /**
+     * Set picto
+     *
+     * @param \stdClass $picto
+     * @return Article
+     */
+    public function setPicto($picto)
+    {
+        $this->picto = $picto;
+    
+        return $this;
+    }
+
+    /**
+     * Get picto
+     *
+     * @return \stdClass 
+     */
+    public function getPicto()
+    {
+        return $this->picto;
+    }
+
+    public function getFeedItemDescription() {
+        return $this->content;
+    }
+
+    public function getFeedItemPubDate() {
+        return $this->date;
+    }
+
+    public function getFeedItemRouteName() {
+        return 'display_news';
+    }
+
+    public function getFeedItemRouteParameters() {
+        return array('article_id' => $this->id);
+    }
+
+    public function getFeedItemTitle() {
+        return $this->title;
+    }
+
+    public function getFeedItemUrlAnchor() {
+        
+    }
+    
+    /**
+     * Returns a custom media field
+     *
+     * @return string
+     */
+    public function getFeedMediaItem()
+    {
+        return array(
+            'type' => 'image/jpeg',
+            'length' => 500,
+            'value' => ''// $this->picto->getAbsolutePath()
+        );
     }
 }

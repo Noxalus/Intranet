@@ -7,10 +7,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\NewsBundle\Entity\Article;
+use Intranet\NewsBundle\Entity\ArticleAttachment;
 use Intranet\NewsBundle\Entity\PictoNews;
 use Intranet\NewsBundle\Form\Type\PictoNewsType;
 use Symfony\Component\HttpFoundation\Response;
 use Eko\FeedBundle\Field\MediaItemField;
+use Intranet\NewsBundle\Form\Type\ArticleType;
+use Intranet\NewsBundle\Form\Type\ArticleAttachmentType;
 
 class FrontController extends Controller
 {
@@ -72,21 +75,15 @@ class FrontController extends Controller
     {
         $article = new Article();
 
-        $formBuilder = $this->createFormBuilder($article);
-
-        $formBuilder
-                ->add('title', 'text', array('label' => 'Titre'))
-                ->add('picto', 'entity', array(
-                    'label' => 'Pictogramme',
-                    'class' => 'IntranetNewsBundle:PictoNews',
-                    'property' => 'description',
-                    'empty_value' => 'Choisissez le pictogramme',
-                    'expanded' => false,
-                    'multiple' => false,))
-                ->add('content', 'ckeditor', array('label' => 'Contenu'));
-
-        $form = $formBuilder->getForm();
-
+        $attachment = new ArticleAttachment();
+        /*
+        $attachment->setTitle("COUCOU");
+        $attachment->setArticle($article);
+        $article->addAttachment($attachment);
+        */
+        
+        $form = $this->createForm(new ArticleAttachmentType(), $attachment);
+        
         $request = $this->get('request');
 
         if ($request->getMethod() == 'POST')

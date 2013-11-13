@@ -58,6 +58,13 @@ class Article implements RoutedItemInterface
     private $picto;
     
     /**
+     * @var ArticleAttachment
+     * 
+     * @ORM\OneToMany(targetEntity="ArticleAttachment", orphanRemoval=true, mappedBy="article", cascade={"persist", "remove"})
+     */
+    private $attachments;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -218,5 +225,45 @@ class Article implements RoutedItemInterface
             'length' => 500,
             'value' => ''// $this->picto->getAbsolutePath()
         );
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add attachments
+     *
+     * @param \Intranet\NewsBundle\Entity\ArticleAttachment $attachments
+     * @return Article
+     */
+    public function addAttachment(\Intranet\NewsBundle\Entity\ArticleAttachment $attachments)
+    {
+        $this->attachments[] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachments
+     *
+     * @param \Intranet\NewsBundle\Entity\ArticleAttachment $attachments
+     */
+    public function removeAttachment(\Intranet\NewsBundle\Entity\ArticleAttachment $attachments)
+    {
+        $this->attachments->removeElement($attachments);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }
