@@ -1,0 +1,34 @@
+{% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
+
+{% block content %}
+<h1>Gestion des cours "fantômes"</h1>
+<div>
+    {% if typeR | length > 0 %}
+    {% for type in typeR %}
+    {% if type.ghosts | length > 0 %}        
+    
+    <h3>{{ type.type.name }}</h3>
+    <table class="table">
+           {% for course in type.ghosts %}
+            <tr>
+                <td></td>
+                <td>
+                    <a href="{{  path('course_display', { 'id' : course.ghost.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a><br/><br/>
+                    Cours initialement prévu le {{ course.ghost.date|date('d/m') }} à {{ course.ghost.date|date('H') }}h{{ course.ghost.date|date('i') }}</b>
+                </td>
+                <td>  
+                    <form method="post" {{ form_enctype(course.form) }}>
+                        {{ form_widget(course.form) }}
+                        <input type="submit" class="btn btn-primary" />
+                    </form>
+                </td>
+            </tr>
+           {% endfor %}
+
+        </table>
+    {% endif %}
+    {% endfor%}
+    {% endif %}
+</div>
+    
+{% endblock %}
