@@ -23,6 +23,7 @@ class ArticleType extends AbstractType {
                     'label' => 'Fichiers joints',
                     'type' => new ArticleAttachmentType(),
                     'allow_add' => true,
+                    'allow_delete' => true,
                     'by_reference' => false));
     }
 

@@ -6,6 +6,7 @@
 <div class="well">
     <form action="#" method="POST"  {{ form_enctype(form) }}>
         <div id="intranet_userbundle_usertype">
+            {{ form_errors(form) }}
             <div>
                 {{ form_label(form.username) }}
                 {{ form_errors(form.username) }}
@@ -48,6 +49,8 @@
                     {{ form_errors(form.photo) }}
                     {{ form_widget(form.photo) }}
             </div>
+            
+            {{ form_rest(form) }}
         </div>
         <br />
         <input type="submit" value="Ajouter" class="btn btn-success" />

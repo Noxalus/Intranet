@@ -13,7 +13,13 @@
             <strong>Prénom</strong>: {{ user.firstName }}<br />
             <strong>Login</strong>: {{ user.username }}<br />
             <strong>Adresse email</strong>: {{ user.email }}<br />
-            <strong>Promotion</strong>: {{ user.promo }}
+            <strong>Promotion</strong>: {{ user.promo }}<br />
+            <strong>Rôle</strong>:  
+            {% if 'ROLE_TEACHER' in user.roles %}
+                <em>Professeur</em>
+            {% else %}
+                Étudiant
+            {% endif %}
         </p>
 
         <p>

@@ -11,20 +11,19 @@ use Intranet\ProjectBundle\Entity\ProjectGroup;
 use Intranet\ProjectBundle\Form\Type\ProjectType;
 use Intranet\ProjectBundle\Entity\ProjectSubmission;
 
-class FrontController extends Controller
-{
+class FrontController extends Controller {
+
     /**
      * @Route("/projets", name="projects")
      * @Template()
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $repository = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('IntranetProjectBundle:Project');
 
         $projects = $repository->findAll();
-        
+
         return array(
             'projects' => $projects
         );
@@ -34,8 +33,7 @@ class FrontController extends Controller
      * @Route("/projet/voir/{id}", name="projects_display")
      * @Template()
      */
-    public function displayAction($id)
-    {
+    public function displayAction($id) {
         $user = $this->get('security.context')->getToken()->getUser();
 
         $repository = $this->getDoctrine()
@@ -43,7 +41,7 @@ class FrontController extends Controller
                 ->getRepository('IntranetProjectBundle:ProjectGroup');
 
         $projectGroup = $repository->findProjectGroup($id, $user->getId());
-        
+
         return array(
             'projectGroup' => $projectGroup
         );
@@ -53,45 +51,40 @@ class FrontController extends Controller
      * @Route("/projets/ajouter", name="projects_add")
      * @Template()
      */
-    public function addAction()
-    {
+    public function addAction() {
         $project = new Project();
-        
+
         $deadline = new \Intranet\ProjectBundle\Entity\ProjectDeadline();
         $deadline->setDate(new \DateTime());
         $project->addDeadline($deadline);
         /*
-        $formBuilder = $this->createFormBuilder($project);
+          $formBuilder = $this->createFormBuilder($project);
 
-        $formBuilder
-                ->add('name', 'text')
-                ->add('description', 'textarea');
+          $formBuilder
+          ->add('name', 'text')
+          ->add('description', 'textarea');
 
-        $form = $formBuilder->getForm();
-        */
+          $form = $formBuilder->getForm();
+         */
         $form = $this->createForm(new ProjectType(), $project);
-        
+
         $request = $this->get('request');
 
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 // On l'enregistre notre objet $article dans la base de données
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($project);
                 $em->flush();
 
                 $this->getDoctrine()
-                     ->getRepository('IntranetNewsBundle:Article')
-                     ->postNotification('Ajout d\'un projet', '<p>Un nouveau projet a été ajouté : '.$project->getName().'.</p>');
-                
+                        ->getRepository('IntranetNewsBundle:Article')
+                        ->postNotification('Ajout d\'un projet', '<p>Un nouveau projet a été ajouté : ' . $project->getName() . '.</p>');
+
                 return $this->redirect($this->generateUrl('projects'));
-            }
-            else
-            {
+            } else {
                 
             }
         }
@@ -104,8 +97,7 @@ class FrontController extends Controller
      * @Route("/projets/groupe/ajouter", name="projects_group_add")
      * @Template()
      */
-    public function addGroupAction()
-    {
+    public function addGroupAction() {
         $projectGroup = new ProjectGroup();
 
         $formBuilder = $this->createFormBuilder($projectGroup);
@@ -122,12 +114,10 @@ class FrontController extends Controller
 
         $request = $this->get('request');
 
-        if ($request->getMethod() == 'POST')
-        {
+        if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 // On l'enregistre notre objet $article dans la base de données
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projectGroup);
@@ -136,35 +126,30 @@ class FrontController extends Controller
                 return $this->redirect($this->generateUrl('projects'));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
-        
+
     /**
      * @Route("/projet/{id_project}/editer", name="edit_project")
      * @Template()
      * @Secure(roles="ROLE_TEACHER")
      */
-    public function editAction($id_project)
-    {
+    public function editAction($id_project) {
         $request = $this->get('request');
         $session = $request->getSession();
-        
+
         $project = $this->getDoctrine()
                 ->getRepository('IntranetProjectBundle:Project')
                 ->find($id_project);
 
-        if ($project)
-        {
+        if ($project) {
             $form = $this->createForm(new ProjectType(), $project);
-            if ($request->getMethod() == 'POST')
-            {
+            if ($request->getMethod() == 'POST') {
                 $form->bind($request);
-                if ($form->isValid())
-                {                      
+                if ($form->isValid()) {
                     // On l'enregistre notre objet $project dans la base de données
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($project);
@@ -174,105 +159,91 @@ class FrontController extends Controller
                     $session->getFlashBag()->add('success', $msg);
 
                     $this->getDoctrine()
-                     ->getRepository('IntranetNewsBundle:Article')
-                     ->postNotification('Modification d\'un projet', '<p>Les informations du projet '.$project->getName().' ont été modifiées.</p>');
-                
-                    
+                            ->getRepository('IntranetNewsBundle:Article')
+                            ->postNotification('Modification d\'un projet', '<p>Les informations du projet ' . $project->getName() . ' ont été modifiées.</p>');
+
+
                     return $this->redirect($this->generateUrl('projects'));
                 }
             }
             return array(
                 'form' => $form->createView(),
             );
-        }
-        else
-        {
+        } else {
             $error = 'Il semblerait que ce projet n\'existe pas dans la base de données. L\'édition est donc impossible.';
             $session->getFlashBag()->add('error', $error);
             return $this->redirect($this->generateUrl('projects'));
         }
     }
 
-    
-     /**
+    /**
      * @Route("/projet/{id_project}/supprimer", name="delete_project")
      * @Template()
      * @Secure(roles="ROLE_TEACHER")
      */
-    public function deleteAction($id_project)
-    {
+    public function deleteAction($id_project) {
         $request = $this->get('request');
         $session = $request->getSession();
-        
+
         $project = $this->getDoctrine()
                 ->getRepository('IntranetProjectBundle:Project')
                 ->find($id_project);
 
-        if ($project)
-        {
+        if ($project) {
             $form = $this->createFormBuilder()->getForm();
 
             $request = $this->getRequest();
-            if ($request->getMethod() == 'POST')
-            {
+            if ($request->getMethod() == 'POST') {
                 $form->bind($request);
 
-                if ($form->isValid())
-                {
+                if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
                     $em->remove($project);
                     $em->flush();
-               
+
                     $error = 'Projet supprimé avec succès.';
                     $session->getFlashBag()->add('success', $error);
-                    
+
                     return $this->redirect($this->generateUrl('projects'));
                 }
             }
 
             return array(
                 'project' => $project,
-                'form'    => $form->createView()
-                );
-        }
-        else
-        {
+                'form' => $form->createView()
+            );
+        } else {
             $error = 'Il semblerait que ce projet n\'existe pas dans la base de données. Il n\'a donc pas pu être supprimé.';
             $session->getFlashBag()->add('error', $error);
         }
         return $this->redirect($this->generateUrl('projects'));
-        
     }
-    
+
     /**
      * @Route("/projet/{project_id}/ajouter/rendu/{deadline_id}", name="add_submission")
      */
-    public function addSubmissionAction($project_id, $deadline_id)
-    {
+    public function addSubmissionAction($project_id, $deadline_id) {
         $submission = new ProjectSubmission();
-        
+
         $formBuilder = $this->createFormBuilder($submission);
 
         $formBuilder->add('file', 'file')
-                    ->add('md5', 'text');
+                ->add('md5', 'text');
 
         $form = $formBuilder->getForm();
 
         $request = $this->get('request');
-        
-        if ($request->getMethod() == 'POST')
-        {
+
+        if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $md5 = md5_file($_FILES['form']['tmp_name']['file']);
-                if ($md5 === strtolower($submission->getMd5()))
-                {
+                if ($md5 === strtolower($submission->getMd5())) {
                     $submission->setCreatedAt(new \DateTime());
                     $repository = $this->getDoctrine()
-                        ->getManager()
-                        ->getRepository('IntranetProjectBundle:ProjectDeadline');
+                            ->getManager()
+                            ->getRepository('IntranetProjectBundle:ProjectDeadline');
 
                     $deadline = $repository->find($deadline_id);
 
@@ -282,15 +253,14 @@ class FrontController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($submission);
                     $em->flush();
-                }
-                else
-                {
+                } else {
                     $session = $request->getSession();
                     $session->getFlashBag()->add('error', 'Le hash MD5 du fichier ne correspond pas à celui que vous avez entré !');
                 }
             }
         }
-        
+
         return $this->redirect($this->generateUrl('projects_display', array('id' => $project_id)));
     }
+
 }

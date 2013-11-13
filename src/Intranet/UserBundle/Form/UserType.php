@@ -21,10 +21,11 @@ class UserType extends AbstractType {
                     'label' => 'Rôles',
                     'choices' => array(
                         'ROLE_STUDENT' => 'Etudiant', 
-                        'ROLE_TEACHER' => 'Professeur',
-                        'ROLE_ADMIN' => 'Administrateur'),
+                        'ROLE_TEACHER' => 'Professeur'),
                     'required' => true,
-                    'multiple'  => true,
+                    'multiple'  => false,
+                    'expanded' => false,
+                    'mapped' => false
                 ))
                 ->add('photo', new PhotoType(), array('label' => ' ', 'required' => false));
     }

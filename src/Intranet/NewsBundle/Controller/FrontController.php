@@ -76,14 +76,10 @@ class FrontController extends Controller
         $article = new Article();
 
         $attachment = new ArticleAttachment();
-        /*
-        $attachment->setTitle("COUCOU");
-        $attachment->setArticle($article);
         $article->addAttachment($attachment);
-        */
         
-        $form = $this->createForm(new ArticleAttachmentType(), $attachment);
-        
+        $form = $this->createForm(new ArticleType(), $article);
+
         $request = $this->get('request');
 
         if ($request->getMethod() == 'POST')
@@ -96,6 +92,11 @@ class FrontController extends Controller
                 
                 $article->setDate(new \DateTime());
                 $article->setAuthor($user);
+                
+                foreach($article->getAttachments() as $attachment)
+                {
+                    $attachment->setArticle($article);
+                }
                 
                 // On l'enregistre notre objet $article dans la base de données
                 $em = $this->getDoctrine()->getManager();
@@ -336,5 +337,30 @@ class FrontController extends Controller
         $feed->addItemField(new MediaItemField('getFeedMediaItem'));
         
         return new Response($feed->render('atom')); // or 'atom'
+    }
+    
+    /**
+     * Serves an uploaded file.
+     *
+     * @Route("/fichier/{id}", name="news_file")
+     * @Template()
+     */
+    public function fileAction($id) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('IntranetNewsBundle:ArticleAttachment')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ArticleAttachment entity.');
+        }
+
+        $headers = array(
+            'Content-Type' => $entity->getDocument()->getMimeType(),
+            'Content-Disposition' => 'attachment; filename="' . $entity->getDocument()->getName() . '"'
+        );
+
+        $filename = $entity->getDocument()->getUploadRootDir() . '/' . $entity->getDocument()->getName();
+
+        return new Response(file_get_contents($filename), 200, $headers);
     }
 }

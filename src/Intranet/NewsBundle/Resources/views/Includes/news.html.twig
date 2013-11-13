@@ -21,10 +21,14 @@
 
 <div class="news-content">
 {{ article.content|raw }}
+    
+{% if article.attachments|length > 0 %}
 <hr />
 <p><i>Fichiers joints:</i></p>
 <ul>
-    <li><a href="#">Consignes PLIC.pdf</a></li>
-    <li><a href="#">Template MTI.docx</a></li>
+    {% for attachment in article.attachments %}
+        <li><a href="{{ attachment.getWebPath() }}">{{ attachment.title }}</a></li>
+    {% endfor %}
 </ul>
+{% endif %}
 </div>

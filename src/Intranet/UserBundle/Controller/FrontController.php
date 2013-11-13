@@ -115,16 +115,25 @@ class FrontController extends Controller {
         $form->setData($user);
 
         $request = $this->get('request');
+
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
+
+            $newRole = $form['roles']->getData();
+
+            if (!in_array($newRole, $user->getRoles())) {
+                $user->addRole($newRole);
+            }
 
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
-                // If we don't do anything on the Photo entity, the image won't be moved
-                if (!$user->getPhoto()->getCreatedAt())
-                    $user->getPhoto()->setCreatedAt(new \DateTime());
-                $user->getPhoto()->setUpdatedAt(new \DateTime());
+                if ($user->getPhoto() != null) {
+                    // If we don't do anything on the Photo entity, the image won't be moved
+                    if (!$user->getPhoto()->getCreatedAt())
+                        $user->getPhoto()->setCreatedAt(new \DateTime());
+                    $user->getPhoto()->setUpdatedAt(new \DateTime());
+                }
 
                 $em->persist($user);
                 $em->flush();
@@ -151,17 +160,14 @@ class FrontController extends Controller {
                 ->getRepository('IntranetUserBundle:User')
                 ->find($user_id);
 
-        if ($user)
-        {
+        if ($user) {
             $form = $this->createFormBuilder()->getForm();
 
             $request = $this->getRequest();
-            if ($request->getMethod() == 'POST')
-            {
+            if ($request->getMethod() == 'POST') {
                 $form->bind($request);
 
-                if ($form->isValid())
-                {
+                if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
                     $em->remove($user);
                     $em->flush();
@@ -177,16 +183,14 @@ class FrontController extends Controller {
                 'user' => $user,
                 'form' => $form->createView()
             );
-        }
-        else
-        {
+        } else {
             $error = 'Il semblerait que cet utilisateur n\'existe pas dans la base de données. Il n\'a donc pas pu être supprimé.';
             $session->getFlashBag()->add('error', $error);
         }
 
         return $this->redirect($this->generateUrl('user_list'));
     }
-    
+
     /**
      * @Route("/ajouter/promo", name="user_add_promo")
      * @Template()
