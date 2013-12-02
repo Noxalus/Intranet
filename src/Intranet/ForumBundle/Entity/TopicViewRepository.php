@@ -51,7 +51,8 @@ class TopicViewRepository extends EntityRepository
     
     public function getLastPostFromCategory($category)
     {
-        $queryBuilder = $this->_em->createQueryBuilder()
+        // Get post
+        $queryBuilderPost = $this->_em->createQueryBuilder()
                 ->select('p')
                 ->from('IntranetForumBundle:Post', 'p')
                 ->leftJoin('IntranetForumBundle:Topic', 't', Join::WITH, 'p.topic = t.id')
@@ -59,12 +60,39 @@ class TopicViewRepository extends EntityRepository
                 ->orderBy('p.createdAt', 'DESC')
                 ->setParameter('category', $category);
 
-        $query = $queryBuilder->getQuery();
+        $queryPost = $queryBuilderPost->getQuery();
+        $resultPost = $queryPost->getResult();
 
-        $result = $query->getResult();
-
-        if (count($result) > 0)
-            return $result[0];
+        // Get topic
+        $queryBuilderTopic = $this->_em->createQueryBuilder()
+                ->select('t')
+                ->from('IntranetForumBundle:Topic', 't')
+                ->where('t.category = :category')
+                ->orderBy('t.createdAt', 'DESC')
+                ->setParameter('category', $category);
+        
+        $queryTopic = $queryBuilderTopic->getQuery();
+        $resultTopic = $queryTopic->getResult();
+                
+        if (count($resultPost) > 0)
+        {
+            if (count($resultTopic) > 0)
+            {
+                $lastPost = $resultPost[0];
+                $lastTopic = $resultTopic[0];
+                
+                var_dump($lastPost);
+                var_dump($lastTopic);
+                exit;
+                
+                if ($lastPost->getCreatedAt() > $lastTopic->getCreatedAt())
+                    return $lastPost;
+                else
+                    return $lastTopic;
+            }
+            else
+                return $resultPost[0];
+        }
         else
             return null;
     }
@@ -113,7 +141,10 @@ class TopicViewRepository extends EntityRepository
                 }
             }
             else
-                return 1;
+            {
+                if ($user != $topic->getAuthor())
+                    return 0;
+            }
         }
     }
     

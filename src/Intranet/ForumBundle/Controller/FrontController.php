@@ -196,6 +196,8 @@ class FrontController extends Controller
 
         if ($tvRepository->hasReadTopic($user, $topic) <= 0)
         {
+            $em = $this->getDoctrine()->getManager();
+
             $topicView = $tvRepository->getTopicView($user, $topic);
             $lastPost = $tvRepository->getLastPostFromTopic($topic);
 
@@ -205,14 +207,13 @@ class FrontController extends Controller
                 // Update the existing line with the last post id
                 $topicView->setPost($lastPost);
                 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($topicView);
                 $em->flush();
             }
              // User has never read this topic
             else
             {
-                // No message into this topic ?
+
                 if ($lastPost != null)
                 {
                     // Insert new line into TopicView database
@@ -221,11 +222,25 @@ class FrontController extends Controller
                     $newTopicView->setTopic($topic);
                     $newTopicView->setPost($lastPost);
                     $newTopicView->setParticipated($lastPost->getAuthor() == $user);
-
-                    $em = $this->getDoctrine()->getManager();
+                    
                     $em->persist($newTopicView);
                     $em->flush();
                 }
+                // No message into this topic ?
+                elseif ($topic->getAuthor() != $user)
+                {
+                    // Insert new line into TopicView database
+                    $newTopicView = new TopicView();
+                    $newTopicView->setUser($user);
+                    $newTopicView->setTopic($topic);
+                    $newTopicView->setPost(null);
+                    $newTopicView->setParticipated(false);
+                    
+                    $em->persist($newTopicView);
+                    $em->flush();
+                }
+                
+                
             }
         }
 
