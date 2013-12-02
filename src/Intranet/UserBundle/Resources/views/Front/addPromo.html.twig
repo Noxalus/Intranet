@@ -11,6 +11,16 @@ $(this).attr("checked",status);
 
 <h1>Ajout d'une promotion</h1>
 
+<div class="alert alert-info">
+    <h3>Rappels</h3>
+    <p>Le fichier CSV envoyé doit correspondre à ces critères:<br /></p>
+    <ul>
+        <li>Il contient 4 colonnes: login, nom de famille, prénom, email</li>
+        <li>La première ligne est réservé au nom des colonnes</li>
+        <li>Le caractère de séparation des données est le ";" et non la ","</li>
+    </ul>
+</div>
+
 {% if users|length == 0 %}
 <div class="well">
     <form method="POST" action="{{ path('user_add_promo') }}" enctype="multipart/form-data">

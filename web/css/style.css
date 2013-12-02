@@ -61,11 +61,12 @@ a#deco
 
 a#admin
 {
-    width:29px;
-    height:37px;
+    width:30px;
+    height:30px;
     position:absolute;
     background-image: url('../img/admin.png');
     margin-left: 880px;
+    margin-top: 4px;
 }
 
 #trans-nav li 

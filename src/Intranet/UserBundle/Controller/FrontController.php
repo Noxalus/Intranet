@@ -218,7 +218,7 @@ class FrontController extends Controller {
                 if (($handle = fopen($file, 'r')) !== FALSE) {
                     $userManager = $this->container->get('fos_user.user_manager');
 
-                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                         $num = count($data);
                         if ($row > 1) {
                             $infos = array();
