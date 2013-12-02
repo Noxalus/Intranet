@@ -91,13 +91,14 @@ class FrontController extends Controller
         $d = date_create_from_format('jmY H:i:s', $date);
         $d->modify('+'.($hour * 15 * 60 ).' seconds');
         
-        
         $repository = $this->getDoctrine()
                    ->getManager()
                    ->getRepository('IntranetScheduleBundle:CourseType');
 
         $course = $repository->findOneByName($name);
 
+        $em = $this->getDoctrine()->getManager();
+        
         if (!$course)
         {
             $course = new CourseType();
@@ -118,10 +119,11 @@ class FrontController extends Controller
 
         if (!$sch) { // If course doesn't exist : it's created
             $sch = new Schedule();
-            $sch->setDate($date);
+            $sch->setDate($d);
             $sch->setDuration($duration);
             $sch->setType($course);
             $sch->setisGhost(false);
+            
             $em->persist($sch);
             $em->flush();
         }
