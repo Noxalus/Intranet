@@ -81,10 +81,6 @@ class TopicViewRepository extends EntityRepository
                 $lastPost = $resultPost[0];
                 $lastTopic = $resultTopic[0];
                 
-                var_dump($lastPost);
-                var_dump($lastTopic);
-                exit;
-                
                 if ($lastPost->getCreatedAt() > $lastTopic->getCreatedAt())
                     return $lastPost;
                 else

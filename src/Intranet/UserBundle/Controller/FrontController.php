@@ -104,6 +104,8 @@ class FrontController extends Controller {
      * @Template("IntranetUserBundle:Profile:edit.html.twig")
      */
     public function profileEditAction($user_id) {
+        $userManager = $this->container->get('fos_user.user_manager');
+        
         $repository = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('IntranetUserBundle:User');
@@ -135,9 +137,8 @@ class FrontController extends Controller {
                     $user->getPhoto()->setUpdatedAt(new \DateTime());
                 }
 
-                $em->persist($user);
-                $em->flush();
-
+                $userManager->updateUser($user);
+                
                 return $this->redirect($this->generateUrl('user_profile', array('username' => $user->getUsername())));
             }
         }
@@ -332,6 +333,12 @@ class FrontController extends Controller {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 
+                $newRole = $form['roles']->getData();
+
+                if (!in_array($newRole, $user->getRoles())) {
+                    $user->addRole($newRole);
+                }
+                
                 // If we don't do anything on the Photo entity, the image won't be moved
                 if ($user->getPhoto() != null) {
                     if (!$user->getPhoto()->getCreatedAt())
@@ -339,11 +346,7 @@ class FrontController extends Controller {
                     $user->getPhoto()->setUpdatedAt(new \DateTime());
                 }
 
-                var_dump($user);
-                exit;
-                
-                $em->persist($user);
-                $em->flush();
+                $userManager->updateUser($user);
 
                 return $this->redirect($this->generateUrl('user_profile', array('username' => $user->getUsername())));
             }
