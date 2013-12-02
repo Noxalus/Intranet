@@ -10,7 +10,19 @@
         {% if sch.comment %}
             <p>{{ sch.comment|raw }}</p>
         {% endif %}
-        <br/>
+        
+        {% if sch.attachments|length > 0 %}
+        <h3>Fichiers joints</h3>
+        <div>
+            <ul>
+                {% for attachment in sch.attachments %}
+                    {% set ext = '.' ~ attachment.path | split('.') | last %}
+                    <li><a href="{{ path('course_file', { 'id': attachment.id, 'title': attachment.title ~ ext }) }}">{{ attachment.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
         <h3>Examens de la matière
         {% if is_granted('ROLE_TEACHER') %}
                 <a href="{{ path('add_examd', {'id_typeCourse' : type.id, 'date' : sch.date|date('jmY H:i:s')}) }}" class="btn btn-success btn-small"><i class="icon-white icon-plus-sign"></i></a>

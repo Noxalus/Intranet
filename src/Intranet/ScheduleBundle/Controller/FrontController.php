@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Intranet\ScheduleBundle\Entity\Schedule;
 use Intranet\ScheduleBundle\Entity\CourseType;
+use Intranet\ScheduleBundle\Form\Type\ScheduleType;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontController extends Controller
 {
@@ -375,10 +377,8 @@ class FrontController extends Controller
 
         if ($sch)
         {
-            $formBuilder = $this->createFormBuilder($sch);
-            $formBuilder
-                    ->add('comment', 'ckeditor', array('label' => 'Commentaire'));
-            $form = $formBuilder->getForm();
+            $form = $this->createForm(new ScheduleType(), $sch);
+            
             $request = $this->get('request');
 
             if ($request->getMethod() == 'POST')
@@ -387,6 +387,11 @@ class FrontController extends Controller
 
                 if ($form->isValid())
                 {                      
+                    foreach($sch->getAttachments() as $attachment)
+                    {
+                        $attachment->setSchedule($sch);
+                    }
+                    
                     // On l'enregistre notre objet $article dans la base de données
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($sch);
@@ -471,6 +476,33 @@ class FrontController extends Controller
             return $this->redirect($this->generateUrl('list_course'));
         }
         
+    }
+    
+    /**
+     * Serves an uploaded file.
+     *
+     * @Route("/cours/fichier/{id}/{title}", name="course_file")
+     * @Template()
+     */
+    public function fileAction($id, $title) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('IntranetScheduleBundle:ScheduleAttachment')->find($id);
+
+        $realExtension = pathinfo($entity->getPath(), PATHINFO_EXTENSION);
+        
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ScheduleAttachment entity.');
+        }        
+        
+        $headers = array(
+            'Content-Type' => mime_content_type($entity->getAbsolutePath()),
+            'Content-Disposition' => 'attachment; filename="' . $entity->getTitle() . '.' + $realExtension . '"'
+        );
+
+        $filename = $entity->getAbsolutePath();
+        
+        return new Response(file_get_contents($filename), 200, $headers);
     }
 }
 

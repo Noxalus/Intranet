@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Schedule
  *
- * @ORM\Table(name="schedule")
+ * @ORM\Table(name="intranet_course_schedule")
  * @ORM\Entity(repositoryClass="Intranet\ScheduleBundle\Entity\ScheduleRepository")
  */
 class Schedule
@@ -38,17 +38,34 @@ class Schedule
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="text")
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
     /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="type", type="object")
+     * @ORM\ManyToOne(targetEntity="CourseType")
      */
     private $type;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isGhost", type="boolean")
+     */
+    private $isGhost;
+    
+    /**
+     * @var ScheduleAttachment
+     * 
+     * @ORM\OneToMany(targetEntity="ScheduleAttachment", orphanRemoval=true, mappedBy="schedule", cascade={"persist", "remove"})
+     */
+    private $attachments;
 
+    public function __construct()
+    {
+        $this->date = new \Datetime;
+        $this->comment = null;
+    }
 
     /**
      * Get id
@@ -69,7 +86,7 @@ class Schedule
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -92,7 +109,7 @@ class Schedule
     public function setDuration($duration)
     {
         $this->duration = $duration;
-    
+
         return $this;
     }
 
@@ -115,7 +132,7 @@ class Schedule
     public function setComment($comment)
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
@@ -138,7 +155,7 @@ class Schedule
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -150,5 +167,28 @@ class Schedule
     public function getType()
     {
         return $this->type;
+    }
+
+        /**
+     * Set type
+     *
+     * @param $isGhost
+     * @return Schedule
+     */
+    public function setisGhost($isGhost)
+    {
+        $this->isGhost = $isGhost;
+
+        return $this;
+    }
+
+    /**
+     * Get isGhost
+     *
+     * @return \stdClass 
+     */
+    public function getisGhost()
+    {
+        return $this->isGhost;
     }
 }

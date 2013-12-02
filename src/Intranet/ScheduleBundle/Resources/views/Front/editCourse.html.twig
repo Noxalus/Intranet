@@ -5,9 +5,96 @@
 
 <div class="well">
   <form method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <br />
+ 
+      <div>
+        {{ form_label(form.comment) }}
+        {{ form_errors(form.comment) }}
+        {{ form_widget(form.comment) }}
+        </div>
+      <br />
+        <div>
+            <ul class="attachments unstyled" data-prototype="{{ form_widget(form.attachments.vars.prototype)|e }}">
+            {% for attachment in form.attachments %}
+                <li>
+                    {{ form_errors(attachment.title) }}
+                    {{ form_row(attachment.title) }}
+
+                    {{ form_errors(attachment.file) }}
+                    {{ form_row(attachment.file) }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {{ form_rest(form) }}
     <input type="submit" class="btn btn-primary" />
   </form>
 </div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+// Get the ul that holds the collection of deadlines
+var collectionHolder = $('ul.attachments');
+
+// setup an "Ajouter une deadline" link
+var $addAttachmentLink = $('<a href="#" class="btn btn-success btn-mini add_attachment_link"><i class="icon-white icon-plus"></i> Ajouter un fichier joint</a>');
+var $newLinkLi = $('<li></li>').append($addAttachmentLink);
+
+jQuery(document).ready(function() {
+    // ajoute un lien de suppression à tous les éléments li de
+    // formulaires de tag existants
+    collectionHolder.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+    });
+    
+    // add the "Ajouter un fichier" anchor and li to the tags ul
+    collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+
+    $addAttachmentLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addAttachmentForm(collectionHolder, $newLinkLi);
+    });
+});
+
+function addAttachmentForm(collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = collectionHolder.data('prototype');
+
+    // get the new index
+    var index = collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+    
+    // ajoute un lien de suppression au nouveau formulaire
+    addTagFormDeleteLink($newFormLi);
+}
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a href="#" class="btn btn-danger btn-mini"><i class="icon-white icon-trash"></i></a><br /><br />');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+
+        // supprime l'élément li pour le formulaire de tag
+        $tagFormLi.remove();
+    });
+}
+</script>
 {% endblock %}

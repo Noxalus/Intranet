@@ -54,12 +54,18 @@ class Schedule
      */
     private $isGhost;
     
-    
+    /**
+     * @var ScheduleAttachment
+     * 
+     * @ORM\OneToMany(targetEntity="ScheduleAttachment", orphanRemoval=true, mappedBy="schedule", cascade={"persist", "remove"})
+     */
+    private $attachments;
 
     public function __construct()
     {
         $this->date = new \Datetime;
         $this->comment = null;
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -164,13 +170,13 @@ class Schedule
         return $this->type;
     }
 
-        /**
-     * Set type
+    /**
+     * Set isGhost
      *
-     * @param $isGhost
+     * @param boolean $isGhost
      * @return Schedule
      */
-    public function setisGhost($isGhost)
+    public function setIsGhost($isGhost)
     {
         $this->isGhost = $isGhost;
 
@@ -180,10 +186,43 @@ class Schedule
     /**
      * Get isGhost
      *
-     * @return \stdClass 
+     * @return boolean 
      */
-    public function getisGhost()
+    public function getIsGhost()
     {
         return $this->isGhost;
+    }
+
+    /**
+     * Add attachments
+     *
+     * @param \Intranet\ScheduleBundle\Entity\ScheduleAttachment $attachments
+     * @return Schedule
+     */
+    public function addAttachment(\Intranet\ScheduleBundle\Entity\ScheduleAttachment $attachments)
+    {
+        $this->attachments[] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachments
+     *
+     * @param \Intranet\ScheduleBundle\Entity\ScheduleAttachment $attachments
+     */
+    public function removeAttachment(\Intranet\ScheduleBundle\Entity\ScheduleAttachment $attachments)
+    {
+        $this->attachments->removeElement($attachments);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }

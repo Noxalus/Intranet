@@ -38,5 +38,3 @@ class ArticleType extends AbstractType {
     }
 
 }
-
-?>

@@ -1,12 +1,12 @@
 <?php
 
-namespace Intranet\NewsBundle\Form\Type;
+namespace Intranet\ScheduleBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ArticleAttachmentType extends AbstractType {
+class ScheduleAttachmentType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
@@ -16,12 +16,12 @@ class ArticleAttachmentType extends AbstractType {
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Intranet\NewsBundle\Entity\ArticleAttachment'
+            'data_class' => 'Intranet\ScheduleBundle\Entity\ScheduleAttachment'
         ));
     }
 
     public function getName() {
-        return 'ArticleAttachment';
+        return 'ScheduleAttachment';
     }
 
 }
