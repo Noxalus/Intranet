@@ -11,11 +11,20 @@ class UserType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('username', 'text', array('label' => 'Login'))
-                ->add('password', 'password', array('label' => 'Mot de passe'))
-                ->add('email', 'text', array('label' => 'Adresse email'))
+                ->add('plainPassword', 'repeated', array(
+                'type' => 'password',
+                'label' => ' ',
+                'options' => array('translation_domain' => 'FOSUserBundle'),
+                'first_options' => array('label' => 'Mot de passe'),
+                'second_options' => array('label' => 'Confirmation'),
+                'invalid_message' => 'Les deux mots de passe ne sont pas identiques',
+                ))
+                ->add('email', 'email', array('label' => 'Adresse email'))
                 ->add('firstName', 'text', array('label' => 'Prénom'))
                 ->add('lastName', 'text', array('label' => 'Nom'))
-                ->add('promo', 'integer', array('label' => 'Promotion'))
+                ->add('promo', 'integer', array(
+                    'label' => 'Promotion',
+                    'required' => false))
                 
                 ->add('roles', 'choice', array(
                     'label' => 'Rôles',

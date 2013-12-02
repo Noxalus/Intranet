@@ -9,7 +9,10 @@
         <h3>Deadlines</h3>
         <ul class="deadlines unstyled" data-prototype="{{ form_widget(form.deadlines.vars.prototype)|e }}">
         {% for deadline in form.deadlines %}
-            <li>{{ form_row(deadline.date) }}</li>
+            <li><div class="input-append date form_datetime">
+			{{ form_widget(deadline.date) }}
+			<span class="add-on"><i class="icon-th"></i></span>
+		</div></li>
         {% endfor %}
         </ul>
         

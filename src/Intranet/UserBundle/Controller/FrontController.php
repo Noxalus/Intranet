@@ -317,8 +317,12 @@ class FrontController extends Controller {
      * @Secure("ROLE_TEACHER")
      */
     public function addAction() {
-        $user = new User();
+        
+        $userManager = $this->container->get('fos_user.user_manager');
 
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+        
         $form = $this->createForm(new UserType, $user);
 
         $request = $this->get('request');
@@ -335,6 +339,9 @@ class FrontController extends Controller {
                     $user->getPhoto()->setUpdatedAt(new \DateTime());
                 }
 
+                var_dump($user);
+                exit;
+                
                 $em->persist($user);
                 $em->flush();
 

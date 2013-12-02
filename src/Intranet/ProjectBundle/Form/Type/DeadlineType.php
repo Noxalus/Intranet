@@ -16,7 +16,10 @@ class DeadlineType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('date', 'datetime', array('label' => 'Date limite'));
+        $builder->add('date', 'datetime', array(
+                      'label' => 'Date limite',
+                      //'format' => 'yyyy-mm-dd hh:ii',
+                      'widget' => 'single_text'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

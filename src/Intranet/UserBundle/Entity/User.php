@@ -47,7 +47,7 @@ class User extends BaseUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="promo", type="integer")
+     * @ORM\Column(name="promo", type="integer", nullable=true)
      */
     private $promo;
 

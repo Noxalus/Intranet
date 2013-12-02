@@ -7,7 +7,8 @@
 <form action="{{ path('user_trombi_promo', { 'promo': promo }) }}" method="POST">
     <div>
         <label>Promotion:</label>
-        <select name="promo">
+        <input list="promos" name="promo" />
+        <datalist id="promos">
             {% for i in (promo - 5)..(promo + 5) %}
                 {% if i == promo %}
                     <option value="{{ i }}" selected="selected">{{ i }}</option>
@@ -15,14 +16,14 @@
                     <option value="{{ i }}">{{ i }}</option>
                 {% endif %}
             {% endfor %}
-        </select>
-        <br />
-        <input type="submit" value="Valider" />
+        </datalist>
+        <br /><br />
+        <input type="submit" value="Valider" class="btn btn-info" />
     </div>
 </form>
 </div>
 
-<table>
+<table class="trombi-table">
     <tr>
     {% for user in users %}
         {% if (loop.index - 1) is divisibleby(5) %}

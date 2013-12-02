@@ -522,3 +522,13 @@ blockquote cite cite {
 blockquote.uncited {
 	padding-top: 25px;
 }
+
+table.trombi-table 
+{
+    margin: auto;
+}
+
+.trombi-table td
+{
+    padding: 10px;
+}

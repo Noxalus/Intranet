@@ -23,8 +23,7 @@
         "liip/imagine-bundle": "dev-master",
         "knplabs/doctrine-behaviors": "dev-master",
         "Trsteel/ckeditor-bundle": "dev-master",
-        "eko/feedbundle": "1.1.*@dev",
-        "punkave/symfony2-file-uploader-bundle": "dev-master"
+        "eko/feedbundle": "1.1.*@dev"
     },
     "scripts": {
         "post-install-cmd": [
