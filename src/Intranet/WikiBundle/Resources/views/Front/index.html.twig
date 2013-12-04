@@ -21,9 +21,16 @@
 
                 {% if thematic.articles|length > 0 %}
                     <ul>
-                    {% for article in thematic.articles %}
-                        <li><a href="{{ path('wiki_display_article', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
+                    {% for article in thematic.articles if article.active %}
+                        {% if loop.index <= 3 %}
+                            <li><a href="{{ path('wiki_display_article', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
+                        {% endif %}
+                        
+                            
                     {% endfor %}
+                    {% if thematic.articles|length > 3 %}
+                        <li><a href="{{ path('wiki_display_thematic', { 'id' : thematic.id } ) }}">...</a></li>
+                    {% endif %}
                     </ul>
                 {% else %}
                      <p class="text-error">Aucun article</p>

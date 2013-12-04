@@ -89,7 +89,7 @@ class FrontController extends Controller
                 ->getManager()
                 ->getRepository('IntranetForumBundle:Topic');
 
-        $topics = $repository->findBy(array('category' => $id));
+        $topics = $repository->findBy(array('category' => $id), array('createdAt' => 'DESC'));
 
         return array(
             'category' => $category,

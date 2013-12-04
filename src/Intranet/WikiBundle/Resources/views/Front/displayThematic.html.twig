@@ -25,7 +25,7 @@
         <hr />
         <p>Articles en rapport:</p>
         <ul>
-        {% for article in thematic.articles %}
+        {% for article in thematic.articles if article.active %}
             <li><a href="{{ path('wiki_display_article', { 'id_article' : article.id } ) }}">{{ article.name }}</a></li>
         {% endfor %}
         </ul>

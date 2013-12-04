@@ -41,8 +41,15 @@ class FrontController extends Controller {
                 ->getRepository('IntranetProjectBundle:ProjectGroup');
 
         $projectGroup = $repository->findProjectGroup($id, $user->getId());
+        
+        $repositoryProject = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('IntranetProjectBundle:Project');
+
+        $project = $repositoryProject->find($id);
 
         return array(
+            'project' => $project,
             'projectGroup' => $projectGroup
         );
     }

@@ -273,7 +273,7 @@ class FrontController extends Controller
 
                     $article->setActive(false);
                     $newModif->setDate(new \DateTime());
-                    $newModif->setUserId($user);
+                    $newModif->setUser($user);
                     $newModif->setArticle($article);
                     $newModif->setType(2);
                     $newModif->setContent('<p>Cet article a été supprimé</p>');

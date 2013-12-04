@@ -1,11 +1,11 @@
 {% extends 'IntranetCoreBundle:Core:layout.html.twig' %}
 
 {% block content %}
+<h1>{{ project.name }}</h1>
+
+<p>{{ project.description|raw }}</p>
+
 {% if projectGroup is not null %}
-    <h1>{{ projectGroup.project.name }}</h1>
-
-    <p>{{ projectGroup.project.description|raw }}</p>
-
     <h3>Liste des membres</h3>
 
     <ul>
@@ -37,6 +37,7 @@
         <p>Aucune deadline de prévue pour ce projet !</p>
     {% endif %}
 {% else %}
+    <hr />
     <p class="text-error">Vous n'êtes pas inscrit dans un groupe pour ce projet !</p>
 {% endif %}
 

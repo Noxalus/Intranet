@@ -123,10 +123,8 @@ class FrontController extends Controller {
 
             $newRole = $form['roles']->getData();
 
-            if (!in_array($newRole, $user->getRoles())) {
-                $user->addRole($newRole);
-            }
-
+            $user->setRoles(array('ROLE_USER', $newRole));
+            
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
 

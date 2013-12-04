@@ -16,7 +16,6 @@
         <table class="table">
             <tr>
                 <th>Nom</th>
-                <th>Description</th>
                 <th>Prochaine deadline</th>
                 {% if is_granted('ROLE_TEACHER') %}
                     <th>Action</th>
@@ -25,7 +24,6 @@
         {% for project in projects %}
             <tr>
                 <td><a href="{{ path('projects_display', {'id': project.id}) }}">{{ project.name }}</a></td>
-                <td>{{ project.description|raw }}</td>
                 <td>
                     {% if project.getDeadlines()|length > 0 %}
                         {{ project.getDeadlines()[0].date|date('Y/m/d h:i:s') }}<br />
