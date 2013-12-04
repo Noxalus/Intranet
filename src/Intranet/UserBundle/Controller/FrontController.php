@@ -321,7 +321,7 @@ class FrontController extends Controller {
 
         $user = $userManager->createUser();
         $user->setEnabled(true);
-        
+
         $form = $this->createForm(new UserType, $user);
 
         $request = $this->get('request');
@@ -333,9 +333,7 @@ class FrontController extends Controller {
 
                 $newRole = $form['roles']->getData();
 
-                if (!in_array($newRole, $user->getRoles())) {
-                    $user->addRole($newRole);
-                }
+                $user->setRoles(array('ROLE_USER', $newRole));
                 
                 // If we don't do anything on the Photo entity, the image won't be moved
                 if ($user->getPhoto() != null) {
@@ -343,6 +341,8 @@ class FrontController extends Controller {
                         $user->getPhoto()->setCreatedAt(new \DateTime());
                     $user->getPhoto()->setUpdatedAt(new \DateTime());
                 }
+                
+
 
                 $userManager->updateUser($user);
 

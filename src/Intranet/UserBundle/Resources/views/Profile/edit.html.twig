@@ -41,9 +41,13 @@
             </div>
             {% endif %}
             <div>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
                     {{ form_label(form.photo) }}
                     {{ form_errors(form.photo) }}
-                    {{ form_widget(form.photo) }}
+                    <div class="input-append">
+                        <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Selectionnez un fichier</span><span class="fileupload-exists">Changer</span>{{ form_widget(form.photo.file) }}</span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Supprimer</a>
+                    </div>
+                </div>
             </div>
             
             {{ form_widget(form._token) }}

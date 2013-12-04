@@ -42,14 +42,12 @@
             <tr>
                 <th></th>
                 <th>Date</th>
-                <th>Commentaire</th>
             </tr>
 
                 {% for course in courses %}
             <tr>
                 <td><a href="{{  path('course_display', { 'id' : course.id } )  }}" class="btn btn-inverse btn-mini"><i class="icon-white icon-play-circle"></i> Fiche</a></td>
                 <td>Le {{ course.date|date('d/m') }} à {{ course.date|date('H') }}h{{ course.date|date('i') }}</b></td>
-                <td>{% if course.comment %}{{course.comment|raw}}{% endif %}</td>
             </tr>
                 {% endfor %}
 

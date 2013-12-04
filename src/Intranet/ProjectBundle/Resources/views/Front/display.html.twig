@@ -39,6 +39,25 @@
 {% else %}
     <hr />
     <p class="text-error">Vous n'êtes pas inscrit dans un groupe pour ce projet !</p>
+    
+    <h3>Deadlines</h3>
+    
+    {% if project.getDeadlines()|length > 0 %}
+        <table class="table">
+            <tr>
+                <th>Date butoir</th>
+            </tr>
+            {% for deadline in project.getDeadlines() %}
+                <tr>
+                    <td>
+                        {{ deadline.date|date('Y/m/d h:i:s') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucune deadline de prévue pour ce projet !</p>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

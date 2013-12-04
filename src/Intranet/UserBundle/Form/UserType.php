@@ -36,7 +36,7 @@ class UserType extends AbstractType {
                     'expanded' => false,
                     'mapped' => false
                 ))
-                ->add('photo', new PhotoType(), array('label' => ' ', 'required' => false));
+                ->add('photo', new PhotoType(), array('label' => 'Photo', 'required' => false));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
