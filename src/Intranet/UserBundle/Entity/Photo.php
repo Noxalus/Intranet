@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * Yoopies\CoreBundle\Entity\Photo
  *
  * @ORM\Table(name="intranet_user_photo")
  * @ORM\Entity
